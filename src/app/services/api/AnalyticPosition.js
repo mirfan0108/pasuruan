@@ -20,6 +20,14 @@ class Anaylytic {
         return axios.post(ENV+"/anjab", req)
     }
 
+    static modifyAnjab(analytic_id, req_id, req) {
+        return axios.put(ENV + `/anjab/modify/${analytic_id}/${req_id}`, req)
+    }
+
+    static deleteAnjab(id) {
+        return axios.delete(ENV + `/anjab/${id}`)
+    }
+
 }
 
 export default Anaylytic

@@ -1,0 +1,313 @@
+<template>
+    <div>
+        <div class="card">
+            <div class="card-body">
+                <h4 class="card-title">Update Data Analisa Beban Kerja</h4>
+                <div class="row">
+                    <div class="col-md-12">
+                        <table>
+                            <tr>
+                                <td style="width: 250px;">Nama Jabatan</td>
+                                <td>: {{formAbk.position_name}}</td>
+                            </tr>
+                            <tr>
+                                <td style="width: 250px;">Unit Organisasi</td>
+                                <td>: {{formAbk.organization_name}}</td>
+                            </tr>
+                            <tr>
+                                <td style="width: 250px;">Satuan Kerja</td>
+                                <td>: {{formAbk.unit_name}}</td>
+                            </tr>
+                        </table>
+                    </div>
+                    <div class="col-md-12">
+                        <div class="form-group">
+                            <label>Jumlah Pemangku Saat ini (Sesuai Bezzeting)</label>
+                            <input type="number" class="form-control" placeholder="Masukan angka disini..." v-model="formAbk.current_stickholder">
+                        </div>
+                    </div>
+
+                    <div class="col-md-12">
+                        <div class="form-group">
+                            <label>Golongan Jabatan Pemangku Saat ini </label>
+                            <select id="golongan-selection" class="select2 form-control " style="width: 100%;"  >
+                                <option selected disabled value="">---PILIH GOLONGAN---</option>
+                                <option value="Ia" >Golongan Ia = Pangkat Juru Muda</option>
+                                <option value="Ib">Golongan Ib = Pangkat Juru Muda Tingkat 1</option>
+                                <option value="Ic">Golongan Ic = Pangkat Juru </option>
+                                <option value="Id">Golongan Id = Pangkat Juru Tingkat 1</option>
+                                <option value="IIa">Golongan IIa = Pangkat Juru Muda</option>
+                                <option value="IIb">Golongan IIb = Pangkat Juru Muda Tingkat 1</option>
+                                <option value="IIc">Golongan IIc = Pangkat Pengatur </option>
+                                <option value="IId">Golongan IId = Pangkat Pengatur Tingkat 1</option>
+                                <option value="IIIa">Golongan IIIa = Pangkat Penata Muda</option>
+                                <option value="IIIb">Golongan IIIb = Pangkat Penata Muda Tingkat 1</option>
+                                <option value="IIIc">Golongan IIIc = Pangkat Penata </option>
+                                <option value="IIId">Golongan IIId = Pangkat Penata Tingkat 1</option>
+                                <option value="IVa">Golongan IVa = Pangkat Pembina</option>
+                                <option value="IVb">Golongan IVb = Pangkat Pembina Tingkat 1</option>
+                                <option value="IVc">Golongan IVc = Pangkat Pembina Utama Muda </option>
+                                <option value="IVd">Golongan IVd = Pangkat Pembina Utama Madya</option>
+                                <option value="IVe">Golongan IVe = Pangkat Pembina Utama</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="col-md-12">
+                        <div class="form-group">
+                            <label>Keterangan Form B (opsional)</label>
+                            <input type="text" class="form-control" v-model="formAbk.info_form_b" placeholder="Keterangan pada form B">
+                        </div>
+                    </div>
+                    <div class="col-md-12">
+                        <div class="form-group">
+                            <label>Keterangan Form D (opsional)</label>
+                            <input type="text" class="form-control" v-model="formAbk.info_form_d" placeholder="Keterangan pada form D">
+                        </div>
+                    </div>
+                    <div class="col-md-12">
+                        <div class="form-group">
+                            <label>Keterangan Form E (opsional)</label>
+                            <input type="text" class="form-control" v-model="formAbk.info_form_e" placeholder="Keterangan pada form E">
+                        </div>
+                    </div>
+
+                    <div class="col-md-12" v-for="(work_list, index) in formAbk.task_detail" :key="index">
+                        
+                        <table class="w3-table-all" >
+                            
+                            <tr >
+                                <th width="400">Rincian Tugas</th>
+                                <td width="10">:</td>
+                                <td >
+                                    {{work_list.task_detail}}
+                                </td>
+                            </tr>
+                            <tr>
+                                <th width="400">Alat Kerja</th>
+                                <td>:</td>
+                                <td >
+                                    <div v-for="(eq, index) in formEquipments">
+                                        <input v-if="eq.numb == work_list.numb" v-model="eq.value" type="checkbox" v-bind:id="'eqsm_checkbox_'+index" class="filled-in" checked="">
+                                        <label v-if="eq.numb == work_list.numb" v-bind:for="'eqsm_checkbox_'+index" style="margin-left: 5px;">{{ eq.equipment }}</label>
+                                    </div>
+                                </td>
+                            </tr>
+                            <tr>
+                                <th width="400">Satuan</th>
+                                <td>:</td>
+                                <td >
+                                    <input type="text" class="form-control" placeholder="Satuan" v-model="work_list.unit">
+                                </td>
+                            </tr>
+                            <tr>
+                                <th width="400">Vol Kerja/ th</th>
+                                <td>:</td>
+                                <td >
+                                    <input type="number" step="0.01" class="form-control" placeholder="Satuan" v-model="work_list.volume">
+                                </td>
+                            </tr>
+                            <tr>
+                                <th width="400">Norma Waktu (jam)</th>
+                                <td>:</td>
+                                <td >
+                                    <input type="number" step="0.01" class="form-control" placeholder="Satuan" v-model="work_list.time">
+                                </td>
+                            </tr>
+                            <tr>
+                                <th width="400">Beban Kerja</th>
+                                <td>:</td>
+                                <th >
+                                    {{work_list.volume * work_list.time ? (work_list.volume * work_list.time).toFixed(2) + ' OJ' : "0"}}
+                                </th>
+                            </tr>
+                        </table>
+                        <br>
+                    </div>
+
+                    <div class="col-md-12">
+                        <tr>
+                            <th  style="text-align: center;">Total</th>
+                            <td>{{getTotal() ? getTotal() +' OJ': '0'}} </td >
+                        </tr>
+                        <tr>
+                            
+                            <th  style="font-size: 11pt;">Kebutuhan Pegawai : </th>
+                            <td>  {{getPredictEmp() ? getPredictEmp() + " Orang" : '0'}}</td>
+                        </tr>
+                    </div>
+                </div>
+                <button class="btn btn-primary pull-right" @click.prevent="updateAbk()">Simpan</button>
+            </div>
+        </div>
+    </div>
+</template>
+
+<script>
+    import ApiAbk from '../../services/api/AnalyticAbk.js';
+    export default {
+        props: ['position_id'],
+        data() {
+            return {
+                dataPosition: null,
+                is_update: false,
+                update_equipment: 'Alat Tulis Kantor',
+                update_volume: [],
+                update_time: [],
+                update_unit: [],
+                onLoad: false,
+                waiting: true,
+                analytics: {},
+                equipmentList: [],
+                formEquipments: [],
+                formAbk: {
+                    id_wl: 0,
+                    analytic_id: 0,
+                    task_detail: [],
+                    work_equipment: [],
+                    organization_name: '',
+                    unit_name: "",
+                    current_stickholder: 0,
+                    current_position: '',
+                    position_name: "",
+                    info_form_b: '',
+                    info_form_d: '',
+                    info_form_e: '',
+                    position_id: 0
+                },
+            }
+        },
+        async mounted() {
+            await ApiAbk.GetDetail(this.position_id)
+                .then(resp => {
+                    console.log(resp)
+                    if(resp ) {
+                        let _temp = resp.data.TB_ANALYTIC_POSITION
+                        this.dataPosition = resp.data
+                        this.formAbk.id_wl = resp.data.TB_WORKLOAD.id
+                        this.formAbk.task_detail = resp.data.TB_WORKLOAD.TB_WORKLOAD_TASKs
+                        this.formAbk.analytic_id = _temp.id
+                        this.formAbk.work_equipment = JSON.parse(_temp.work_equipment)
+                        this.formAbk.organization_name = resp.data.TB_WORKLOAD.organization_name
+                        this.formAbk.unit_name = resp.data.TB_WORKLOAD.unit_name
+                        this.formAbk.current_stickholder = resp.data.TB_WORKLOAD.current_stickholder
+                        this.formAbk.current_position = resp.data.TB_WORKLOAD.current_position
+                        this.formAbk.position_name = resp.data.name
+                        this.formAbk.position_id = resp.data.id
+                        this.formAbk.info_form_b = resp.data.TB_WORKLOAD.info_form_b
+                        this.formAbk.info_form_d = resp.data.TB_WORKLOAD.info_form_d
+                        this.formAbk.info_form_e = resp.data.TB_WORKLOAD.info_form_e
+                    }
+                })
+                .catch(e => console.log(e))
+                .finally(() => {
+                    
+                    let temps = this.formAbk.task_detail
+                    let temp = []
+                    temps.map((_td, index) => {
+                        console.log(_td)
+                        temp.push({
+                            id: _td.id,
+                            numb: index + 1,
+                            task_detail: _td.task,
+                            equipment: JSON.parse(_td.equipment),
+                            volume: parseFloat(_td.volume),
+                            time: parseFloat(_td.norma),
+                            unit: _td.unit
+                        })
+                    })
+                    this.formAbk.task_detail = temp
+                    this.equipmentList = this.formAbk.work_equipment
+                    console.log('formABK',this.formAbk)
+                    
+                })
+
+                $(".select2").select2()
+
+                $('.multi').select2({
+                    multiple: true
+                });
+
+                $("#golongan-selection").val(this.formAbk.current_position).trigger('change');
+
+                this.formAbk.task_detail.map(_ls => {
+                    let warper = $(`#eq-selection-${_ls.numb}`)
+                    let eqs = []
+                    this.equipmentList.forEach(_eq => {
+                        if(_ls.equipment.findIndex(_e => _e == _eq.equipment) > -1) {
+                            this.formEquipments.push({
+                                numb: _ls.numb,
+                                equipment: _eq.equipment,
+                                value: true
+                            })
+                            // warper.append(`<input type="checkbox" checked value="${_eq.equipment}" > ${_eq.equipment}`)
+                        } else {
+                            this.formEquipments.push({
+                                numb: _ls.numb,
+                                equipment: _eq.equipment,
+                                value: false
+                            })
+                            // warper.append(`<input type="checkbox" value="${_eq.equipment}" > ${_eq.equipment}`)
+                        }
+                    })
+                })
+        },
+        methods: {
+            getPredictEmp() {
+                let total = 0
+                total = this.getTotal() / 1250
+                return Math.round(total)
+            },
+            getTotal() {
+                let total = 0
+                this.formAbk.task_detail.forEach(td => {
+                    total += (parseFloat(td.volume) * parseFloat(td.time))
+                })
+                return parseFloat(total).toFixed(2)
+            },
+            
+            updateAbk() {
+                let payloads = {
+                    workload: {
+                        current_position: $("#golongan-selection").val(),
+                        current_stickholder: this.formAbk.current_stickholder,
+                        info_form_b: this.formAbk.info_form_b,
+                        info_form_d: this.formAbk.info_form_d,
+                        info_form_e: this.formAbk.info_form_e,
+                    },
+                    workload_task: []
+                }
+                this.formAbk.task_detail.map((_val, index) => {
+                    let temps_eq = []
+                    this.formEquipments.map(_eq => {
+                        if(_eq.numb == (index+1) && _eq.value) {
+                            temps_eq.push(_eq.equipment)
+                        } 
+                    })
+                    payloads.workload_task.push({
+                        id: _val.id,
+                        equipment: JSON.stringify(temps_eq),
+                        loader: parseFloat(_val.time) * parseFloat(_val.volume),
+                        norma: parseFloat(_val.time),
+                        volume: parseFloat(_val.volume),
+                        unit: _val.unit
+                    })
+                })
+                try {
+                    ApiAbk.ModifyABK(this.formAbk.id_wl, payloads)
+                    .then(resp => resp)
+                    .catch(err => console.log(err))
+                    .finally(() => {
+                        this.$root.$router.replace({
+                            name: 'detail.abk.page',
+                            params: {
+                                position_id: this.position_id
+                            }
+                        })
+                    })
+                } catch (error) {
+                    console.log(error)
+                }
+            }
+        }
+    }
+</script>

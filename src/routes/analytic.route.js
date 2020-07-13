@@ -1,8 +1,12 @@
 import AnjabPage from "@/app/pages/anjab/anjab.page.html"
 import InputAnjabPage from "@/app/pages/anjab/input.page.html"
 import DetailAnjabPage from "@/app/pages/anjab/detail.page.html"
+import ModifyAnjabPage from "@/app/pages/anjab/modify.page.html"
 
 import DetailAbkPage from "@/app/pages/abk/detail.page.html"
+import InputAbkPage from "@/app/pages/abk/input.page.html"
+import ModifyAbkPage from "@/app/pages/abk/modify.page.html"
+
 import FormAPage from "@/app/pages/abk/form.a.page.html"
 import FormBPage from "@/app/pages/abk/form.b.page.html"
 import FormCPage from "@/app/pages/abk/form.c.page.html"
@@ -21,6 +25,12 @@ export default [
         component: InputAnjabPage
     },
     {
+        path: 'anjab/modify/:position_id',
+        name: 'modify.anjab.page',
+        component: ModifyAnjabPage,
+        props: true
+    },
+    {
         path: 'anjab/detail/:position_id',
         name: 'detail.anjab.page',
         component: DetailAnjabPage,
@@ -30,6 +40,18 @@ export default [
         path: 'abk/detail/:position_id',
         name: 'detail.abk.page',
         component: DetailAbkPage,
+        props: true
+    },
+    {
+        path: 'abk/input/:position_id',
+        name: 'input.abk.page',
+        component: InputAbkPage,
+        props: true
+    },
+    {
+        path: 'abk/modify/:position_id',
+        name: 'modify.abk.page',
+        component: ModifyAbkPage,
         props: true
     },
     {

@@ -2,7 +2,7 @@
     <div >
         <div class="card">
             <div class="card-body">
-                <button class="btn btn-success btn-sm btn-rounded pull-right" @click.prevent="edit()"><i class="fa fa-pencil"></i> Edit</button>
+                <button class="btn btn-success btn-sm btn-rounded pull-right" @click.prevent="edit()" style="margin-left: 10px;"><i class="fa fa-pencil"></i> Edit</button>
                 <button class="btn btn-danger btn-sm btn-rounded pull-right" @click.prevent="del()"><i class="fa fa-trash"></i> Delete</button>
                 <button class="btn btn-sm btn-secondary btn-rounded pull-left" @click.prevent="$root.$router.back()"> Kembali</button><br>
                 <!-- <button class="btn btn-primary" @click.prevent="prints()"><i class="fa fa-print"></i> Print</button> -->
@@ -549,7 +549,7 @@
             },
             edit() {
                 this.$root.$router.push({
-                    name: 'analytic.position.form.modify',
+                    name: 'modify.anjab.page',
                     params: {
                         position_id: this.dataPosition.id
                     }
@@ -563,7 +563,7 @@
                     showCancelButton: true,
                     confirmButtonColor: '#d33',
                     cancelButtonColor: '#b3b3b3',
-                    confirmButtonText: 'Ya, delete it!',
+                    confirmButtonText: 'Ya, Hapus itu!',
                 }).then((result) => {
                     if (result.value) {
                         ApiAnalytic.deleteAnjab(this.TB_ANALYTIC_POSITION.id)
@@ -576,7 +576,7 @@
                                         'success'
                                     )
                                     .then(this.$router.replace({
-                                        name: 'anjab-abk'
+                                        name: 'anjab.page'
                                     }))
 
                             })

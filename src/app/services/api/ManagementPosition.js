@@ -20,10 +20,10 @@ class MasterPosition {
     }
 
     static getListByOpd(id, currentPage, search = "") {
-        return axios.get(routeApi.PositionManagement+ "/opd/" + id +"?page="+currentPage+"&search="+search)
+        return axios.get(ENV+ "/position/opd/" + id +"?page="+currentPage+"&search="+search)
     }
     static getAllPositionOpd(id){
-        return axios.get(routeApi.PositionManagement+`/all/${id}`)
+        return axios.get(ENV+`/position/all/${id}`)
     }
 
 }

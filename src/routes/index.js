@@ -4,6 +4,8 @@ import LoginPage        from "@/app/pages/login/login.page.html"
 import HomePage         from "@/app/pages/home/home.page.html"
 import * as MasterFiles from "./masterfile.route"
 import * as Analytic from "./analytic.route"
+import * as Penjabat from "./evjab.route"
+
 const routes = new VueRouter({
   mode: 'history',
   routes: [{
@@ -22,6 +24,7 @@ const routes = new VueRouter({
             component: HomePage
           },
           ...Analytic.default,
+          ...Penjabat.default,
           MasterFiles.default.equipment,
           MasterFiles.default.material,
           MasterFiles.default.talent,

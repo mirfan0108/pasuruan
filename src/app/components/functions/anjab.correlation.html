@@ -21,29 +21,25 @@
                     <div class="col-md-12">
                         <div class="form-group">
                             <label>Hubungan</label>
-                            <tr v-for="relation in componentKorelasi">
-                                <td>
-                                    <input type="checkbox" value="true" v-model="relation.is_check" class="checkbox-component icheckbox_flat-green" >
-                                </td>
-                                <td>
-                                    {{relation.name}}
-                                </td>
-                            </tr>
-                            <tr >
-                                <td>
-                                    <input type="checkbox" value="true" v-model="otherRelation" class="checkbox-component icheckbox_flat-green" >
-                                </td>
-                                <td>
-                                    Lainnya
-                                </td>
-                            </tr>
+                            <table class="table">
+                                <tr v-for="(relation, index) in componentKorelasi">
+                                    <td>
+                                        <input  v-model="relation.is_check" type="checkbox" v-bind:id="'rel_checkbox_'+index" class="filled-in" checked="">
+                                        <label v-bind:for="'rel_checkbox_'+index" style="margin-left: 5px;">{{relation.name}}</label>
+                                    </td>
+                                </tr>
+                                <tr >
+                                    <td>
+                                        <input  v-model="otherRelation" type="checkbox" id="rel_checkbox_other" class="filled-in" checked="">
+                                        <label for="rel_checkbox_other" style="margin-left: 5px;">Lainnya</label>
+                                    </td>
+                                </tr>
+                            </table>
                             <br>
                             <!-- <input v-if="otherRelation" class="form-control" type="text" v-model="relation" placeholder="Tulis disini..."> -->
                             <textarea v-if="otherRelation" class="form-control" type="text" v-model="relation" placeholder="Tulis disini..." rows="4"></textarea>
+                            <button  class="btn btn-success pull-right" @click.prevent="doAdd()">Tambahkan</button>
                         </div>
-                    </div>
-                    <div class="col-md-12" >
-                        <button class="btn btn-success" @click.prevent="doAdd()">Tambahkan</button>
                     </div>
                 </div>
             </li>
@@ -168,6 +164,7 @@
                 ApiOpd.getOneOpd($("#opdSelections").val())
                 .then(resp => {
                     payload.opd = resp.data.opd.name
+                    console.log(payload)
                 })
                 .catch(err => console.log(err))
                 .finally(async () => {

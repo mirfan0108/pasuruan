@@ -9,14 +9,14 @@
                 <div class="box box-success">
                     <div class="box-body" >
                         <table class="table" >
-                            <thead>
+                            <thead >
                                 <tr>
                                     <td colspan="5">
                                         <input class="form-control" placeholder="Cari Jabatan ...." v-model="searchPosition">
                                     </td>
                                 </tr>
             
-                                <tr >
+                                <tr v-if="!onLoad">
                                     <th width="600">JABATAN</th>
                                     <th style="text-align: center;">ANJAB</th>
                                     <th style="text-align: center;">ABK(Form A)</th>
@@ -28,7 +28,8 @@
                                 <tr>
                                     <td colspan="5" align="center">
                                         <div class="overlay"  align="center" >
-                                            <img src="/assets/gif/loading.gif" width="100">
+                                            <img src="/assets/gif/loading.gif" width="100"> <br>
+                                            <span>Mohon Tunggu</span>
                                         </div>
                                     </td>
                                 </tr>
@@ -70,7 +71,7 @@
                         </table>
                     </div>
                     
-                    <div class="box-footer" >
+                    <div class="box-footer" v-if="!onLoad">
                         <div class="pull-right" >
                             <b-pagination
                                     v-model="currentPage"
@@ -187,10 +188,8 @@
 
             createNewFormA(position) {
                 let id_opd = $("#opd-selection").val()
-                    // console.log("opd " + id_opd)
-                    console.log('will create', position)
                 this.$root.$router.push({
-                    name: 'analytic.job.form',
+                    name: 'input.abk.page',
                     params: {
                         position_id: position.id
                     }

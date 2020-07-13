@@ -1,0 +1,110 @@
+<template>
+    <div>
+        <div class="card">
+            <div class="card-body">
+                <h4 class="card-title">List Penjabat Saat Ini</h4>
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <select class="select2 form-control" style="width: 100%;" id="opdSelections" ></select>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <select  class="select2 form-control" id="positionSelections">
+                                <option value="0" selected disabled>--- PILIH JABATAN ---</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+                
+                <table class="table color-bordered-table dark-bordered-table">
+                    <tr>
+                        <td >Nama </td>
+                        <td >Golongan</td>
+                        <td><button class="btn btn-sm btn-info btn-rounded pull-right">Tambahkan</button></td>
+                    </tr>
+                    <tr>
+                        <td style="width: 70%;">Mr. Ahmad S.I</td>
+                        <td >IIV</td>
+                        <td style="width: 20%;">
+                            <button class="btn btn-sm btn-success btn-rounded pull-right" style="margin-left: 10px;">Edit</button>
+                            <button class="btn btn-sm btn-danger btn-rounded pull-right">Hapus</button>
+                        </td>
+                    </tr>
+                </table>
+            </div>
+        </div>
+    </div>
+</template>
+
+<script>
+    import ApiPosition from '../../services/api/ManagementPosition.js';
+    export default {
+        mounted() {
+            this.fetchOpd()
+            $("#positionSelections").select2()
+            $('#opdSelections').on('select2:select', (e) => {
+                this.fetchPosition($('#opdSelections').val())
+            });
+        },
+        methods: {
+            async fetchOpd() {
+                $("#opdSelections").html("<option value='0' selected disabled>---PILIH OPD---</option>")
+                
+                let auth
+                let token
+                if (sessionStorage.getItem("__CSRF")) {
+                    token = await JSON.parse(sessionStorage.getItem("__CSRF")).access_token
+                    console.log(token)
+                    auth = await `Bearer ${token}`;
+                }
+                try {
+                    $("#opdSelections").select2({
+                        ajax: {
+                            url: process.env.BASE_API+"/opd",
+                            headers: {
+                                "Authorization": auth,
+                            },
+                            delay: 1000,
+                            data: function (params) {
+                                var query = {
+                                    search: params.term,
+                                    limit: 10,
+                                    page: params.page || 1
+                                }
+                                return query;
+                            },
+                            processResults: function (data, params) {
+                                params.page = params.page || 1;
+                                data.content.forEach( _val => {
+                                    _val.text = _val.name
+                                })
+                                return {
+                                    results: data.content,
+                                    pagination: {
+                                        more: (params.page * 10) < data.total
+                                    }
+                                };
+                            }
+                        }
+                    })
+                } catch (error) {
+                    console.log(error)
+                }
+            },
+            fetchPosition(id) {
+                ApiPosition.getAllPositionOpd(id)
+                .then(resp => {
+                    $("#positionSelections").html("<option selected disabled>---PILIH JABATAN---</option>")
+                    resp.data.position.forEach(_item => {
+                        $("#positionSelections").append("<option value='"+JSON.stringify(_item)+"'>"+_item.name+"</option>")
+                    })
+                })
+                .finally(() => {
+                    $('#positionSelections').prop("disabled", false)
+                })
+            },
+        }
+    }
+</script>

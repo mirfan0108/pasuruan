@@ -5,6 +5,16 @@ class Anaylytic {
     static readyToVerify(req) {
         return axios.put(ENV+  `/abk/verify/${req.id}`, req)
     }
+    static postAbk(req) {
+        return axios.post(ENV+'/abk', req)
+    }
+    static deleteAbk(id) {
+        return axios.delete(ENV+ `/abk/${id}`)
+    }
+    static ModifyABK(id, req) {
+        return axios.put(ENV + `/abk/modify/${id}`, req)
+    }
+
     static GenerateFormA(opdId) {
         return axios.get(ENV+`/abk/generate/form/a/${opdId}`)
     }

@@ -901,30 +901,32 @@
     import Swal from 'sweetalert2'
 
     export default {
+        props: ['position_id'],
         components: {
             OpdSelections,
             CorrelationSelection,
             AnjabPosition
         },
         data() {
-            var query = this.$root.$route.query
-            query.position = JSON.parse(query.position)
             var dateNow = new Date()
             return {
-                is_update: false,
-                dataUpdateAnalytic: [],
-                dataUpdateReq: [],
-                positionData: query.position,
-                opdId: query.opd_id,
-                noRisk: false,
+                // ID ANALYTIC & REQUIREMENT
+                _analyticsId: 0,
+                _reqId: 0,
 
+                positionData: {
+                    name: ''
+                }, //POSITOIN UPDATES
+                opdId: 0, //OPD ID UPDATES
+                noRisk: false,
+                
                 phys_risk: false,
                 phys_form: '',
 
                 ment_risk: false,
                 ment_form: '',
 
-
+                
 
                 step: 'eselon',
                 compOpd: {
@@ -948,21 +950,21 @@
 
                 //MASTER FILE
                 masterMaterial: [],
-                masterEquipment: [],
-                masterResponsibility: [],
-                masterAuthority: [],
+                masterEquipment:[],
+                masterResponsibility:[],
+                masterAuthority:[],
                 masterEffort: [],
-                masterPowertype: [],
-                masterTalent: [],
-                masterTemperament: [],
-                masterInterest: [],
+                masterPowertype:[],
+                masterTalent:[],
+                masterTemperament:[],
+                masterInterest:[],
                 masterOPD: [],
                 corellationPositionSelection: [],
                 // OTHER MATERIALS
                 isOtherMaterials: false,
                 formOtherMaterial: '',
                 listOtherMaterials: [],
-                defaultListMaterial: [],
+                defaultListMaterial:[],
 
                 // OTHER EQUIPMENT
                 isOtherEquipment: false,
@@ -975,13 +977,13 @@
                 formOtherResponsibility: '',
                 listOtherResponsibility: [],
                 defaultListResponsibility: [],
-
+                
 
                 // OTHER AUTHORITY
                 isOtherAuthority: false,
                 formOtherAuthority: '',
                 listOtherAuthority: [],
-                defaultListAuthority: [],
+                defaultListAuthority:[],
 
                 //WORK RESULT
                 formWorkResult: '',
@@ -999,12 +1001,12 @@
                 listFunctional: [],
 
                 //KNOWLADGE
-                formKnowladge: '',
-                listKnowladge: [],
+                formKnowladge:'',
+                listKnowladge:[],
 
                 //EXPERTISE
-                formExpertise: '',
-                listExpertise: [],
+                formExpertise:'',
+                listExpertise:[],
 
                 // EDUCATION
                 formEducation: {},
@@ -1016,36 +1018,46 @@
                     relation: ''
                 },
                 listCorelation: [],
-                counterCorelation: 1,
 
 
                 formAnalytic: {
-                    position_id: 0,
-                    year: dateNow.getFullYear(),
-                    task_summary: '',
-                    work_result: [],
-                    analytic_workList: [],
-                    analytic_materials: [],
+                    position_id: 0, //Done
+                    year: dateNow.getFullYear(), //Done
+                    task_summary: '', //Done
+                    work_result: [], //Done
+                    analytic_workList:[], //Done
+                    analytic_materials: [], 
                     analytic_equipments: [],
                     analytic_responsibility: [],
-                    analytic_authority: [],
-                    analytic_corelation: [],
-                    analytic_workPlace: '',
-                    analytic_temperature: '',
-                    analytic_air: '',
-                    analytic_conditionRoom: '',
-                    analytic_place: '',
-                    analytic_light: '',
-                    analytic_sound: '',
-                    analytic_conditionWork: '',
-                    analytic_vibration: '',
-                    analytic_class: '',
-                    analytic_expertise: [],
-                    analytic_knowladge: [],
-                    analytic_training: '',
-                    analytic_functional: [],
-                    analytic_experiance: ''
+                    analytic_authority:[],
+                    analytic_corelation:[],
+                    analytic_workPlace:'',
+                    analytic_temperature:'',
+                    analytic_air:'',
+                    analytic_conditionRoom:'',
+                    analytic_place:'',
+                    analytic_light:'',
+                    analytic_sound:'',
+                    analytic_conditionWork:'',
+                    analytic_vibration:'',
+                    analytic_class:'',
+                    analytic_expertise:[],
+                    analytic_knowladge:[],
+                    analytic_training:'',
+                    analytic_functional:[],
+                    analytic_experiance:''
                 },
+
+                tempMaterialForm: [],
+                tempEqForm: [],
+                tempResponsibleForm: [],
+                tempAuthorityForm: [],
+                tempPhysical_Effort: [],
+                tempPowerForm: [],
+                tempTalentForm : [],
+                tempTempramentForm: [],
+                tempInterestForm: [],
+
 
                 formReq: {
                     class: '',
@@ -1065,436 +1077,415 @@
         },
         beforeCreate() {
             this.$root.page = {
-                title: "Formulir",
+                title: "Update",
                 subtitle: "Analisa Jabatan"
             }
         },
-
+        
         mounted() {
-            // console.log('position data', this.positionData)
-            $('.select2').select2()
-            $('#positionSelection').prop("disabled", true)
-
-            $('#position-selection').on('select2:select', (e) => {
-                var selected = $('#position-selection').val()
-                this.formAnalytic.position_id = selected
-            });
-
-            $('#opdSelection').on('select2:select', (e) => {
-                var selected = $('#opdSelection').val()
-                this.fetchPosition(selected)
-            });
-
-            //GET MASTERFILE
-            $('.select2').select2()
-            this.fetchMasterFile()
-            this.DataUpdate()
-            $('.checkbox-component').iCheck({
-                checkboxClass: 'icheckbox_flat-green'
-            })
-
-            $('#other-materials').iCheck({
-                checkboxClass: 'icheckbox_flat-green'
-            })
-
-            //EVENT CHECKBOX IS OTHER EQUIPMENT
-            $('#other-equipment').iCheck({
-                checkboxClass: 'icheckbox_flat-green'
-            })
-
-            //EVENT CHECKBOX IS OTHER RESPONSIBILITY
-            $('#other-responsibility').iCheck({
-                checkboxClass: 'icheckbox_flat-green'
-            })
-
-            //EVENT CHECKBOX IS OTHER AUTHORITY
-            $('#other-authority').iCheck({
-                checkboxClass: 'icheckbox_flat-green'
-            })
-
-
-
-
+            console.log('position data', this.position_id)
+            
+            if(!this.position_id) {
+                this.$root.$router.replace({name: 'anjab.page'})
+            } else {
+                $('.select2').select2()
+                this.initialPage()
+                this.getDataUpdates()
+                
+            }
         },
 
-        methods: {
-            DataUpdate() {
-                if (this.$route.query.do == 'update') {
-                    this.is_update = true
-                        // console.log("will update");
-                    let data = this.$route.query.position;
-                    console.log("data", data)
-                    let analytic = this.dataUpdateAnalytic = data.TB_ANALYTIC_POSITIONs[0];
-                    
-                    this.formAnalytic.position_id = analytic.position_id;
-                    this.formAnalytic.year = analytic.year;
-                    this.formAnalytic.task_summary = analytic.task_summary;
-                    this.formAnalytic.analytic_workPlace = analytic.workplace_condition.place;
-                    this.formAnalytic.analytic_temperature = analytic.workplace_condition.temperature;
-                    this.formAnalytic.analytic_air = analytic.workplace_condition.air;
-                    this.formAnalytic.analytic_conditionRoom = analytic.workplace_condition.place_condition;
-                    this.formAnalytic.analytic_place = analytic.workplace_condition.location;
-                    this.formAnalytic.analytic_light = analytic.workplace_condition.lighting;
-                    this.formAnalytic.analytic_sound = analytic.workplace_condition.noise;
-                    this.formAnalytic.analytic_conditionWork = analytic.workplace_condition.work_condition;
-                    this.formAnalytic.analytic_vibration = analytic.workplace_condition.vibration;
-                    // -------- analytic
-                    this.listWorkResult = analytic.work_result;
-                    this.masterMaterial = analytic.work_material;
-                    this.listWorkList = analytic.task_detail;
-                    this.listCorelation = analytic.job_correlation;
-                    let risk_of_danger = analytic.risk_of_danger;
-                    if (risk_of_danger == false)
-                        this.noRisk = true
-                    else {
-                        if (risk_of_danger.physical != 'n/b') {
-                            this.phys_risk = true
-                            this.phys_form = risk_of_danger.physical
-                        }
-                        if (risk_of_danger.mentality != 'n/b') {
-                            this.ment_risk = true
-                            this.ment_form = risk_of_danger.mentality
-                        }
-                    }
-                    // -------- requirement
-                    let requirements = this.dataUpdateReq = data.TB_ANALYTIC_POSITIONs[0].TB_POSITION_REQUIREMENT;
-                    this.formReq.training_structure = requirements.training_structure
-                    this.formReq.experience = requirements.experience[0].exp
-                    let physi = requirements.physical_condition;
-                    this.physi_conditional.gender = physi.gender
-                    if (isNaN(physi.age))
-                        this.physi_conditional.age_limit = 'Tidak ada batasan'
-                    else if ("" == physi.age) {
-                        this.physi_conditional.age_limit = ''
-                    } else {
-                        this.physi_conditional.age_limit = 'batasan'
-                        this.physi_conditional.age_form = physi.age
-                    }
-
-                    if (isNaN(physi.weigh))
-                        this.physi_conditional.weigh_limit = 'Tidak ada batasan'
-                    else if ("" == physi.weigh) {
-                        this.physi_conditional.weigh_limit = ''
-                    } else {
-                        this.physi_conditional.weigh_limit = 'batasan'
-                        this.physi_conditional.weigh_form = physi.weigh
-                    }
-
-                    if (isNaN(physi.heigh))
-                        this.physi_conditional.heigh_limit = 'Tidak ada batasan'
-                    else if ("" == physi.heigh) {
-                        this.physi_conditional.heigh_limit = ''
-                    } else {
-                        this.physi_conditional.heigh_limit = 'batasan'
-                        this.physi_conditional.heigh_form = physi.heigh
-                    }
-
-                    if (isNaN(physi.posture))
-                        this.physi_conditional.posture_limit = 'Tidak ada batasan'
-                    else if ("" == physi.posture) {
-                        this.physi_conditional.posture_limit = ''
-                    } else {
-                        this.physi_conditional.posture_limit = 'batasan'
-                        this.physi_conditional.posture_form = physi.posture
-                    }
-
-                    if (isNaN(physi.appearance))
-                        this.physi_conditional.appear_limit = 'Tidak ada batasan'
-                    else if ("" == physi.appearance) {
-                        this.physi_conditional.appear_limit = ''
-                    } else {
-                        this.physi_conditional.appear_limit = 'batasan'
-                        this.physi_conditional.appear_form = physi.appearance
-                    }
-                    this.listSkill = requirements.skill;
-                    this.listExpertise = requirements.expretise;
-                    this.listKnowladge = requirements.knowledge;
-                    this.listFunctional = requirements.training_functional;
-                };
-            },
-            check(field) {
-                let status = false
-                this.dataUpdateAnalytic.work_material.forEach(element => {
-                    if (element.material === field)
-                        status = true
+        methods:{
+            initialPage() {
+                $('#positionSelection').prop("disabled", true)
+            
+                $('#position-selection').on('select2:select', (e) => {
+                    var selected = $('#position-selection').val()
+                    this.formAnalytic.position_id = selected
                 });
-                return status
+
+                $('#opdSelection').on('select2:select', (e) => {
+                    var selected = $('#opdSelection').val()
+                    this.fetchPosition(selected)
+                });
+
+                //GET MASTERFILE
+                $('.select2').select2()
+                $('.checkbox-component').iCheck({
+                    checkboxClass: 'icheckbox_flat-green',
+                    radioClass: 'iradio_flat-green'
+                })
+
+                $('#other-materials').iCheck({
+                    checkboxClass: 'icheckbox_flat-green',
+                    radioClass: 'iradio_flat-green'
+                })
+
+                //EVENT CHECKBOX IS OTHER EQUIPMENT
+                $('#other-equipment').iCheck({
+                    checkboxClass: 'icheckbox_flat-green',
+                    radioClass: 'iradio_flat-green'
+                })
+
+                //EVENT CHECKBOX IS OTHER RESPONSIBILITY
+                $('#other-responsibility').iCheck({
+                    checkboxClass: 'icheckbox_flat-green',
+                    radioClass: 'iradio_flat-green'
+                })
+
+                //EVENT CHECKBOX IS OTHER AUTHORITY
+                $('#other-authority').iCheck({
+                    checkboxClass: 'icheckbox_flat-green',
+                    radioClass: 'iradio_flat-green'
+                })
             },
+            
+            getDataUpdates(){
+                ApiAnalytic.getDetail(this.position_id)
+                    .then(async resp => {
+                        if(resp) {
+                            console.log(resp)
+                            this.dataPosition =  resp.data.content
+                            this.positionData = resp.data.content
+                            this.opdId = resp.data.content.TB_OPD.id
+                            let data = this.dataPosition
+                            let analytic = this.dataUpdateAnalytic = data.TB_ANALYTIC_POSITION ? data.TB_ANALYTIC_POSITION : false;
+                            console.log('COBA VALUE', this.dataPosition)
+                            if(analytic) {
+                                this.tempMaterialForm = await JSON.parse(analytic.work_material)
+                                this.tempEqForm = JSON.parse(analytic.work_equipment)
+                                this.tempResponsibleForm = JSON.parse(analytic.responsible)
+                                this.tempAuthorityForm = JSON.parse(analytic.authority)
+                                this.tempPhysical_Effort = JSON.parse(analytic.physical_effort)
+                                this.tempPowerForm = JSON.parse(analytic.power_type)
+
+                                console.log("COba material", this.tempMaterialForm)
+                                this._analyticsId = analytic.id
+                                this.formAnalytic.position_id = analytic.position_id;
+                                this.formAnalytic.year = analytic.year;
+                                this.formAnalytic.task_summary = analytic.task_summary;
+                                let wk_place = await JSON.parse(analytic.workplace_condition)
+                                this.formAnalytic.analytic_workPlace = wk_place.place
+                                this.formAnalytic.analytic_temperature = wk_place.temperature;
+                                this.formAnalytic.analytic_air = wk_place.air;
+                                this.formAnalytic.analytic_conditionRoom = wk_place.place_condition;
+                                this.formAnalytic.analytic_place = wk_place.location;
+                                this.formAnalytic.analytic_light = wk_place.lighting;
+                                this.formAnalytic.analytic_sound = wk_place.noise;
+                                this.formAnalytic.analytic_conditionWork = wk_place.work_condition;
+                                this.formAnalytic.analytic_vibration = wk_place.vibration;
+                                
+                                this.listWorkResult = JSON.parse(analytic.work_result);
+                                this.masterMaterial = JSON.parse(analytic.work_material);
+                                this.listWorkList = JSON.parse(analytic.task_detail);
+                                this.listCorelation = JSON.parse(analytic.job_correlation);
+                                let risk_of_danger = JSON.parse(analytic.risk_of_danger);
+                                if (risk_of_danger == false)
+                                    this.noRisk = true
+                                else {
+                                    if (risk_of_danger.physical != 'n/b') {
+                                        this.phys_risk = true
+                                        this.phys_form = risk_of_danger.physical
+                                    }
+                                    if (risk_of_danger.mentality != 'n/b') {
+                                        this.ment_risk = true
+                                        this.ment_form = risk_of_danger.mentality
+                                    }
+                                }
+    
+                                // REQ
+                                let requirements = this.dataUpdateReq = data.TB_ANALYTIC_POSITION.TB_POSITION_REQUIREMENT;
+                                console.log('req ', requirements)
+                                this._reqId = requirements.id
+                                this.tempTalentForm = JSON.parse(requirements.work_talent)
+                                this.tempTempramentForm = JSON.parse(requirements.work_temperament)
+                                this.tempInterestForm = JSON.parse(requirements.work_interest)
+
+                                this.formReq.training_structure = requirements.training_structure
+                                this.formReq.experience = JSON.parse(requirements.experience)[0].exp
+    
+                                let physi = JSON.parse(requirements.physical_condition);
+                                this.physi_conditional.gender = physi.gender
+    
+                                if (isNaN(physi.age))
+                                    this.physi_conditional.age_limit = 'Tidak ada batasan'
+                                else if ("" == physi.age) {
+                                    this.physi_conditional.age_limit = ''
+                                } else {
+                                    this.physi_conditional.age_limit = 'batasan'
+                                    this.physi_conditional.age_form = physi.age
+                                }
+    
+                                if (isNaN(physi.weigh))
+                                    this.physi_conditional.weigh_limit = 'Tidak ada batasan'
+                                else if ("" == physi.weigh) {
+                                    this.physi_conditional.weigh_limit = ''
+                                } else {
+                                    this.physi_conditional.weigh_limit = 'batasan'
+                                    this.physi_conditional.weigh_form = physi.weigh
+                                }
+    
+                                if (isNaN(physi.heigh))
+                                    this.physi_conditional.heigh_limit = 'Tidak ada batasan'
+                                else if ("" == physi.heigh) {
+                                    this.physi_conditional.heigh_limit = ''
+                                } else {
+                                    this.physi_conditional.heigh_limit = 'batasan'
+                                    this.physi_conditional.heigh_form = physi.heigh
+                                }
+    
+                                if (isNaN(physi.posture))
+                                    this.physi_conditional.posture_limit = 'Tidak ada batasan'
+                                else if ("" == physi.posture) {
+                                    this.physi_conditional.posture_limit = ''
+                                } else {
+                                    this.physi_conditional.posture_limit = 'batasan'
+                                    this.physi_conditional.posture_form = physi.posture
+                                }
+    
+                                if (isNaN(physi.appearance))
+                                    this.physi_conditional.appear_limit = 'Tidak ada batasan'
+                                else if ("" == physi.appearance) {
+                                    this.physi_conditional.appear_limit = ''
+                                } else {
+                                    this.physi_conditional.appear_limit = 'batasan'
+                                    this.physi_conditional.appear_form = physi.appearance
+                                }
+    
+                                this.listSkill = JSON.parse(requirements.skill);
+                                this.listExpertise = JSON.parse(requirements.expretise);
+                                this.listKnowladge = JSON.parse(requirements.knowledge);
+                                this.listFunctional = JSON.parse(requirements.training_functional);
+                            }
+                            // 
+                        }
+                    })
+                    .catch(err => {
+                        console.log("error update")
+                        console.log(err)
+                        setTimeout(() => {
+                            this.onLoad = false
+                        }, 1000)
+                    })
+                    .finally(() => {
+                        this.fetchMasterFile()
+                        setTimeout(() => {
+                            this.onLoad = false
+                        }, 1000)
+                    })
+            },
+            
             fetchMasterFile() {
                 ApiMaterial.getAll()
-                    .then(respMaterial => {
-                        if (this.is_update) {
-                            this.dataUpdateAnalytic.work_material.forEach(check => {
-                                let is_same = false
-                                respMaterial.data.data.forEach(element => {
-                                    if (check.material === element.name) {
-                                        element.selected = true
-                                        is_same = true
-                                    } else if (element.selected != true) {
-                                        element.selected = false
-                                    }
-                                });
-                                if (!is_same) {
-                                    this.isOtherMaterials = true
-                                    this.listOtherMaterials.push({
-                                        material: check.material
-                                    })
-                                }
-                            })
+                .then(respMaterial => {
+                    respMaterial.data.data.forEach(element => {
+                        element.selected = false
+                    });
+                    this.masterMaterial = respMaterial.data.data
+                    this.tempMaterialForm.forEach(_mat => {
+                        if(respMaterial.data.data.findIndex(__mate => __mate.name == _mat.material) > -1) {
+                            this.masterMaterial[respMaterial.data.data.findIndex(__mate => __mate.name == _mat.material)].selected = true
                         } else {
-                            respMaterial.data.data.forEach(element => {
-                                element.selected = false
-                            });
+                            this.isOtherMaterials = true
+                            this.listOtherMaterials.push(_mat)
                         }
-                        this.masterMaterial = respMaterial.data.data
-                        ApiEquipment.getAll()
-                            .then(respEquipment => {
-                                if (this.is_update) {
-                                    this.dataUpdateAnalytic.work_equipment.forEach(check => {
-                                        let is_same = false
-                                        respEquipment.data.data.forEach(element => {
-                                            if (check.equipment === element.name) {
-                                                element.selected = true
-                                                is_same = true
-                                            } else if (element.selected != true) {
-                                                element.selected = false
-                                            }
-                                        });
-                                        if (!is_same) {
-                                            this.isOtherEquipment = true
-                                            this.listOtherEquipment.push({
-                                                equipment: check.equipment
-                                            })
-                                        }
-                                    })
-                                } else {
-                                    respEquipment.data.data.forEach(element => {
-                                        element.selected = false
-                                    });
-                                }
-                                this.masterEquipment = respEquipment.data.data
-                                ApiResponsibility.getAll()
-                                    .then(respResponsibility => {
-                                        if (this.is_update) {
-                                            this.dataUpdateAnalytic.responsible.forEach(check => {
-                                                let is_same = false
-                                                respResponsibility.data.data.forEach(element => {
-                                                    if (check.responsible === element.name) {
-                                                        element.selected = true
-                                                        is_same = true
-                                                    } else if (element.selected != true) {
-                                                        element.selected = false
-                                                    }
-                                                });
-                                                if (!is_same) {
-                                                    this.isOtherResponsibility = true
-                                                    this.listOtherResponsibility.push({
-                                                        responsible: check.responsible
-                                                    })
-                                                }
-                                            })
-                                        } else {
-                                            respResponsibility.data.data.forEach(element => {
-                                                element.selected = false
-                                            });
-                                        }
-                                        this.masterResponsibility = respResponsibility.data.data
-                                        ApiAuthority.getAll()
-                                            .then(respAuthority => {
-                                                if (this.is_update) {
-                                                    this.dataUpdateAnalytic.authority.forEach(check => {
-                                                        let is_same = false
-                                                        respAuthority.data.data.forEach(element => {
-                                                            if (check.authority === element.name) {
-                                                                element.selected = true
-                                                                is_same = true
-                                                            } else if (element.selected != true) {
-                                                                element.selected = false
-                                                            }
-                                                        });
-                                                        if (!is_same) {
-                                                            this.isOtherAuthority = true
-                                                            this.listOtherAuthority.push({
-                                                                authority: check.authority
-                                                            })
-                                                        }
-                                                    })
-                                                } else {
-                                                    respAuthority.data.data.forEach(element => {
-                                                        element.selected = false
-                                                    });
-                                                }
-                                                this.masterAuthority = respAuthority.data.data
-                                                ApiEffort.getAll()
-                                                    .then(respEffort => {
-                                                        respEffort.data.data.forEach(element => {
-                                                            element.selected = false
-                                                            if (this.is_update) {
-                                                                this.dataUpdateAnalytic.physical_effort.forEach(check => {
-                                                                    if (check.effort === element.name)
-                                                                        element.selected = true
-                                                                });
-                                                            }
-                                                        })
-                                                        this.masterEffort = respEffort.data.data
-                                                        ApiPowertype.getAll()
-                                                            .then(respPowertype => {
-
-                                                                respPowertype.data.data.forEach(element => {
-                                                                    element.selected = false
-                                                                    if (this.is_update) {
-                                                                        this.dataUpdateAnalytic.power_type.forEach(check => {
-                                                                            if (check.power_type === element.name)
-                                                                                element.selected = true
-                                                                        });
-                                                                    }
-                                                                })
-                                                                this.masterPowertype = respPowertype.data.data
-                                                                ApiTalent.getAll()
-                                                                    .then(respTalent => {
-                                                                        // console.log("Talent ", respTalent)
-                                                                        respTalent.data.data.forEach(element => {
-                                                                            element.selected = false
-                                                                            if (this.is_update) {
-                                                                                this.dataUpdateReq.work_talent.forEach(check => {
-                                                                                    if (check.code === element.code)
-                                                                                        element.selected = true
-                                                                                });
-                                                                            }
-                                                                        })
-                                                                        this.masterTalent = respTalent.data.data
-                                                                        ApiTemperament.getAll()
-                                                                            .then(respTemperament => {
-                                                                                // console.log("temperament", respTemperament)
-                                                                                respTemperament.data.data.forEach(element => {
-                                                                                    element.selected = false
-                                                                                    if (this.is_update) {
-                                                                                        // console.log(this.dataUpdateReq.work_temperament);
-                                                                                        this.dataUpdateReq.work_temperament.forEach(check => {
-                                                                                            if (check.code === element.code)
-                                                                                                element.selected = true
-                                                                                        });
-                                                                                    }
-                                                                                })
-                                                                                this.masterTemperament = respTemperament.data.data
-                                                                                ApiInterest.getAll()
-                                                                                    .then(respInterest => {
-                                                                                        // console.log("interes", respInterest)
-                                                                                        respInterest.data.data.forEach(element => {
-                                                                                            if (this.is_update) {
-                                                                                                element.selected = false
-                                                                                                this.dataUpdateReq.work_interest.forEach(check => {
-                                                                                                    if (check.code === element.code)
-                                                                                                        element.selected = true
-                                                                                                });
-                                                                                            }
-                                                                                        })
-                                                                                        this.masterInterest = respInterest.data.data
-                                                                                            // ApiOpd.getList()
-                                                                                            // .then(resp => {
-                                                                                            //     // $("#opd-selection").html("<option value='0'>---PILIH OPD---</option>")
-                                                                                            //     // resp.data.opd.forEach(item => {
-                                                                                            //     //     $("#opd-selection").html("<option value='"+item.id+"'>"+item.name+"</option>")
-                                                                                            //     // })
-                                                                                            //     this.masterOPD = resp.data.opd
-                                                                                            // })
-                                                                                            // ApiPosition.getList()
-                                                                                            // .then(resp => {
-                                                                                            //     console.log(resp)
-                                                                                            //     this.masterPosition = resp.data.position
-                                                                                            // })
-                                                                                    })
-
-                                                                            })
-
-                                                                    })
-
-                                                            })
-
-                                                    })
-                                            })
-                                    })
-                            })
                     })
 
+                    ApiEquipment.getAll()
+                    .then(respEquipment => {
+                        respEquipment.data.data.forEach(element => {
+                            element.selected = false
+                        })
+
+                        this.masterEquipment = respEquipment.data.data
+                        this.tempEqForm.forEach(_tempEq => {
+                            if(respEquipment.data.data.findIndex(_val => _val.name == _tempEq.equipment) > -1) {
+                                this.masterEquipment[this.masterEquipment.findIndex(_eq => _eq.name == _tempEq.equipment)].selected = true
+                            } else {
+                                this.isOtherEquipment = true
+                                this.formOtherEquipment = _tempEq.equipment
+                                this.addToList('work-equipment')
+                            }
+
+                        })
+                        
+                        ApiResponsibility.getAll()
+                        .then(respResponsibility => {
+                            respResponsibility.data.data.forEach(element => {
+                                element.selected = false
+                            })
+                            this.masterResponsibility = respResponsibility.data.data
+                            this.tempResponsibleForm.forEach(_temp_resp => {
+                                if(respResponsibility.data.data.findIndex(__resp => __resp.name == _temp_resp.responsible) > -1) {
+                                    this.masterResponsibility[this.masterResponsibility.findIndex(__resp => __resp.name == _temp_resp.responsible)].selected = true
+                                } else {
+                                    this.isOtherResponsibility = true
+                                    this.listOtherResponsibility.push(_temp_resp)
+                                }
+                            })
+
+                            ApiAuthority.getAll()
+                            .then(respAuthority => {
+                                respAuthority.data.data.forEach(element => {
+                                    element.selected = false
+                                })
+                                this.masterAuthority = respAuthority.data.data
+                                console.log('auth',this.masterAuthority)
+                                this.tempAuthorityForm.forEach(_auth => {
+                                    if(this.masterAuthority.findIndex(_mauth => _mauth.name == _auth.authority) > -1) {
+                                        this.masterAuthority[this.masterAuthority.findIndex(_mauth => _mauth.name == _auth.authority)].selected = true
+                                    } else {
+                                        this.isOtherAuthority = true
+                                        this.listOtherAuthority.push(_auth)
+                                    }
+                                })
+
+                                ApiEffort.getAll()
+                                .then(respEffort => {
+                                    
+                                    respEffort.data.data.forEach(element =>{
+                                        element.selected =false
+                                    })
+                                    this.masterEffort = respEffort.data.data
+                                    
+                                    this.tempPhysical_Effort.forEach(_val => {
+                                        if(this.masterEffort.findIndex(_eff => _eff.name == _val.effort) > -1) {
+                                            this.masterEffort[this.masterEffort.findIndex(_eff => _eff.name == _val.effort)].selected = true
+                                        }
+                                    })
+
+                                    ApiPowertype.getAll()
+                                    .then(respPowertype => {
+                                        respPowertype.data.data.forEach(element =>{
+                                            element.selected = false
+                                        })
+                                        this.masterPowertype = respPowertype.data.data
+                                        console.log('power', this.masterPowertype)
+                                        this.tempPowerForm.forEach(_val => {
+                                            if(this.masterPowertype.findIndex(_po => _po.name == _val.power_type) > -1) {
+                                                this.masterPowertype[this.masterPowertype.findIndex(_po => _po.name == _val.power_type)].selected = true
+                                            }
+                                        })
+
+                                        ApiTalent.getAll()
+                                        .then(respTalent => {
+                                            console.log("Talent ", respTalent)
+                                            respTalent.data.data.forEach(element =>{
+                                                element.selected = false
+                                            })
+                                            this.masterTalent = respTalent.data.data
+                                            this.tempTalentForm.forEach(_val => {
+                                                if(this.masterTalent.findIndex(_mtalent => _mtalent.code == _val.code) > -1 ) {
+                                                    this.masterTalent[this.masterTalent.findIndex(_mtalent => _mtalent.code == _val.code)].selected = true
+                                                }
+                                            })
+
+                                            ApiTemperament.getAll()
+                                            .then(respTemperament => {
+                                                console.log("temperament", respTemperament)
+                                                respTemperament.data.data.forEach(element =>{
+                                                    element.selected = false
+                                                })
+                                                this.masterTemperament = respTemperament.data.data
+                                                this.tempTempramentForm.forEach(_val => {
+                                                    if(this.masterTemperament.findIndex(_mtempra => _mtempra.code == _val.code) > -1 ) {
+                                                        this.masterTemperament[this.masterTemperament.findIndex(_mtempra => _mtempra.code == _val.code)].selected = true
+                                                    }
+                                                })
+
+                                                ApiInterest.getAll()
+                                                .then( async respInterest => {
+                                                    respInterest.data.data.forEach(element =>{
+                                                        element.selected = false
+                                                    })
+                                                    this.masterInterest = respInterest.data.data
+                                                    this.tempInterestForm.forEach(_val => {
+                                                        if(this.masterInterest.findIndex(_minter => _minter.code == _val.code) > -1 ) {
+                                                            this.masterInterest[this.masterInterest.findIndex(_minter => _minter.code == _val.code)].selected = true
+                                                        }
+                                                    })
+                                                    
+                                                })
+                                
+                                            })
+                            
+                                        })
+                        
+                                    })
+                    
+                                })
+                            })
+                        })
+                    })
+                })
+                
 
 
 
 
 
-
+                
+                
             },
             fetchPosition(id) {
                 ApiPosition.getListByOpd(id)
-                    .then(resp => {
-                        $("#positionSelection").html("<option selected disabled>---PILIH JABATAN---</option>")
-                        resp.data.position.forEach(_item => {
-                            $("#positionSelection").append("<option value='" + _item.id + "'>" + _item.position_name + "</option>")
-                        })
+                .then(resp => {
+                    $("#positionSelection").html("<option selected disabled>---PILIH JABATAN---</option>")
+                    resp.data.position.forEach(_item => {
+                        $("#positionSelection").append("<option value='"+_item.id+"'>"+_item.position_name+"</option>")
                     })
-                    .finally(() => {
-                        $('#positionSelection').prop("disabled", false)
-                    })
+                })
+                .finally(() => {
+                    $('#positionSelection').prop("disabled", false)
+                })
             },
-
+            
 
             addToList(nameList) {
                 switch (nameList) {
                     case 'work-result':
-                        if (this.formWorkResult != '') {
-                            this.listWorkResult.push({
-                                work_result: this.formWorkResult
-                            })
+                        if(this.formWorkResult != '') {
+                            this.listWorkResult.push({work_result: this.formWorkResult})
                             this.formWorkResult = ''
                         }
                         break;
                     case 'skill':
-                        if (this.formSkill != '') {
-                            this.listSkill.push({
-                                skill: this.formSkill
-                            })
+                        if(this.formSkill != '') {
+                            this.listSkill.push({skill: this.formSkill})
                             this.formSkill = ''
                         }
                         break;
                     case 'work-material':
-                        if (this.formOtherMaterial != '') {
-                            this.listOtherMaterials.push({
-                                material: this.formOtherMaterial
-                            })
+                        
+                        if(this.formOtherMaterial != '') {
+                            this.listOtherMaterials.push({material: this.formOtherMaterial})
                             this.formOtherMaterial = ''
                         }
                         break;
                     case 'work-equipment':
-                        if (this.formOtherEquipment != '') {
-                            this.listOtherEquipment.push({
-                                equipment: this.formOtherEquipment
-                            })
+                        console.log('tes form', this.formOtherEquipment)
+                        if(this.formOtherEquipment != '') {
+                            this.listOtherEquipment.push({equipment: this.formOtherEquipment})
                             this.formOtherEquipment = ''
                         }
                         break;
                     case 'work-list':
-                        if (this.formWorkList != '') {
-                            this.listWorkList.push({
-                                task_detail: this.formWorkList
-                            })
+                        if(this.formWorkList != '') {
+                            this.listWorkList.push({task_detail: this.formWorkList})
                             this.formWorkList = ''
                         }
                         break;
 
                     case 'work-responsibility':
-                        if (this.formOtherResponsibility != '') {
-                            this.listOtherResponsibility.push({
-                                responsible: this.formOtherResponsibility
-                            })
+                        if(this.formOtherResponsibility != '') {
+                            this.listOtherResponsibility.push({responsible: this.formOtherResponsibility})
                             this.formOtherResponsibility = ''
                         }
                         break;
 
                     case 'work-authority':
-                        if (this.formOtherAuthority != '') {
-                            this.listOtherAuthority.push({
-                                authority: this.formOtherAuthority
-                            })
+                        if(this.formOtherAuthority != '') {
+                            this.listOtherAuthority.push({authority: this.formOtherAuthority})
                             this.formOtherAuthority = ''
                         }
                         break;
@@ -1503,51 +1494,44 @@
                         let opdSelected;
                         let positoinSelected;
                         this.masterOPD.forEach(opd => {
-                            if (opd.id == $("#opdSelection").val()) {
+                            if(opd.id == $("#opdSelection").val()) {
                                 opdSelected = opd.name
                             }
                         })
                         this.masterPosition.forEach(position => {
-                            if (position.id == $("#positionSelection").val()) {
+                            if(position.id == $("#positionSelection").val()) {
                                 positoinSelected = position.position_name
                             }
                         })
                         let payload = {
-                                position: positoinSelected,
-                                opd: opdSelected,
-                                relation: this.formCorelation.relation
-                            }
-                            // console.log(payload)
-                        if (this.formCorelation.relation != '') {
+                            position: positoinSelected,
+                            opd: opdSelected,
+                            relation: this.formCorelation.relation
+                        }
+                        console.log(payload)
+                        if(this.formCorelation.relation != '') {
                             this.listCorelation.push(payload)
                             this.formCorelation.relation = ''
                         }
-                        console.log(this.listCorelation)
                         break;
-
+                    
                     case 'functional':
-                        if (this.formFunctional != '') {
-                            this.listFunctional.push({
-                                training_func: this.formFunctional
-                            })
+                        if(this.formFunctional != '') {
+                            this.listFunctional.push({training_func: this.formFunctional})
                             this.formFunctional = ''
                         }
                         break;
 
                     case 'knowladge':
-                        if (this.formKnowladge != '') {
-                            this.listKnowladge.push({
-                                knowledge: this.formKnowladge
-                            })
+                        if(this.formKnowladge != '') {
+                            this.listKnowladge.push({knowledge: this.formKnowladge})
                             this.formKnowladge = ''
                         }
                         break;
 
                     case 'expertise':
-                        if (this.formExpertise != '') {
-                            this.listExpertise.push({
-                                expertise: this.formExpertise
-                            })
+                        if(this.formExpertise != '') {
+                            this.listExpertise.push({expertise: this.formExpertise})
                             this.formExpertise = ''
                         }
                         break;
@@ -1574,7 +1558,7 @@
                         this.listSkill.splice(this.listSkill
                             .findIndex(_item => _item === keyList), 1);
                         break;
-
+                    
                     case 'work-material':
                         this.listOtherMaterials.splice(this.listOtherMaterials
                             .findIndex(_item => _item === keyList), 1);
@@ -1609,7 +1593,7 @@
                         this.listFunctional.splice(this.listFunctional
                             .findIndex(_item => _item === keyList), 1);
                         break;
-
+                    
                     case 'knowladge':
                         this.listKnowladge.splice(this.listKnowladge
                             .findIndex(_item => _item === keyList), 1);
@@ -1624,13 +1608,14 @@
                         break;
                 }
             },
+            
             doPost() {
                 this.formAnalytic.work_result = this.listWorkResult
                 this.formAnalytic.analytic_workList = this.listWorkList
-                this.formAnalytic.analytic_corelation = this.listCorelation
-                this.formAnalytic.analytic_responsibility = this.mergingArrResponsibility(this.masterResponsibility, this.listOtherResponsibility)
-                this.formAnalytic.analytic_materials = this.mergingArrMaterial(this.masterMaterial, this.listOtherMaterials)
-                this.formAnalytic.analytic_equipments = this.mergingArrEquipment(this.masterEquipment, this.listOtherEquipment)
+                this.formAnalytic.analytic_corelation =  this.listCorelation
+                this.formAnalytic.analytic_responsibility = this.mergingArrResponsibility(this.masterResponsibility, this.listOtherResponsibility) 
+                this.formAnalytic.analytic_materials = this.mergingArrMaterial(this.masterMaterial, this.listOtherMaterials) 
+                this.formAnalytic.analytic_equipments = this.mergingArrEquipment(this.masterEquipment, this.listOtherEquipment) 
                 this.formAnalytic.analytic_authority = this.mergingArrAuthority(this.masterAuthority, this.listOtherAuthority)
                 this.formAnalytic.analytic_class = $('#class').val()
                 this.formAnalytic.analytic_expertise = this.listExpertise
@@ -1640,37 +1625,33 @@
 
                 let tempEffort = []
                 this.masterEffort.forEach(item => {
-                    if (item.selected) {
-                        tempEffort.push({
-                            effort: item.name
-                        })
+                    if(item.selected) {
+                        tempEffort.push({effort: item.name})
                     }
                 })
 
                 let tempPowerType = []
                 this.masterPowertype.forEach(item => {
-                    if (item.selected) {
-                        tempPowerType.push({
-                            power_type: item.name
-                        })
+                    if(item.selected) {
+                        tempPowerType.push({power_type: item.name})
                     }
                 })
 
                 let tempRisk = {
                     physical: 'n/b',
                     mentality: 'n/b',
-
+                    
                 }
-                if (this.noRisk) {
+                if(this.noRisk) {
                     tempRisk = false
                 } else {
-                    if (this.phys_risk) {
+                    if(this.phys_risk) {
                         tempRisk.physical = this.phys_form
                     }
-                    if (this.ment_risk) {
+                    if(this.ment_risk) {
                         tempRisk.mentality = this.ment_form
                     }
-
+                   
                 }
 
                 let payloads = {
@@ -1705,60 +1686,51 @@
 
                 let tempWorkTalent = []
                 this.masterTalent.forEach(item => {
-                    if (item.selected) {
-                        tempWorkTalent.push({
-                            code: item.code,
-                            description: item.description
-                        })
+                    if(item.selected) {
+                        tempWorkTalent.push({code: item.code, description: item.description})
                     }
                 })
 
                 let tempWorkTemperament = []
                 this.masterTemperament.forEach(item => {
-                    if (item.selected) {
-                        tempWorkTemperament.push({
-                            code: item.code,
-                            description: item.description
-                        })
+                    if(item.selected) {
+                        tempWorkTemperament.push({code: item.code, description: item.description})
                     }
                 })
 
                 let tempWorkInterest = []
                 this.masterInterest.forEach(item => {
-                    if (item.selected) {
-                        tempWorkInterest.push({
-                            code: item.code,
-                            interest: item.name
-                        })
+                    if(item.selected) {
+                        tempWorkInterest.push({code: item.code, interest: item.name})
                     }
                 })
 
                 let payloadReq = {
-                    class: JSON.stringify({
-                        position_class: this.classesText(this.formReq.class),
-                        code: this.formReq.class
-                    }),
+                    class: JSON.stringify({position_class: this.classesText(this.formReq.class), code: this.formReq.class}),
                     expretise: JSON.stringify(this.formAnalytic.analytic_expertise),
                     skill: JSON.stringify(this.listSkill),
                     knowledge: JSON.stringify(this.formAnalytic.analytic_knowladge),
                     training_structure: this.formReq.training_structure,
                     training_functional: JSON.stringify(this.formAnalytic.analytic_functional),
-                    experience: JSON.stringify([{
-                        exp: this.formReq.experience
-                    }]),
+                    experience: JSON.stringify([{exp: this.formReq.experience}]) ,
                     physical_condition: JSON.stringify({
                         gender: this.physi_conditional.gender,
-                        age: this.physi_conditional.age_limit == "batasan" ?
-                            this.physi_conditional.age_form : this.physi_conditional.age_limit,
-                        appearance: this.physi_conditional.appear_limit == "batasan" ?
-                            this.physi_conditional.appear_form : this.physi_conditional.appear_limit,
-                        weigh: this.physi_conditional.weigh_limit == "batasan" ?
-                            this.physi_conditional.weigh_form : this.physi_conditional.weigh_limit,
-                        heigh: this.physi_conditional.heigh_limit == "batasan" ?
-                            this.physi_conditional.heigh_form : this.physi_conditional.heigh_limit,
-                        posture: this.physi_conditional.posture_limit == "batasan" ?
-                            this.physi_conditional.posture_form : this.physi_conditional.posture_limit,
-
+                        age: this.physi_conditional.age_limit == "batasan" ? 
+                            this.physi_conditional.age_form : 
+                            this.physi_conditional.age_limit,
+                        appearance: this.physi_conditional.appear_limit == "batasan" ? 
+                            this.physi_conditional.appear_form : 
+                            this.physi_conditional.appear_limit,
+                        weigh: this.physi_conditional.weigh_limit == "batasan" ? 
+                            this.physi_conditional.weigh_form : 
+                            this.physi_conditional.weigh_limit,
+                        heigh: this.physi_conditional.heigh_limit == "batasan" ? 
+                            this.physi_conditional.heigh_form : 
+                            this.physi_conditional.heigh_limit,
+                        posture: this.physi_conditional.posture_limit == "batasan" ? 
+                            this.physi_conditional.posture_form : 
+                            this.physi_conditional.posture_limit,
+                        
                     }),
                     work_talent: JSON.stringify(tempWorkTalent),
                     work_temperament: JSON.stringify(tempWorkTemperament),
@@ -1769,38 +1741,36 @@
                     analytics: payloads,
                     requirements: payloadReq
                 }
-                if (!this.is_update) {
-                    ApiAnalytic.postAnjab(FetchPayload)
+                console.log('id ', {ana: this._analyticsId, req: this._reqId})
+                if(this._reqId ) {
+                    ApiAnalytic.modifyAnjab( this._analyticsId, this._reqId, FetchPayload)
+                    .then(resp => console.log(resp))
+                    .catch(err => console.log(err))
+                    .finally(() => {
+                        this.$root.$router.replace({name: 'anjab.page'})
+                    })
+                } else {
+                    ApiAnalytic.createReq(this._analyticsId, FetchPayload)
+                    .then(_resp => {
+                        if(_resp.data.data.requirement) {
+                            this._reqId = _resp.data.data.requirement.id
+                        }
+                    })
+                    .finally(() => {
+                        ApiAnalytic.modifyAnjab( this._analyticsId, this._reqId, FetchPayload)
                         .then(resp => console.log(resp))
                         .catch(err => console.log(err))
                         .finally(() => {
-                            this.$root.$router.replace({
-                                name: 'anjab.page'
-                            })
+                            this.$root.$router.replace({name: 'anjab.page'})
                         })
-                } else {
-                    FetchPayload.id = FetchPayload.analytics.id = FetchPayload.requirements.id = this.dataUpdateAnalytic.id
-                    try {
-                        ApiAnalytic.modifyAnjab(FetchPayload)
-                            .then(resp => resp)
-                            .catch(err => console.log(err))
-                            .finally(() => {
-                                this.$root.$router.replace({
-                                    name: 'anjab.page'
-                                })
-                            })
-                    } catch (error) {
-                        console.log(error)
-                    }
+                    })
                 }
             },
             mergingArrEquipment(defaultArr, otherArr) {
                 let resMerge = []
                 defaultArr.forEach(item => {
-                    if (item.selected) {
-                        resMerge.push({
-                            equipment: item.name
-                        })
+                    if(item.selected) {
+                        resMerge.push({equipment:item.name})
                     }
                 })
                 otherArr.forEach(item => {
@@ -1861,7 +1831,7 @@
                     case "IVe":
                         return "Pangkat Pembina Utama"
                         break;
-
+                
                     default:
                         break;
                 }
@@ -1870,10 +1840,8 @@
             mergingArrMaterial(defaultArr, otherArr) {
                 let resMerge = []
                 defaultArr.forEach(item => {
-                    if (item.selected) {
-                        resMerge.push({
-                            material: item.name
-                        })
+                    if(item.selected) {
+                        resMerge.push({material: item.name})
                     }
                 })
                 otherArr.forEach(item => {
@@ -1885,10 +1853,8 @@
             mergingArrResponsibility(defaultArr, otherArr) {
                 let resMerge = []
                 defaultArr.forEach(item => {
-                    if (item.selected) {
-                        resMerge.push({
-                            responsible: item.name
-                        })
+                    if(item.selected) {
+                        resMerge.push({responsible: item.name})
                     }
                 })
                 otherArr.forEach(item => {
@@ -1900,10 +1866,8 @@
             mergingArrAuthority(defaultArr, otherArr) {
                 let resMerge = []
                 defaultArr.forEach(item => {
-                    if (item.selected) {
-                        resMerge.push({
-                            authority: item.name
-                        })
+                    if(item.selected) {
+                        resMerge.push({authority:item.name})
                     }
                 })
                 otherArr.forEach(item => {
@@ -1917,8 +1881,8 @@
                 this.compOpd.position_id = data.position_id
             },
             getDataCorrelation(data) {
-                console.log('corelation emmited',data)
-                if (data.relation != '') {
+                console.log(data)
+                if(data.relation != '') {
                     this.listCorelation.push(data)
                 }
             },
@@ -1929,4 +1893,5 @@
 
         },
     }
+
 </script>
