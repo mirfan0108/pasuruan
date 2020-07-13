@@ -19,26 +19,44 @@
                                 </select>
                             </div>
                         </div>
-                        <table class="table color-table success-table" style="width: 100%; margin-top: 10px;"> 
+                        <table style="width: 100%; margin-top: 20px;" border="1"> 
                             <thead>
                                 <tr>
-                                    <th rowspan="2">No</th>
-                                    <th rowspan="2">Nama Jabatan</th>
-                                    <th rowspan="2">JC</th>
-                                    <th rowspan="2">F1 Ruang Lingkup + Dampak L5</th>
-                                    <th rowspan="2">F2 Pengaturan Organisasi L3</th>
-                                    <th rowspan="2">F3 Wewenang Penyeliaan + Manajerial L3</th>
-                                    <th colspan="2">F4 Hubugan Personal</th>
-                                    <th rowspan="2">F5 Kesulitan Pengarahan Pekerjaan L8</th>
-                                    <th rowspan="2">F6 Kondisi Lain F6</th>
-                                    <th rowspan="2">B</th>
-                                    <th rowspan="2">K</th>
+                                    <th rowspan="2" style="width: 5%; text-align: center;">No</th>
+                                    <th rowspan="2" style="width: 20%; text-align: center;" >Nama Jabatan</th>
+                                    <th rowspan="2" style="width: 5%; text-align: center;">JC</th>
+                                    <th rowspan="2" style="text-align: center; width: 5%;">Job Value</th>
+                                    <th rowspan="2" style="text-align: center; width: 10%;">F1 Ruang Lingkup + Dampak L5</th>
+                                    <th rowspan="2" style="text-align: center; width: 10%;">F2 Pengaturan Organisasi L3</th>
+                                    <th rowspan="2" style="text-align: center; width: 10%;">F3 Wewenang Penyeliaan + Manajerial L3</th>
+                                    <th colspan="2" style="text-align: center;">F4 Hubugan Personal</th>
+                                    <th rowspan="2" style="text-align: center; width: 10%;">F5 Kesulitan Pengarahan Pekerjaan L8</th>
+                                    <th rowspan="2" style="text-align: center; width: 10%;">F6 Kondisi Lain F6</th>
+                                    <th rowspan="2" style="width: 5%;text-align: center;">B</th>
+                                    <th rowspan="2" style="width: 5%; text-align: center;">K</th>
                                 </tr>
                                 <tr>
                                     <th>Sifat Hub</th>
                                     <th>Tujuan Hub</th>
                                 </tr>
                             </thead>
+                            <tbody v-if="dumData.length > 0">
+                                <tr v-for="(dt, index) in dumData">
+                                    <td>{{index+1}}</td>
+                                    <td>Kepala Jabatan</td>
+                                    <td></td>
+                                    <td>{{dt.f1}}</td>
+                                    <td>{{dt.f2}}</td>
+                                    <td>{{dt.f3}}</td>
+                                    <td>{{dt.f4}}</td>
+                                    <td>{{dt.f5}}</td>
+                                    <td>{{dt.f1}}</td>
+                                    <td>{{dt.f3}}</td>
+                                    <td>{{dt.f2}}</td>
+                                    <td>1</td>
+                                    <td>1</td>
+                                </tr>
+                            </tbody>
                         </table>
                     </div>
                 </div>
@@ -49,7 +67,7 @@
             <div class="modal-dialog modal-lg">
                 <div class="modal-content">
                     <div class="modal-header">
-                        <h4 class="modal-title" id="myLargeModalLabel">Tambah Jabatan</h4>
+                        <h4 class="modal-title" id="myLargeModalLabel">Tambah</h4>
                         <button type="button" class="close" data-dismiss="modal" aria-hidden="true" @click.prevent="formAdd.name = null">×</button>
                     </div>
                     <div class="modal-body">
@@ -103,6 +121,7 @@
     export default {
         data() {
             return {
+                dumData: [],
                 search: '',
                 perPage: 10,
                 currentPage: 1,
@@ -140,6 +159,11 @@
             }
         },
         mounted() {
+            if(localStorage.getItem('FES')) {
+                let temp = JSON.parse(localStorage.getItem('FES'))
+                this.dumData.push(temp)
+            }
+
             $("#type-selection").select2()
             $("#opd-selection").select2({
                 ajax: {
@@ -217,7 +241,7 @@
 
             createPosition() {
                 // this.$root.$store.dispatch('setOpd', {})
-                this.$root.$router.push({name: 'masterfile.create.position.page'})
+                this.$root.$router.push({name: 'struktural.form.evjab'})
             },
 
             deletePosition(data) {
