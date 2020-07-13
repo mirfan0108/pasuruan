@@ -1,0 +1,312 @@
+<template>
+    <div>
+        <div class="card">
+            <div class="card-body">
+                <h4 class="card-title">ANALISA</h4>
+                <div class="form-group">
+                    <select class="select2 form-control" style="width: 100%;" id="opd-selection" ></select>
+                </div>
+                <div class="box box-success">
+                    <div class="box-body" >
+                        <table class="table" >
+                            <thead>
+                                <tr>
+                                    <td colspan="5">
+                                        <input class="form-control" placeholder="Cari Jabatan ...." v-model="searchPosition">
+                                    </td>
+                                </tr>
+            
+                                <tr >
+                                    <th width="600">JABATAN</th>
+                                    <th style="text-align: center;">ANJAB</th>
+                                    <th style="text-align: center;">ABK(Form A)</th>
+                                    <th style="text-align: center;">STATUS</th>
+                                    <th style="text-align: center;">TOOLS</th>
+                                </tr>
+                            </thead>
+                            <tbody v-if="onLoad" align="center">
+                                <tr>
+                                    <td colspan="5" align="center">
+                                        <div class="overlay"  align="center" >
+                                            <img src="/assets/gif/loading.gif" width="100">
+                                        </div>
+                                    </td>
+                                </tr>
+                            </tbody>
+                            <tbody v-if="!onLoad">
+                                <tr v-for="position in dataPosition" >
+                                    <td>{{position.name}}</td>
+                                    <td style="text-align: center;">
+                                        <button class="btn btn-secondary btn-sm btn-rounded" v-if="position.TB_ANALYTIC_POSITION != null" @click.prevent="detailAnjab(position)">Detail</button>
+                                        <button class="btn btn-success btn-sm btn-rounded" v-if="position.TB_ANALYTIC_POSITION == null" @click.prevent="createNewAnjab(position)">Buat</button>
+                                    </td>
+                                    <td style="text-align: center;">
+                                        <button class="btn btn-secondary btn-sm btn-rounded"  v-if="position.TB_WORKLOAD && position.TB_WORKLOAD.TB_WORKLOAD_TASKs.length > -1 " @click.prevent="detailFormA(position)">Detail</button>
+                                        <button class="btn btn-success btn-sm btn-rounded" :disabled="position.TB_ANALYTIC_POSITION == null" v-if="position.TB_WORKLOAD == null" @click.prevent="createNewFormA(position)">Buat</button>
+                                    </td>
+                                    <td style="text-align: center;" >
+                                        {{
+                                            position.TB_ANALYTIC_POSITION == null ? 'ANJAB belum tersedia' : 
+                                                position.TB_WORKLOAD == null  ? 'ABK belum tersedia' :  
+                                                    position.TB_WORKLOAD.TB_WORKLOAD_TASKs.length == 0 ? 'ABK masih kosong' : 
+                                                        position.TB_ANALYTIC_POSITION.status == 1 ? 'Lengkap' : 
+                                                            position.TB_ANALYTIC_POSITION.status == 2 ? 'Proses Verifikasi' : 
+                                                                position.TB_ANALYTIC_POSITION.status == 3 ? 'Valid' : 
+                                                                    position.TB_ANALYTIC_POSITION.status == 3 ? 'Tidak Valid' : ''
+                                        }}
+                                    </td>
+                                    <td style="text-align: center;" >
+                                        <div v-if="position.TB_ANALYTIC_POSITION && position.TB_WORKLOAD && position.TB_WORKLOAD.TB_WORKLOAD_TASKs.length > 0">
+                                            <!-- <button class="btn btn-success" :disabled="isdisabled" @click.prevent="doSend(position)">
+                                                Kirim
+                                            </button> -->
+                                            <button class="btn btn-primary btn-sm btn-rounded" :disabled="!position.TB_ANALYTIC_POSITION || position.TB_WORKLOAD.TB_WORKLOAD_TASKs.length == 0 || position.TB_ANALYTIC_POSITION.status == 2 || position.TB_ANALYTIC_POSITION.status == 3 " @click.prevent="doSend(position)">
+                                                Kirim
+                                            </button>
+                                        </div>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    
+                    <div class="box-footer" >
+                        <div class="pull-right" >
+                            <b-pagination
+                                    v-model="currentPage"
+                                    :total-rows="totalRows"
+                                    :per-page="perPage"
+                                    align="fill"
+                                    size="md"></b-pagination>
+                        </div>
+                    </div>
+                </div>  
+            </div>
+        </div>
+    </div>
+</template>
+
+<script>
+    import ApiOpd from '../../services/api/ManagementOpd.js';
+    import ApiPosition from '../../services/api/ManagementPosition.js';
+    import ApiAnalytic from '../../services/api/AnalyticPosition.js';
+    import ApiAbk from '../../services/api/AnalyticAbk.js'
+    export default {
+        data() {
+            return {
+                perPage: 10,
+                currentPage: 1,
+                totalRows: 0,
+                dataPosition: [],
+                isdisabled: true,
+                opd_selected: 0,
+                searchPosition: '',
+                onLoad: true
+            }
+        },
+        watch: {
+            "currentPage": function(newVal, oldVal) {
+                this.onLoad = true;
+                this.fetchAnjab(newVal, 10, this.opd_selected, this.searchPosition)
+            },
+            "searchPosition": function( newVal, oldVal) {
+                this.onLoad = true;
+                if(this.currentPage != 1) {
+                    this.currentPage == 1
+                } 
+                this.fetchAnjab(1 , 10, this.opd_selected, newVal)
+            }
+        },
+        mounted() {
+            this.$root.page = {
+                title: "ANJAB - ABK",
+                subtitle: ""
+            }
+            $(".select2").select2()
+            $('#opd-selection').on('select2:select', async(e) => {
+                this.onLoad = true
+                let id_opd = await $("#opd-selection").val()
+                this.dataPosition = []
+                this.opd_selected = id_opd
+                this.currentPage = 1
+                    // this.fetchPosition(id_opd)
+                localStorage.setItem('__selection_opd', id_opd)
+                this.fetchAnjab(1, 10, id_opd)
+                this.searchPosition = ""
+            })
+            this.onLoad = true;
+            this.fetchOpd()
+
+        },
+        methods: {
+            fetchAnjab(page = 1, limit = 10, id, search = "") {
+                ApiAnalytic.fetchAnjab(page, limit, id, search)
+                    .then(resp => {
+                        console.log('anjab', resp)
+                        if(resp.data) {
+                            this.totalRows = resp.data.total
+                            this.dataPosition = resp.data.content
+                        }
+                    })
+                    .catch(e => console.log(e))
+                    .finally(() => {
+                        setTimeout(() => {
+                            this.onLoad = false
+                        }, 1000)
+                    })
+            },
+
+            createNewAnjab(position) {
+                let id_opd = $("#opd-selection").val()
+                this.$root.$router.push({
+                    name: 'input.anjab.page',
+                    query: {
+                        opd_id: id_opd,
+                        position: JSON.stringify(position)
+                    }
+                })
+            },
+
+            detailAnjab(position) {
+                this.$root.$router.push({
+                    name: 'detail.anjab.page',
+                    params: {
+                        position_id: position.id
+                    }
+                })
+            },
+
+            detailFormA(position) {
+                this.$root.$router.push({
+                    name: 'detail.abk.page',
+                    params: {
+                        position_id: position.id
+                    },
+                })
+            },
+
+            createNewFormA(position) {
+                let id_opd = $("#opd-selection").val()
+                    // console.log("opd " + id_opd)
+                    console.log('will create', position)
+                this.$root.$router.push({
+                    name: 'analytic.job.form',
+                    params: {
+                        position_id: position.id
+                    }
+                })
+
+            },
+
+            doSend(position) {
+                let analytic_position = position.TB_ANALYTIC_POSITION ? position.TB_ANALYTIC_POSITION : false
+                let work_load = position.TB_WORKLOAD
+                analytic_position.status = 2
+                ApiAnalytic.readyToVerify(analytic_position)
+                .then(res => console.log('res', res))
+                .catch(err => console.log(err))
+                .finally(() => {
+                    ApiAbk.readyToVerify(work_load)
+                    .then(resp => {
+                        console.log('resp', resp)
+                    })
+                    .catch(err => console.log(err))
+                    .finally(() => {
+                        // window.location.reload()
+                    })
+                })
+            },
+
+            fetchOpd() {
+                $("#opd-selection").html("")
+                ApiOpd.getOpd()
+                    .then(resp => {
+                        let first_id = 0
+                        let index = 1
+                        this.opd = resp.data.content
+                            // console.log("opd", resp)
+                        resp.data.content.forEach(element => {
+                            if (!this.opd_selected) {
+                                if (index == 1) {
+                                    
+                                    this.opd_selected = element.id
+                                        // console.log()
+                                    first_id = element.id
+                                    
+                                    this.opd_name = this.opd[this.opd.findIndex(_item => _item.id == element.id)].name
+                                    $("#opd-selection").append("<option value='" + element.id + "' selected>" + element.name + "</option>")
+
+                                } else {
+                                    $("#opd-selection").append("<option value='" + element.id + "' >" + element.name + "</option>")
+                                }
+                            } else {
+                                if (this.opd_selected == element.id) {
+                                    first_id = element.id
+                                    $("#opd-selection").append("<option value='" + element.id + "' selected>" + element.name + "</option>")
+                                } else {
+                                    $("#opd-selection").append("<option value='" + element.id + "' >" + element.name + "</option>")
+                                }
+                            }
+                            index += 1
+                        });
+                        this.opd_selected = first_id
+                        // this.fetchPosition(first_id)
+                    })
+                    .catch(err => console.log(err))
+                    .finally(async () => {
+                        let auth
+                        let token
+                        if (sessionStorage.getItem("__CSRF")) {
+                            token = await JSON.parse(sessionStorage.getItem("__CSRF")).access_token
+                            console.log(token)
+                            auth = await `Bearer ${token}`;
+                        }
+                        try {
+                            $("#opd-selection").select2({
+                                ajax: {
+                                    url: process.env.BASE_API+"/opd",
+                                    headers: {
+                                        "Authorization": auth,
+                                    },
+                                    delay: 1000,
+                                    data: function(params) {
+                                        var query = {
+                                            search: params.term,
+                                            limit: 10,
+                                            page: params.page || 1
+                                        }
+                                        return query;
+                                    },
+                                    processResults: function(data, params) {
+                                        params.page = params.page || 1;
+                                        data.content.forEach(_val => {
+                                            _val.text = _val.name
+                                        })
+                                        return {
+                                            results: data.content,
+                                            pagination: {
+                                                more: (params.page * 10) < data.total
+                                            }
+                                        };
+                                    }
+                                }
+                                
+                            })
+                            if(localStorage.getItem('__selection_opd')) {
+                                $("#opd-selection").val(localStorage.getItem('__selection_opd')).trigger('change')
+                                this.currentPage = 1
+                                this.opd_selected = localStorage.getItem('__selection_opd')
+                                this.fetchAnjab(1, 10, this.opd_selected, '')
+                            } else {
+                                localStorage.setItem('__selection_opd', $("#opd-selection").val())
+                                this.fetchAnjab(1, 10, 1, '')
+                            }
+                            
+                        } catch (error) {
+                            console.log(error)
+                        }
+                    })
+            },
+        }
+    }
+</script>

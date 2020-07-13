@@ -1,0 +1,164 @@
+<template>
+    <div>
+        <div class="card">
+            <div class="card-body">
+                <button class="btn btn-sm btn-rounded btn-success pull-right" @click.prevent="edit()"><i class="fa fa-pencil"></i> Edit</button>
+                <button class="btn btn-danger btn-sm btn-rounded pull-right" @click.prevent="del()"><i class="fa fa-trash"></i> Delete</button>
+                <button  class="btn btn-sm btn-rounded btn-secondary pull-left" @click.prevent="$root.$router.back()"> Kembali</button>
+            </div>
+            <div class="card-body">
+                <h4 class="card-title">PENGUMPULAN DATA BEBAN KERJA</h4>
+                <table v-if="positionDetail">
+                    <tr>
+                        <td colspan="3">&nbsp;</td>
+                    </tr>
+                    <tr>
+                        <td colspan="3">&nbsp;</td>
+                    </tr>
+                    <tr>
+                        <th>Nama Jabatan</th>
+                        <th>&nbsp;:&nbsp;</th>
+                        <th>{{positionDetail.name}}</th>
+                    </tr>
+                    <tr>
+                        <th>Organisasi </th>
+                        <th>&nbsp;:&nbsp;</th>
+                        <th>{{FormA.organization_name}}</th>
+                    </tr>
+                    <tr>
+                        <th>Satuan Kerja </th>
+                        <th>&nbsp;:&nbsp;</th>
+                        <th>{{FormA.unit_name}}</th>
+                    </tr>
+                </table>
+                
+                <br>
+                <table class="table">
+                    <tr >
+                        <th style="text-align: center;">No.</th>
+                        <th >RINCIAN TUGAS</th >
+                        <th style="text-align: center;">SATUAN</th>
+                        <th style="text-align: center;">VOL KERJA/ TH</th>
+                        <th style="text-align: center;">NORMA WAKTU</th>
+                        <th style="text-align: center;">ALAT KERJA</th>
+                        <th style="text-align: center;">KET</th>
+                    </tr>
+                    <tr v-for="(detail, index) in FormA.TB_WORKLOAD_TASKs">
+                        <td style="text-align: center;">
+                            {{index+1}}
+                        </td>
+                        <td>
+                            {{detail.task}}
+                        </td>
+                        <td style="text-align: center;">
+                            {{detail.unit}}
+                        </td>
+                        <td style="text-align: center;">
+                            {{detail.volume}}
+                        </td>
+                        <td style="text-align: center;">
+                            {{detail.norma}}
+                        </td>
+                        <td style="text-align: center;">
+                            {{getEqueipmentToText(detail.equipment)}}
+                        </td>
+                        <td style="text-align: center; width: 100px;" >
+                            {{ parseFloat(parseFloat(detail.volume)*parseFloat(detail.norma)).toFixed(2) }} OJ
+                        </td>
+                    </tr>
+                </table>
+            </div>
+        </div>
+    </div>
+</template>
+
+<script>
+    import ApiAbk from "../../services/api/AnalyticAbk.js"
+    import Swal from 'sweetalert2'
+
+    export default {
+        props: ['position_id'],
+        data() {
+            return {
+                dataAbk: [],
+                opd_selected: null,
+                positionDetail: null,
+                FormA: []
+            }
+        },
+        mounted() {
+            ApiAbk.GetDetail(this.position_id)
+                .then(resp => {
+                    console.log('abk detail', resp.data)
+                    if(resp ) {
+                        this.positionDetail = resp.data
+                        this.FormA = resp.data.TB_WORKLOAD
+                    }
+                })
+                .catch(e => console.log(e))
+                .finally(() => {
+                    this.$root.page = {
+                    title: "FORM A",
+                    subtitle: "Jabatan " + this.positionDetail.name
+                }
+
+                })
+        },
+        methods: {
+            edit() {
+                this.$root.$router.push({
+                    name: 'analytic.job.modify',
+                    params: {
+                        position_id: this.positionDetail.id
+                    }
+                })
+            },
+            getEqueipmentToText(eq) {
+                let temps = JSON.parse(eq)
+                let _text = ""
+                temps.map((_eq, index) => {
+                    if (temps[index + 1]) {
+                        if (index != 0) {
+                            _text += ", "
+                        }
+                    } else {
+                        if (index != 0) {
+                            _text += " dan "
+                        }
+                    }
+                    _text += temps[index]
+                })
+                return _text
+            },
+            del() {
+                Swal.fire({
+                    title: `Anda yakin ingin menghapus data ini ?`,
+                    text: "Data yang telah dihapus tidak dapat dikembalikan!",
+                    icon: 'warning',
+                    showCancelButton: true,
+                    confirmButtonColor: '#d33',
+                    cancelButtonColor: '#b3b3b3',
+                    confirmButtonText: 'Ya, delete it!',
+                }).then((result) => {
+                    if (result.value) {
+                        ApiAbk.deleteAbk(this.FormA.id)
+                            .then(resp => resp)
+                            .catch(err => console.log(err))
+                            .finally(() => {
+                                Swal.fire(
+                                        'Berhasil',
+                                        `Data ini telah dihapus`,
+                                        'success'
+                                    )
+                                    .then(this.$router.replace({
+                                        name: 'anjab-abk'
+                                    }))
+
+                            })
+
+                    }
+                })
+            },
+        }
+    }
+</script>

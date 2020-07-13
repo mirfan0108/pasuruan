@@ -1,0 +1,280 @@
+<template>
+    <div class="row">
+        <div class="col-md-12 col-lg-12">
+            <div class="card">
+                <div class="card-body">
+                    <button class="pull-right btn btn-sm btn-rounded btn-success" data-toggle="modal" data-target="#modal-Talent-add">Tambah Bakat Kerja</button>
+                    <h4 class="card-title">Bakat Kerja</h4>
+                    <div class="table-responsive" style="margin-top: 35px;">
+                        <table class="table color-table success-table">
+                            <thead>
+                                <tr>
+                                    <th colspan="5">
+                                        <input placeholder="Cari..." v-model="search" class="form-control" type="text">
+                                    </th>
+                                </tr>
+                                <tr>
+                                    <th width="50">#</th>
+                                    <th width="50">Kode</th>
+                                    <th>Bakat Kerja</th>
+                                    <th>Deskripsi</th>
+                                    <th width="200"></th>
+                                </tr>
+                            </thead>
+                            <tbody v-if="!onLoad && Talents.length > 0">
+                                <tr v-for="(Talent, index) in Talents">
+                                    <td width="50">
+                                        {{(currentPage - 1 == 0 ? (index+1) : ((index+1) != 10) ? (currentPage-1)+''+(index+1) : currentPage+''+0)}}
+                                    </td>
+                                    <td width="50">{{Talent.code}}</td>
+                                    <td>{{Talent.name}}</td>
+                                    <td>{{Talent.description}}</td>
+                                    <td>
+                                        <a href="javascript:void(0)" @click.prevent="modifyTalent(Talent)">
+                                            <i class="mdi mdi-lead-pencil"></i> Ubah
+                                        </a> |
+                                        <a href="javascript:void(0)" class="text-danger" @click.prevent="deleteTalent(Talent)">
+                                            <i class="mdi mdi-delete"></i> Hapus
+                                        </a>
+                                    </td>
+                                </tr>
+                            </tbody>
+                            <tbody v-if="!onLoad && Talents.length == 0">
+                                <tr >
+                                    <td colspan="5" style="text-align: center;">Tidak tersedia.</td>
+                                </tr>
+                            </tbody>
+                            <tbody v-if="onLoad">
+                                <tr>
+                                    <td colspan="5" align="center">
+                                        <img src="assets/images/loading.gif" alt="loading" width="180">
+                                    </td>
+                                </tr>
+                            </tbody>
+                            <tfoot>
+                                <tr>
+                                    <td colspan="5">
+                                        <div class="pull-right">
+                                            <b-pagination
+                                                    v-model="currentPage"
+                                                    :total-rows="totalTalents"
+                                                    :per-page="perPage"
+                                                    align="fill"
+                                                    size="md"></b-pagination>
+                                        </div>
+                                    </td>
+                                </tr>
+                            </tfoot>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- START FORM ADD TalentS -->
+        <div class="modal fade " tabindex="-1" id="modal-Talent-add" role="dialog" aria-labelledby="Tambah Bakat Kerja" style="display: none;" aria-hidden="true">
+            <div class="modal-dialog modal-lg">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h4 class="modal-title" id="myLargeModalLabel">Tambah Bakat Kerja</h4>
+                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true" @click.prevent="formAdd.name = null; formAdd.code = null; formAdd.description = null">×</button>
+                    </div>
+                    <div class="modal-body">
+                        <form role="form" @submit.prevent="submitted">
+                            <div class="row">
+                                <div class="form-group col-md-4 col-lg-4">
+                                    <label>Kode Bakat Kerja </label>
+                                    <input class="form-control" type="text" maxlength="2" placeholder="Kode Bakat Kerja" v-model="formAdd.code">
+                                </div>
+                                <div class="form-group col-md-8 col-lg-8">
+                                    <label>Bakat Kerja</label>
+                                    <input class="form-control" type="text" maxlength="50" placeholder="Bakat Kerja" v-model="formAdd.name">
+                                </div>
+                                <div class="form-group col-md-12 col-lg-12">
+                                    <label>Deskripsi</label>
+                                    <textarea class="form-control" cols="50" rows="10" placeholder="max.200 Karakter" v-model="formAdd.description"></textarea>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-danger waves-effect text-left" data-dismiss="modal" id="close-modal-add-Talent" @click.prevent="formAdd.name = null; formAdd.code = null; formAdd.description = null">Close</button>
+                        <button type="button" class="btn btn-primary waves-effect text-left" :disabled="onLoad" @click.prevent="submitted"> {{onLoad ? 'Please Wait...': 'Submit'}}</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- END FORM ADD TalentS -->
+
+        <!-- START FORM MODIFY TalentS -->
+        <button  data-toggle="modal" data-target="#modal-Talent-modify" style="display: none;" id="open-modify-modal"></button>
+        <div class="modal fade " tabindex="-1" id="modal-Talent-modify" role="dialog" aria-labelledby="Tambah Bakat Kerja" style="display: none;" aria-hidden="true">
+            <div class="modal-dialog modal-lg">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h4 class="modal-title" id="myLargeModalLabel">Ubah Bakat Kerja</h4>
+                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true" @click.prevent="formModify.name = null; idModify = null; formModify.code = null; formModify.description = null;">×</button>
+                    </div>
+                    <div class="modal-body">
+                        <form role="form" @submit.prevent="submitModify">
+                            <div class="row">
+                                <div class="form-group col-md-4 col-lg-4">
+                                    <label>Kode Bakat Kerja </label>
+                                    <input class="form-control" type="text" maxlength="2" placeholder="Kode Bakat Kerja" v-model="formModify.code">
+                                </div>
+                                <div class="form-group col-md-8 col-lg-8">
+                                    <label>Bakat Kerja</label>
+                                    <input class="form-control" type="text" maxlength="50" placeholder="Bakat Kerja" v-model="formModify.name">
+                                </div>
+                                <div class="form-group col-md-12 col-lg-12">
+                                    <label>Deskripsi</label>
+                                    <textarea class="form-control" cols="50" rows="10" placeholder="max.200 Karakter" v-model="formModify.description"></textarea>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-danger waves-effect text-left" data-dismiss="modal" id="close-modal-modify-Talent" @click.prevent="formModify.name = null; idModify = null; formModify.code = null; formModify.description = null;">Close</button>
+                        <button type="button" class="btn btn-primary waves-effect text-left" :disabled="onLoad" @click.prevent="submitModify"> {{onLoad ? 'Please Wait...': 'Submit'}}</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- END FORM MODIFY TalentS -->
+    </div>
+</template>
+
+<script>
+    import { mapState } from 'vuex';
+    import Swal from 'sweetalert2'
+    export default {
+        data() {
+            return {
+                search: '',
+                perPage: 10,
+                currentPage: 1,
+                formAdd: {
+                    code: null,
+                    name: null,
+                    description: null
+                },
+                idModify: null,
+                formModify: {
+                    code: null,
+                    name: null,
+                    description: null
+                }
+            }
+        },
+        computed: mapState(['onLoad', 'Talents', 'totalTalents']),
+        beforeCreate() {
+            let pages = {
+                title: 'Master File',
+                breadcrumb: [
+                    {
+                        name: 'Bakat Kerja'
+                    }
+                ]
+            }    
+            this.$root.$store.dispatch('setBreadCrumb', pages)
+        },
+        watch: {
+            'currentPage': function(newVal, oldVal) {
+                this.init()
+            },
+            'search': async function(newVal, oldVal) {
+                this.currentPage = await 1
+                this.init()
+            }
+        },
+        mounted() {
+            // this.resetData()
+            this.init()
+        },
+        methods: {
+            async resetData() {
+                this.search                 = await ''
+                this.formAdd.name           = null
+                this.formAdd.code           = null
+                this.formAdd.description    = null
+                this.perPage                = await 10
+                this.currentPage            = await 1
+                this.totalItem              = await 0
+                this.idModify               = null
+                this.formModify.name        = null
+                this.formModify.code        = null
+                this.formModify.description = null
+            },
+            async init() {
+                this.$root.$store.dispatch('getTalents', {page: this.currentPage, limit: this.perPage, search: this.search})
+                .catch(_err => _err)
+            },
+
+            deleteTalent(data) {
+                Swal.fire({
+                    title: `Anda yakin ingin menghapus ${data.name} ?`,
+                    text: "Data yang telah dihapus tidak dapat dikembalikan!",
+                    icon: 'warning',
+                    showCancelButton: true,
+                    confirmButtonColor: '#d33',
+                    cancelButtonColor: '#b3b3b3',
+                    confirmButtonText: 'Ya, Hapus itu!',
+                }).then((result) => {
+                    if (result.value) {
+                        this.$root.$store.dispatch('deleteTalent', data.id)
+                        .then(_resp => _resp)
+                        .finally(() => {
+                            Swal.fire({
+                                icon: 'success',
+                                title: `${data.name} berhasil dihapus!`,
+                                onClose: () => {
+                                    
+                                    this.init()
+                                }
+                            })
+                        })
+                    }
+                })
+            },
+
+            submitted() {
+                this.$root.$store.dispatch('addTalents', this.formAdd)
+                .then(_resp => $("#close-modal-add-Talent").click())
+                .finally(() => {
+                    
+                    Swal.fire({
+                        icon: 'success',
+                        title: 'Data berhasil ditambahkan!',
+                        onClose: () => {
+                            this.resetData()
+                            this.init()
+                        }
+                    })
+                })
+            },
+
+            modifyTalent(data) {
+                this.idModify = data.id
+                this.formModify.name = data.name
+                this.formModify.description = data.description
+                this.formModify.code = data.code
+                $("#open-modify-modal").click()
+            },
+
+            submitModify() {
+                this.$root.$store.dispatch('modifyTalent', {id: this.idModify, form: this.formModify})
+                .then(_resp => $("#close-modal-modify-Talent").click())
+                .finally(() => {
+                    
+                    Swal.fire({
+                        icon: 'success',
+                        title: 'Berhasil di ubah',
+                        onClose: () => {
+                            this.init()
+                        }
+                    })
+                })
+            }
+        }
+    }
+</script>

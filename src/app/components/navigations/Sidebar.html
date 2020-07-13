@@ -1,0 +1,189 @@
+<template>
+    <aside class="left-sidebar">
+        <!-- Sidebar scroll-->
+        <div class="scroll-sidebar">
+            <!-- User profile -->
+            <div class="user-profile" style="background: url(/assets/images/background/user-info.jpg) no-repeat; background-size: cover;">
+                <!-- User profile image -->
+                <div class="profile-img"> <img :src="$root.$store.state.avatar" alt="user" /> </div>
+                <!-- User profile text-->
+                <div class="profile-text" v-if="$root.$store.state && $root.$store.state.username"> <a href="#" class="dropdown-toggle u-dropdown" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="true">{{$root.$store.state.username}}</a>
+                    <div class="dropdown-menu animated flipInY"> 
+                        <a @click.prevent="doLogout()" href="javascript:void(0)" class="dropdown-item"><i class="fa fa-power-off"></i> Logout</a> 
+                    </div>
+                </div>
+            </div>
+            <!-- End User profile text-->
+            <!-- Sidebar navigation-->
+            <nav class="sidebar-nav">
+                <ul id="sidebarnav">
+                    <li class="nav-small-cap">MAIN NAVIGATION</li>
+                    
+                    <li id="li-dashboard" @click.prevent="activedClass('dashboard')"> 
+                        <router-link :to="{name: 'dashboard.page'}" class=" waves-effect waves-dark" >
+                            <i class="mdi mdi-gauge"></i><span class="hide-menu">Dashboard</span>
+                        </router-link>
+                    </li>
+                    <li id="li-anjab">
+                        <router-link :to="{name: 'anjab.page'}" class=" waves-effect waves-dark" >
+                            <i class="mdi mdi-gauge"></i><span class="hide-menu">Penjabat</span>
+                        </router-link>
+                    </li>
+                    <li id="li-anjab">
+                        <router-link :to="{name: 'anjab.page'}" class=" waves-effect waves-dark" >
+                            <i class="mdi mdi-gauge"></i><span class="hide-menu">Analisa Jabatan</span>
+                        </router-link>
+                    </li>
+                    
+                    <li id="li-report"  >
+                        <a id="a-report" @click.prevent="report()" class=" waves-effect waves-dark" href="#" aria-expanded="false">
+                            <i class="mdi mdi-border-color"></i><span class="hide-menu">Analisa Beban Kerja</span>
+                        </a>
+                        <ul aria-expanded="false" class="collapse">
+                            <!-- <li id="li-report-linkedin" @click.prevent="reportNavigate('report-linkedin')">
+                                <router-link id="a-report-linkedin" :to="{name: 'report.linkedin.page'}">Linked In</router-link>
+                            </li> -->
+                            <li>
+                                <router-link :to="{name: 'form.a.page'}">Form A</router-link>
+                            </li>
+                            <li>
+                                <router-link :to="{name: 'form.b.page'}">Form B</router-link>
+                            </li>
+                            <li>
+                                <router-link :to="{name: 'form.c.page'}">Form C</router-link>
+                            </li>
+                            <li>
+                                <router-link :to="{name: 'form.d.page'}">Form D</router-link>
+                            </li>
+                            <li>
+                                <router-link :to="{name: 'form.e.page'}">Form E</router-link>
+                            </li>
+                        </ul>
+                    </li>
+                    <li id="li-anjab">
+                        <router-link :to="{name: 'anjab.page'}" class=" waves-effect waves-dark" >
+                            <i class="mdi mdi-gauge"></i><span class="hide-menu">Evaluasi Jabatan</span>
+                        </router-link>
+                    </li>
+                    <li id="li-anjab">
+                        <router-link :to="{name: 'anjab.page'}" class=" waves-effect waves-dark" >
+                            <i class="mdi mdi-gauge"></i><span class="hide-menu">Peta Jabatan</span>
+                        </router-link>
+                    </li>
+                    <li class="nav-devider" ></li>
+                    <li class="nav-small-cap" >DOCUMENTATION</li>
+
+                    <li class="nav-devider" ></li>
+                    <li class="nav-small-cap" >MASTER FILES</li>
+                    <li id="li-report"  >
+                        <a id="a-report" @click.prevent="report()" class=" waves-effect waves-dark" href="#" aria-expanded="false">
+                            <i class="mdi mdi-border-color"></i><span class="hide-menu">Informasi</span>
+                        </a>
+                        <ul aria-expanded="false" class="collapse">
+                            <li>
+                                <router-link :to="{name: 'masterfile.equipments.page'}">Alat Kerja</router-link>
+                            </li>
+                            <li>
+                                <router-link :to="{name: 'masterfile.materials.page'}">Bahan Kerja</router-link>
+                            </li>
+                            <li>
+                                <router-link :to="{name: 'masterfile.talents.page'}">Bakat Kerja</router-link>
+                            </li>
+                            <li>
+                                <router-link :to="{name: 'masterfile.powers.page'}">Jenis Daya</router-link>
+                            </li>
+                            <li>
+                                <router-link :to="{name: 'masterfile.efforts.page'}">Jenis Upaya</router-link>
+                            </li>
+                            <li>
+                                <router-link :to="{name: 'masterfile.interest.page'}">Minat Kerja</router-link>
+                            </li>
+                            <li>
+                                <router-link :to="{name: 'masterfile.responsible.page'}">Tanggung Jawab</router-link>
+                            </li>
+                            <li>
+                                <router-link :to="{name: 'masterfile.temperament.page'}">Temperamen</router-link>
+                            </li>
+                            <li>
+                                <router-link :to="{name: 'masterfile.authority.page'}">Wewenang</router-link>
+                            </li>
+                        </ul>
+                    </li>
+                    <li id="li-administrator" @click.prevent="activedClass('administrator')"> 
+                        <a id="a-report" @click.prevent="report()" class=" waves-effect waves-dark" href="#" aria-expanded="false">
+                            <i class="mdi mdi-border-color"></i><span class="hide-menu">Manajemen</span>
+                        </a>
+                        <ul aria-expanded="false" class="collapse">
+                            <li>
+                                <router-link :to="{name: 'masterfile.opd.page'}">OPD</router-link>
+                            </li>
+                            <li>
+                                <router-link :to="{name: 'masterfile.organization.page'}">Organisasi</router-link>
+                            </li>
+                            <li>
+                                <router-link :to="{name: 'masterfile.unit.page'}">Satuan Kerja</router-link>
+                            </li>
+                            <li>
+                                <router-link :to="{name: 'masterfile.position.page'}">Jabatan</router-link>
+                            </li>
+                        </ul>
+                    </li>
+                    <li id="li-mks" @click.prevent="activedClass('mks')"> 
+                        <router-link :to="{name: 'sales.page'}"  >
+                            <i class="mdi mdi-account-circle"></i><span class="hide-menu">Pengguna</span>
+                        </router-link>
+                    </li>
+                </ul>
+            </nav>
+            <!-- End Sidebar navigation -->
+        </div>
+        <!-- End Sidebar scroll-->
+        <!-- Bottom points-->
+        <div class="sidebar-footer">
+            <small class="text-mute" style="margin-left: 10px;">
+                Version 0.0.1
+            </small>
+        </div>
+        <!-- End Bottom points-->
+    </aside>
+</template>
+
+<script>
+    
+    export default {
+        data(){
+            return {
+                flag: 0
+            }
+        },
+        methods: {
+            inActiveClass() {
+                $("#sidebarnav>#li-dashboard>a.active").removeAttr("class")
+                $("#li-dashboard").removeAttr("class")
+
+                if($('#li-report').hasClass('active')) {
+                    $('#li-report>#a-report').click()
+                }
+                
+            },
+            activedClass(page) {
+                this.inActiveClass()
+                $(`#li-${page}`).addClass("active")
+                
+            },
+            report(){
+                $("#sidebarnav>#li-dashboard>a.active").removeAttr("class")
+                $("#li-dashboard").removeAttr("class")
+            },
+            reportNavigate(page) {
+                let name = page.split('-')
+                // $(`#li-${name[0]}`).addClass("active")
+                $(`#a-${page}`).addClass("active")
+            },
+            doLogout() {
+                
+            }
+        }
+    }
+</script>
+

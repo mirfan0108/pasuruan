@@ -1,0 +1,216 @@
+<template>
+    <div>
+        <ul class="list-group">
+            <li class="list-group-item">
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="form-group" >
+                            <label>OPD</label>
+                            <select  class="select2 form-control" id="opdSelections">
+                            </select>
+                        </div>
+                    </div>
+                    <div class="col-md-12">
+                        <div class="form-group">
+                            <label>Jabatan</label>
+                            <select  class="select2 form-control" id="positionSelections">
+                                <option value="0" selected disabled>--- PILIH JABATAN ---</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="col-md-12">
+                        <div class="form-group">
+                            <label>Hubungan</label>
+                            <tr v-for="relation in componentKorelasi">
+                                <td>
+                                    <input type="checkbox" value="true" v-model="relation.is_check" class="checkbox-component icheckbox_flat-green" >
+                                </td>
+                                <td>
+                                    {{relation.name}}
+                                </td>
+                            </tr>
+                            <tr >
+                                <td>
+                                    <input type="checkbox" value="true" v-model="otherRelation" class="checkbox-component icheckbox_flat-green" >
+                                </td>
+                                <td>
+                                    Lainnya
+                                </td>
+                            </tr>
+                            <br>
+                            <!-- <input v-if="otherRelation" class="form-control" type="text" v-model="relation" placeholder="Tulis disini..."> -->
+                            <textarea v-if="otherRelation" class="form-control" type="text" v-model="relation" placeholder="Tulis disini..." rows="4"></textarea>
+                        </div>
+                    </div>
+                    <div class="col-md-12" >
+                        <button class="btn btn-success" @click.prevent="doAdd()">Tambahkan</button>
+                    </div>
+                </div>
+            </li>
+        </ul>
+    </div>
+</template>
+
+<script>
+    import ApiOpd from '../../services/api/ManagementOpd.js';
+    import ApiPosition from '../../services/api/ManagementPosition.js';
+    export default {
+        data() {
+            return {
+                masterOPD: [],
+                relation: "",
+                otherRelation: false,
+                componentKorelasi: [
+                    {
+                        name: "Konsultasi",
+                        is_check: false
+                    },
+                    {
+                        name: "Koordinasi",
+                        is_check: false
+                    },
+                    {
+                        name: "Laporan",
+                        is_check: false
+                    },
+                    {
+                        name: "Menyelia",
+                        is_check: false
+                    },
+                    {
+                        name: "Membimbing",
+                        is_check: false
+                    },
+                    {
+                        name: "Mengarahkan pelaksanaan tugas",
+                        is_check: false
+                    }
+                ]
+            }
+        },
+        mounted() {
+            $('.select2').select2()
+            this.fetchOpd()
+            $('#positionSelections').prop("disabled", true)
+
+            $('#opdSelections').on('select2:select', (e) => {
+                // var selected = JSON.parse($('#opdSelections').val())
+                this.fetchPosition($('#opdSelections').val())
+            });
+        },
+        methods: {
+            async fetchOpd() {
+                $("#opdSelections").html("<option value='0' selected disabled>---PILIH OPD---</option>")
+                
+                let auth
+                let token
+                if (sessionStorage.getItem("__CSRF")) {
+                    token = await JSON.parse(sessionStorage.getItem("__CSRF")).access_token
+                    console.log(token)
+                    auth = await `Bearer ${token}`;
+                }
+                try {
+                    $("#opdSelections").select2({
+                        ajax: {
+                            url: process.env.BASE_API+"/opd",
+                            headers: {
+                                "Authorization": auth,
+                            },
+                            delay: 1000,
+                            data: function (params) {
+                                var query = {
+                                    search: params.term,
+                                    limit: 10,
+                                    page: params.page || 1
+                                }
+                                return query;
+                            },
+                            processResults: function (data, params) {
+                                params.page = params.page || 1;
+                                data.content.forEach( _val => {
+                                    _val.text = _val.name
+                                })
+                                return {
+                                    results: data.content,
+                                    pagination: {
+                                        more: (params.page * 10) < data.total
+                                    }
+                                };
+                            }
+                        }
+                    })
+                } catch (error) {
+                    console.log(error)
+                }
+            },
+            fetchPosition(id) {
+                ApiPosition.getAllPositionOpd(id)
+                .then(resp => {
+                    $("#positionSelections").html("<option selected disabled>---PILIH JABATAN---</option>")
+                    resp.data.position.forEach(_item => {
+                        $("#positionSelections").append("<option value='"+JSON.stringify(_item)+"'>"+_item.name+"</option>")
+                    })
+                })
+                .finally(() => {
+                    $('#positionSelections').prop("disabled", false)
+                })
+            },
+            doAdd() {
+                this.handleData()
+            },
+            handleData() {
+                let payload = {
+                    opd: null,
+                    position: JSON.parse($("#positionSelections").val()).name,
+                    relation: this.relation,
+                    comps: null
+                }
+                ApiOpd.getOneOpd($("#opdSelections").val())
+                .then(resp => {
+                    payload.opd = resp.data.opd.name
+                })
+                .catch(err => console.log(err))
+                .finally(async () => {
+                    let comps = ""
+                    let temp = []
+                    if(this.relation != '' && this.otherRelation) {
+                        temp.push({name: this.relation, is_check: true})
+                    } else {
+                        temp = []
+                    }
+                    await this.componentKorelasi.map((_comp, index) => {
+                        if(_comp.is_check) {
+                            temp.push(_comp)
+                        }
+                    })
+                    await temp.map((_comp, index) => {
+                        if(_comp.is_check) {
+                            if(temp[index + 1]) {
+                                if(index != 0) {
+                                    comps += ", "
+                                }
+                            } else {
+                                if(index != 0) {
+                                    comps += " dan "
+                                }
+                            }
+                            comps += _comp.name
+                            
+                        }
+                    })
+                    payload.relation = comps
+                    payload.comps = temp
+                    console.log('payload',payload)
+                    this.$emit('data-correlation', payload)
+                    this.relation = ""
+                    this.fetchOpd()
+                    this.componentKorelasi.forEach(_comp => _comp.is_check = false)
+                    this.otherRelation = false
+                    $('#positionSelections').html("<option value='0' selected>---PILIH JABATAN---</option>")
+                    $('#positionSelections').prop("disabled", true)
+                })
+
+            }
+        }
+    }
+</script>

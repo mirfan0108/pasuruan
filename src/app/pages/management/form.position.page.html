@@ -1,0 +1,246 @@
+<template>
+    <div class="row">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-body">
+                    <h4 class="card-title">Formulir Jabatan </h4>
+                    <h6 class="card-subtitle">{{$root.$store.state.positionCreate_OpdName}}</h6>
+                    <form role="form" @submit="createPosition">
+                        <div class="form-group">
+                            <label>Nama Jabatan*</label>
+                            <input type="text" v-model="formPosition.name" placeholder="Nama Jabatan" class="form-control" required>
+                        </div>
+                        <div class="form-group">
+                            <label>Tipe Jabatan*</label>
+                            <select v-model="formPosition.type" class="select2 form-control" id="position-type-selection" style="width: 100%;">
+                                <option value="0" disabled selected>Pilih Tipe Jabatan</option>
+                                <option value="Struktural" >Struktural</option>
+                                <option value="Fungsional">Fungsional</option>
+                                <option value="Pelaksana">Unit Pelaksana</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label>Organisasi*</label>
+                            <select class="select2 form-control" id="organization-selection" style="width: 100%;">
+                                <option value="0" disabled selected>Pilih Organisasi Jabatan</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label>Unit Kerja*</label>
+                            <select class="select2 form-control" id="unit-selection" style="width: 100%;">
+                                <option value="0" disabled selected>Pilih Unit Kerja Jabatan</option>
+                            </select>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-8">
+                                <div class="form-group">
+                                    <label>Atasan*</label>
+                                    <select class="select2 form-control" name="position-selection" id="position-selection" style="width: 100%;" >
+                                        <option value="0">Tidak Ada</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="form-group">
+                                    <label>Level*</label>
+                                    <select  v-model="formPosition.level" class="select2 form-control" id="level-selection" style="width: 100%;" >
+                                        <option value="" selected disabled>Pilih Level</option>
+                                        <option value="0">Tidak Ada</option>
+                                        <option value="1">1</option>
+                                        <option value="2">2</option>
+                                        <option value="3">3</option>
+                                        <option value="4">4</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label>Pangkat / Golongan*</label>
+                            <select v-model="formPosition.position_class" id="class-position" class="select2 form-control " style="width: 100%;" >
+                                <option selected disabled value="">Pilih Pangkat / Golongan</option>
+                                <option value="Ia" >Golongan Ia = Pangkat Juru Muda</option>
+                                <option value="Ib">Golongan Ib = Pangkat Juru Muda Tingkat 1</option>
+                                <option value="Ic">Golongan Ic = Pangkat Juru </option>
+                                <option value="Id">Golongan Id = Pangkat Juru Tingkat 1</option>
+                                <option value="IIa">Golongan IIa = Pangkat Juru Muda</option>
+                                <option value="IIb">Golongan IIb = Pangkat Juru Muda Tingkat 1</option>
+                                <option value="IIc">Golongan IIc = Pangkat Pengatur </option>
+                                <option value="IId">Golongan IId = Pangkat Pengatur Tingkat 1</option>
+                                <option value="IIIa">Golongan IIIa = Pangkat Penata Muda</option>
+                                <option value="IIIb">Golongan IIIb = Pangkat Penata Muda Tingkat 1</option>
+                                <option value="IIIc">Golongan IIIc = Pangkat Penata </option>
+                                <option value="IIId">Golongan IIId = Pangkat Penata Tingkat 1</option>
+                                <option value="IVa">Golongan IVa = Pangkat Pembina</option>
+                                <option value="IVb">Golongan IVb = Pangkat Pembina Tingkat 1</option>
+                                <option value="IVc">Golongan IVc = Pangkat Pembina Utama Muda </option>
+                                <option value="IVd">Golongan IVd = Pangkat Pembina Utama Madya</option>
+                                <option value="IVe">Golongan IVe = Pangkat Pembina Utama</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label>Minimal Pendidikan*</label>
+                            <textarea v-model="formPosition.education" class="form-control" cols="30" rows="10" placeholder="Minimal Pendidikan Jabatan"></textarea>
+                        </div>
+                    </form>
+                    <button class="btn btn-primary pull-rigth" type="submit" @click.prevent="createPosition">Simpan</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</template>
+
+<script>
+    import { mapState } from 'vuex';
+    import Swal from 'sweetalert2'
+    export default {
+        data() {
+            return {
+                formPosition: {
+                    name: null,
+                    opd_id: null,
+                    organization_id: 0,
+                    parent_id: 0,
+                    level: '',
+                    unit_id: null,
+                    type: "0",
+                    position_class: "",
+                    education: null
+                }
+            }
+        },
+        beforeCreate() {
+            if(this.$root.$store.state.positionCreate_OpdName == null) {
+                this.$root.$router.replace({name: 'masterfile.position.page'})
+            }
+        },
+        computed: mapState(['onLoad', 'accessToken']),
+        mounted() {
+            this.initSelect2()
+            this.formPosition.opd_id = this.$root.$store.state.positionCreate_OpdId
+        },
+        methods: {
+            initSelect2() {
+                $("#position-selection").select2({
+                    ajax: {
+                        url: process.env.BASE_API+"/position/opd/"+this.$root.$store.state.positionCreate_OpdId,
+                        headers: {
+                            "Authorization": `Bearer ${this.accessToken.access_token}`,
+                        },
+                        delay: 1000,
+                        data: function (params) {
+                            var query = {
+                                search: params.term,
+                                limit: 10,
+                                page: params.page || 1
+                            }
+                            return query;
+                        },
+                        processResults: function (data, params) {
+                            params.page = params.page || 1;
+                            data.position.forEach( _val => {
+                                _val.text = _val.name
+                            })
+                            return {
+                                results: data.position,
+                                pagination: {
+                                    more: (params.page * 10) < data.total
+                                }
+                            };
+                        }
+                    }
+                })
+                $('#position-selection').on('select2:select', (e) => {
+                    this.formPosition.parent_id = $("#position-selection").val()
+                })
+
+                $("#organization-selection").select2({
+                    ajax: {
+                        url: process.env.BASE_API+"/organization/opd/"+this.$root.$store.state.positionCreate_OpdId,
+                        headers: {
+                            "Authorization": `Bearer ${this.accessToken.access_token}`,
+                        },
+                        delay: 1000,
+                        data: function (params) {
+                            var query = {
+                                search: params.term,
+                                limit: 10,
+                                page: params.page || 1
+                            }
+                            return query;
+                        },
+                        processResults: function (data, params) {
+                            params.page = params.page || 1;
+                            data.content.forEach( _val => {
+                                _val.text = _val.name
+                            })
+                            return {
+                                results: data.content,
+                                pagination: {
+                                    more: (params.page * 10) < data.total
+                                }
+                            };
+                        }
+                    }
+                })
+                $('#organization-selection').on('select2:select', (e) => {
+                    this.formPosition.organization_id = $("#organization-selection").val()
+                })
+
+                $("#unit-selection").select2({
+                    ajax: {
+                        url: process.env.BASE_API+"/unit-work",
+                        headers: {
+                            "Authorization": `Bearer ${this.accessToken.access_token}`,
+                        },
+                        delay: 1000,
+                        data: function (params) {
+                            var query = {
+                                search: params.term,
+                                limit: 10,
+                                page: params.page || 1
+                            }
+                            return query;
+                        },
+                        processResults: function (data, params) {
+                            params.page = params.page || 1;
+                            console.log(data)
+                            data.content.forEach( _val => {
+                                _val.text = _val.name
+                            })
+                            return {
+                                results: data.content,
+                                pagination: {
+                                    more: (params.page * 10) < data.total
+                                }
+                            };
+                        }
+                    }
+                })
+                $('#unit-selection').on('select2:select', (e) => {
+                    this.formPosition.unit_id = $("#unit-selection").val()
+                })
+
+            },
+            createPosition() {
+                this.formPosition.organization_id = parseInt(this.formPosition.organization_id)
+                this.formPosition.unit_id = parseInt(this.formPosition.unit_id)
+                this.formPosition.parent_id = parseInt(this.formPosition.parent_id)
+                this.formPosition.level = parseInt(this.formPosition.level)
+                this.postForm()
+            },
+            postForm() {
+                this.$root.$store.dispatch('addPositions', this.formPosition)
+                .then(_resp => _resp)
+                .finally(() => {
+                    Swal.fire({
+                        icon: 'success',
+                        title: 'Data berhasil ditambahkan!',
+                        onClose: () => {
+                            window.location.reload()
+                        }
+                    })
+                })
+            }
+        }
+    }
+</script>

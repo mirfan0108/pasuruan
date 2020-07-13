@@ -1,0 +1,298 @@
+<template>
+    <div>
+        <div class="card">
+            <div class="card-body">
+                <button class="btn btn-success btn-sm btn-rounded pull-right" 
+                v-if="formE && formE.length != 0 && !onLoad && !onDownload" >Unduh</button>
+                <small class="text-mute pull-right" v-if="onDownload">Mohon tunggu, file sedang dipersiapkan. mungkin akan memakan waktu</small>
+                <button class="btn btn-secondary btn-sm btn-rounded" @click.prevent="$root.$router.back()">Kembali</button>
+                <hr>
+                <h4 class="card-title">REKAPITULASI KEBUTUHAN PEJABAT/PEGAWAI TINGKAT EFIENSI UNIT (EU) DAN PRESTASI KERJA UNIT (PU) (FORM E)</h4>
+                <select id="opd-selection" class="form-control select2 select2-hidden-accessible" style="width: 100%;"
+                    tabindex="-1" aria-hidden="true">
+                    <option value="0" selected disabled>---PILIH OPD---</option>
+                </select>
+            </div>
+            <div class="card-body">
+                <div class="overlay"  align="center" v-if="onLoad">
+                    <img src="/assets/gif/loading.gif" width="100">
+                </div>
+                <div v-if="!onLoad">
+                    <div v-if="formE.formE.length > 0" id="print-abke" style="margin-left: 0.3;margin-right: 0.3;" >
+                        <div class="document"  style="font-size: 9pt;">
+                            <div class="page" >
+                                <table border="1" style="margin-left: 60px; width: 90%; ">
+                                <tr>
+                                    <th style="text-align: center;" width="50">No.</th>
+                                    <th style="text-align: center;" width="200">NAMA JABATAN</th>
+                                    <th style="text-align: center;">
+                                    JML BK <br />
+                                    JABATAN
+                                    </th>
+                                    <th style="text-align: center;">
+                                    JML BUTUH <br />
+                                    PEGAWAI
+                                    </th>
+                                    <th style="text-align: center;">
+                                    JML PEG <br />
+                                    YG ADA
+                                    </th>
+                                    <th style="text-align: center;">+ / -</th>
+                                    <th style="text-align: center;">EU</th>
+                                    <th style="text-align: center;">PU</th>
+                                    <th style="text-align: center;">KET</th>
+                                </tr>
+                                <tr style="background-color: #eca982;">
+                                    <th style="text-align: center;">1</th>
+                                    <th style="text-align: center;">2</th>
+                                    <th style="text-align: center;">3</th>
+                                    <th style="text-align: center;">4</th>
+                                    <th style="text-align: center;">5</th>
+                                    <th style="text-align: center;">6</th>
+                                    <th style="text-align: center;">7</th>
+                                    <th style="text-align: center;">8</th>
+                                    <th style="text-align: center;">9</th>
+                                </tr>
+                                <tr  v-for="forme in formE.formE">
+                                    <td  style="text-align: center;" width="50">{{forme.number }}</td>
+                                    <th width="200" v-if="forme.bold" style="padding-left: 10px;">{{ forme.name }}</th>
+                                    <th style="text-align: center;">{{formatFloat(forme.load_counter.toFixed(2))}}</th>
+                                    <th style="text-align: center;">{{formatNumber(forme.emp_needed)}}</th>
+                                    <th style="text-align: center;">{{formatNumber(forme.current_stickholder)}}</th>
+                                    <th style="text-align: center;">{{ (parseInt(forme.current_stickholder != null ? forme.current_stickholder : 0) - parseInt(forme.emp_needed) ) == 0 ?  0 
+                                        : (parseInt(forme.current_stickholder != null ? forme.current_stickholder : 0) - parseInt(forme.emp_needed) ) > 0 ? "+ "+formatNumber((parseInt(forme.current_stickholder != null ? forme.current_stickholder : 0) - parseInt(forme.emp_needed) ))
+                                        : '- '+ formatNumber((parseInt(forme.current_stickholder != null ? forme.current_stickholder : 0) - parseInt(forme.emp_needed) ))
+                                    }}</th>
+                                    <th style="text-align: center;">{{(Number(forme.load_counter) / (parseInt(forme.emp_needed) * 1250)).toFixed(2) }}</th>
+                                    <th style="text-align: center;">{{
+                                    (Number(forme.load_counter) / (parseInt(forme.emp_needed) * 1250)).toFixed(2) > 1 ? 'A' 
+                                    : (Number(forme.load_counter) / (parseInt(forme.emp_needed) * 1250)).toFixed(2) < 1 || (Number(forme.load_counter) / (parseInt(forme.emp_needed) * 1250)).toFixed(2) > 0.9 ? 'B' 
+                                    : (Number(forme.load_counter) / (parseInt(forme.emp_needed) * 1250)).toFixed(2) < 0.89 || (Number(forme.load_counter) / (parseInt(forme.emp_needed) * 1250)).toFixed(2) > 0.7 ? 'C' : (Number(forme.load_counter) / (parseInt(forme.emp_needed) * 1250)).toFixed(2) < 0.69 || (Number(forme.load_counter) / (parseInt(forme.emp_needed) * 1250)).toFixed(2) > 0.5 ? 'D' : 'E'
+                                    }}</th>
+                                    <th style="text-align: center;">{{forme.info}}</th>
+                                </tr>
+        
+                                <tr style="background-color: #eca982;">
+                                    <th style="text-align: center;" width="50"></th>
+                                    <th width="200" style="padding-left: 10px;">Jumlah</th>
+                                    <th  style="text-align: center;">{{formatFloat(Number(totalBK).toFixed(2))}}</th>
+                                    <th style="text-align: center;">{{formatNumber(formE.totalEmpNeeded)}}</th>
+                                    <th style="text-align: center;">{{formatNumber(formE.totalStikholder)}}</th>
+                                    <th style="text-align: center;">{{ formE.totalStikholder != null ? counterBalance(formE.totalEmpNeeded, formE.totalStikholder) : '' }}</th>
+                                    <th style="text-align: center;">{{ (Number(formE.totalOj) / (Number(formE.totalEmpNeeded) * 1250)).toFixed(2) }}</th>
+                                    <th style="text-align: center;">{{
+                                    (Number(formE.totalOj) / (Number(formE.totalEmpNeeded) * 1250)).toFixed(2) > 1 ? 'A' 
+                                    : (Number(formE.totalOj) / (Number(formE.totalEmpNeeded) * 1250)).toFixed(2) < 1 || (Number(formE.totalOj) / (Number(formE.totalEmpNeeded) * 1250)).toFixed(2) > 0.9 ? 'B' 
+                                    : (Number(formE.totalOj) / (Number(formE.totalEmpNeeded) * 1250)).toFixed(2) < 0.89 || (Number(formE.totalOj) / (Number(formE.totalEmpNeeded) * 1250)).toFixed(2) > 0.7 ? 'C' : (Number(formE.totalOj) / (Number(formE.totalEmpNeeded) * 1250)).toFixed(2) < 0.69 || (Number(formE.totalOj) / (Number(formE.totalEmpNeeded) * 1250)).toFixed(2) > 0.5 ? 'D' : 'E'}}</th>
+                                    <th></th>
+                                </tr>
+                                </table>
+                        
+                                <br />
+                                <br />
+                            </div>
+                        </div>
+                    </div>
+                    <div v-if="formE.formE.length == 0">
+                        Maaf data tidak tersedia
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</template>
+      
+      
+<script>
+    import ApiOpd from '../../services/api/ManagementOpd.js'
+    import ApiAbk from '../../services/api/AnalyticAbk.js'
+    import ABKGenerator from "./form.abk.js"
+
+    export default {
+        data() {
+            return {
+                show: false,
+                dataAbk: [],
+                totalBK: 0,
+                formE:null,
+                opd_selected: null,
+                onLoad: true,
+                onDownload: false,
+            };
+        },
+        mounted() {
+            this.$root.page = {
+              title: "ABK",
+              subtitle: "Kabupaten Pasuruan"
+            };
+            $('.select2').select2()
+            $('#opd-selection').on('select2:select', async (e) => {
+                let id_opd = await $("#opd-selection").val()
+                this.opd_selected = id_opd
+                // this.fetchPosition(id_opd)
+                this.onLoad = true
+                this.generateFormE()
+            })
+            this.fetchOpd()
+        },
+        methods: {
+            counterBalance(needed, current) {
+                let total = current - needed
+                let result = ''
+                if(total > 0) {
+                    result = '+ '
+                } else if (total == 0){
+                    result = ""
+                } else {
+                    result = "- "
+                }
+                return result + this.formatNumber(current - needed)                
+            },
+            formatFloat(angka, prefix = "Rp. ", Sparators = "."){
+                if(angka) {
+                    let string_number = angka.toString()
+                    console.log('toString => ', string_number)
+                    let tempSplit       = string_number.split('.')
+                    var number_string = tempSplit[0].replace(/[^,\d]/g, '').toString(),
+                    split   		= number_string.split(','),
+                    sisa     		= split[0].length % 3,
+                    rupiah     		= split[0].substr(0, sisa),
+                    ribuan     		= split[0].substr(sisa).match(/\d{3}/gi);
+                    console.log('splits => ', tempSplit)
+                    console.log('split number =>', split)
+                    if(ribuan){
+                        let separator = sisa ? Sparators : '';
+                        rupiah += separator + ribuan.join('.');
+                    }
+                    rupiah = split[1] != undefined ? rupiah + ',' + split[1] : rupiah;
+                    return prefix == undefined ? rupiah : (rupiah ? '' + rupiah + ','+tempSplit[1] : '');
+                    } else {
+                    return ''
+                    }
+
+            },
+            formatNumber(angka, prefix = "", Sparators = "."){
+                if(angka) {
+                let string_number = angka.toString()
+                var number_string = string_number.replace(/[^,\d]/g, '').toString(),
+                split   		= number_string.split(','),
+                sisa     		= split[0].length % 3,
+                rupiah     		= split[0].substr(0, sisa),
+                ribuan     		= split[0].substr(sisa).match(/\d{3}/gi);
+                if(ribuan){
+                    let separator = sisa ? Sparators : '';
+                    rupiah += separator + ribuan.join('.');
+                }
+                rupiah = split[1] != undefined ? rupiah + ',' + split[1] : rupiah;
+                return prefix == undefined ? rupiah : (rupiah ? '' + rupiah : '');
+                } else {
+                return angka == 0 ? 0 : ''
+                }
+
+            },
+            generateFormE() {
+                ApiAbk.GenerateFormE(this.opd_selected)
+                .then(resp => {
+                    this.formE = resp.data
+                    console.log('forme',resp.data)
+                })
+                .finally(() => {
+                    ABKGenerator.GenerateFormE(this.formE)
+                    .then(_resp => {
+                        this.formE = _resp
+                        let tempCounter = 0
+                        _resp.formE.map(_fc => {
+                            tempCounter += Number(_fc.load_counter)
+                        })
+                        this.totalBK = tempCounter
+                        console.log('after', tempCounter)
+                    })
+                    .finally(() => {
+                        setTimeout(() => {
+                            this.onLoad = false
+                        }, 1000);
+                    })
+                })
+            },
+            fetchOpd() {
+                $("#opd-selection").html("")
+                ApiOpd.getOpd()
+                    .then(resp => {
+                        let first_id = 0
+                        let index = 1
+                        this.opd = resp.data.content
+                        console.log("opd", resp)
+                        resp.data.content.forEach((element, index) => {
+                            if (!this.opd_selected) {
+                                if (index == 0) {
+                                    
+                                    console.log()
+                                    first_id = element.id
+                                    this.opd_selected = element.id
+                                    this.generateFormE()
+                                    this.opd_name = this.opd[this.opd.findIndex(_item => _item.id == element.id)].name
+                                    $("#opd-selection").append("<option value='" + element.id + "' selected>" + element.name + "</option>")
+
+                                } else {
+                                    $("#opd-selection").append("<option value='" + element.id + "' >" + element.name + "</option>")
+                                }
+                            } else {
+                                if (this.opd_selected == element.id) {
+                                    this.head_pos = element.head_position
+                                    first_id = element.id
+                                    $("#opd-selection").append("<option value='" + element.id + "' selected>" + element.name + "</option>")
+                                } else {
+                                    $("#opd-selection").append("<option value='" + element.id + "' >" + element.name + "</option>")
+                                }
+                            }
+                            index += 1
+                        });
+                        // this.fetchPosition(first_id)
+                    })
+                    .catch(err => console.log(err))
+                    .finally(() => {
+                        let auth
+                        let token
+                        if (sessionStorage.getItem("__CSRF")) {
+                            token = JSON.parse(sessionStorage.getItem("__CSRF")).access_token
+                            auth = `Bearer ${token}`;
+                        }
+                        try {
+                            $("#opd-selection").select2({
+                                ajax: {
+                                    url: process.env.BASE_API+"/opd",
+                                    headers: {
+                                        "Authorization": auth,
+                                    },
+                                    delay: 1000,
+                                    data: function(params) {
+                                        var query = {
+                                            search: params.term,
+                                            limit: 10,
+                                            page: params.page || 1
+                                        }
+                                        return query;
+                                    },
+                                    processResults: function(data, params) {
+                                        params.page = params.page || 1;
+                                        data.content.forEach(_val => {
+                                            _val.text = _val.name
+                                        })
+                                        return {
+                                            results: data.content,
+                                            pagination: {
+                                                more: (params.page * 10) < data.total
+                                            }
+                                        };
+                                    }
+                                }
+                            })
+                        } catch (error) {
+                            console.log(error)
+                        }
+                    })
+            },
+        }
+    };
+</script>

@@ -1,0 +1,230 @@
+<template>
+    <div>
+        <div class="card">
+            <div class="card-body">
+                <button class="btn btn-success btn-sm btn-rounded pull-right" 
+                v-if="formC && formC.length != 0 && !onLoad && !onDownload" >Unduh</button>
+                <small class="text-mute pull-right" v-if="onDownload">Mohon tunggu, file sedang dipersiapkan. mungkin akan memakan waktu</small>
+                <button class="btn btn-secondary btn-sm btn-rounded" @click.prevent="$root.$router.back()">Kembali</button>
+                <hr>
+                <h4 class="card-title">REKAPITULASI JUMLAH BEBAN KERJA JABATAN (FORM C)</h4>
+                <select id="opd-selection" class="form-control select2 select2-hidden-accessible" style="width: 100%;"
+                    tabindex="-1" aria-hidden="true">
+                    <option value="0" selected disabled>---PILIH OPD---</option>
+                </select>
+            </div>
+            <div class="card-body">
+                <div class="overlay"  align="center" v-if="onLoad">
+                    <img src="/assets/gif/loading.gif" width="100"><br>
+                    <span>Mohon Tunggu...</span>
+                </div>
+                <div v-if="!onLoad">
+                    <div v-if="formC.formC.length > 0" id="print-abkc" style="margin-left: 0.3;margin-right: 0.3;">
+                    <div class="document"  style="font-size: 9pt;">
+                        <div class="page">
+                            <!--FORM C  -->
+                            <table border="1" style="margin-left: 60px; width: 90%; " v-if="formC">
+                                
+                                <tbody>
+                                    <tr>
+                                        <th style="text-align: center;" width="50">No.</th>
+                                        <th style="text-align: center;" width="600">NAMA JABATAN</th>
+                                        <th style="text-align: center;" width="100">JUMLAH BEBAN KERJA JABATAN</th>
+                                    </tr>
+                                    <tr style="background-color: #eca982;">
+                                        <th style="text-align: center;">1</th>
+                                        <th style="text-align: center;">2</th>
+                                        <th style="text-align: center;">3</th>
+                                    </tr>
+                                    <tr v-for="c in formC.formC">
+                                        <th style="text-align: center;" width="50"><b>{{c.number ? c.number : ''}}</b></th>
+                
+                                        <th v-if="c.bold" ><b>{{c.name}}</b></th>
+                                        <td v-if="!c.bold">{{c.name}}</td>
+                
+                                        <th v-if="c.bold" style="text-align: center;"><b>{{c.load_counter ? formatNumber(c.load_counter)+' OJ' : ''}} </b></th>
+                                        <td v-if="!c.bold" style="text-align: center;">{{c.load_counter ? formatNumber(c.load_counter)+' OJ' : ''}} </td>
+                                    </tr>
+                                    <tr style="background-color: #eca982;">
+                                        <td style="text-align: center;" width="50"></td>
+                                        <th width="200"><b>Total</b></th>
+                                        <th style="text-align: center;"><b>{{formatNumber(totalBK)}} OJ</b></th>
+                                    </tr>
+                                </tbody>
+                            </table>
+        
+                            <br />
+                            <br />
+                        </div>
+                    </div>
+                    </div>
+    
+                    <div v-if="formC.formC.length == 0">
+                        Maaf data tidak tersedia
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</template>
+
+<script>
+    import ApiOpd from '../../services/api/ManagementOpd.js'
+    import ApiAbk from '../../services/api/AnalyticAbk.js'
+    import ABKGenerator from "./form.abk.js"
+
+    export default {
+        data() {
+        return {
+            dataAbk: [],
+            formC: null,
+            opd_selected: null,
+            show: false,
+            onLoad: true,
+            totalBK: 0
+        };
+        },
+        mounted() {
+        this.$root.page = {
+            title: "ABK Form C",
+            subtitle: "Kabupaten Pasuruan"
+        };
+        $('.select2').select2()
+                $('#opd-selection').on('select2:select', async (e) => {
+                    let id_opd = await $("#opd-selection").val()
+                    this.opd_selected = id_opd
+                    // this.fetchPosition(id_opd)
+                    this.onLoad = true
+                    this.generateFormC()
+                })
+                this.fetchOpd()
+        },
+        methods: {
+            formatNumber(angka, prefix = "Rp. ", Sparators = "."){
+                    let string_number = angka.toString()
+                    console.log('toString => ', string_number)
+                    let tempSplit       = string_number.split('.')
+                    var number_string = tempSplit[0].replace(/[^,\d]/g, '').toString(),
+                    split   		= number_string.split(','),
+                    sisa     		= split[0].length % 3,
+                    rupiah     		= split[0].substr(0, sisa),
+                    ribuan     		= split[0].substr(sisa).match(/\d{3}/gi);
+                    console.log('splits => ', tempSplit)
+                    console.log('split number =>', split)
+                    if(ribuan){
+                        let separator = sisa ? Sparators : '';
+                        rupiah += separator + ribuan.join('.');
+                    }
+                    rupiah = split[1] != undefined ? rupiah + ',' + split[1] : rupiah;
+                    return prefix == undefined ? rupiah : (rupiah ? '' + rupiah + ','+tempSplit[1] : '');
+
+                },
+            generateFormC() {
+                    ApiAbk.GenerateFormC(this.opd_selected)
+                    .then(resp => {
+                    // if(resp.data.)
+                    
+                    if(resp.data) {
+                        this.formC = resp.data
+                        console.log('formC',resp.data)
+                        this.show = true
+                    } else {
+                        this.show = false
+                    }
+                    })
+                    .finally(() => {
+                        ABKGenerator.GenerateFormC(this.formC)
+                        .then(_resp => {
+                            this.formC = _resp
+                            let tempCounter = 0
+                            _resp.formC.map(_fc => {
+                                tempCounter += Number(_fc.load_counter)
+                            })
+                            this.totalBK = tempCounter
+                            console.log('after generate', tempCounter)
+                        })
+                        .finally(() => {
+                            setTimeout(() => {
+                                this.onLoad = false
+                            }, 1000);
+                        })
+                    })
+                },
+        fetchOpd() {
+            $("#opd-selection").html("")
+            ApiOpd.getOpd()
+                .then(resp => {
+                    let first_id = 0
+                    this.opd = resp.data.content
+                    console.log("opd", resp)
+                    resp.data.content.forEach((element, index) => {
+                        if (!this.opd_selected) {
+                            if (index == 0) {
+                                first_id = element.id
+                                this.opd_selected = element.id
+                                this.generateFormC()
+                                this.opd_name = this.opd[this.opd.findIndex(_item => _item.id == element.id)].name
+                                $("#opd-selection").append("<option value='" + element.id + "' selected>" + element.name + "</option>")
+
+                            } else {
+                                $("#opd-selection").append("<option value='" + element.id + "' >" + element.name + "</option>")
+                            }
+                        } else {
+                            if (this.opd_selected == element.id) {
+                                this.head_pos = element.head_position
+                                first_id = element.id
+                                $("#opd-selection").append("<option value='" + element.id + "' selected>" + element.name + "</option>")
+                            } else {
+                                $("#opd-selection").append("<option value='" + element.id + "' >" + element.name + "</option>")
+                            }
+                        }
+                        index += 1
+                    });
+                    // this.generateFormC()
+                })
+                .catch(err => console.log(err))
+                .finally(() => {
+                    let auth
+                    let token
+                    if (sessionStorage.getItem("__CSRF")) {
+                        token = JSON.parse(sessionStorage.getItem("__CSRF")).access_token
+                        auth = `Bearer ${token}`;
+                    }
+                    try {
+                        $("#opd-selection").select2({
+                            ajax: {
+                                url: process.env.BASE_API+"/opd",
+                                headers: {
+                                    "Authorization": auth,
+                                },
+                                delay: 1000,
+                                data: function(params) {
+                                    var query = {
+                                        search: params.term,
+                                        limit: 10,
+                                        page: params.page || 1
+                                    }
+                                    return query;
+                                },
+                                processResults: function(data, params) {
+                                    params.page = params.page || 1;
+                                    data.content.forEach(_val => {
+                                        _val.text = _val.name
+                                    })
+                                    return {
+                                        results: data.content,
+                                        pagination: {
+                                            more: (params.page * 10) < data.total
+                                        }
+                                    };
+                                }
+                            }
+                        })
+                    } catch (error) {
+                        console.log(error)
+                    }
+                })
+            },
+        }
+    }
+</script>

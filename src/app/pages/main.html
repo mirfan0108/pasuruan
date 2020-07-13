@@ -1,0 +1,56 @@
+<template>
+    <div>
+        <div>
+            <topbar></topbar>
+            <sidebar></sidebar>
+            <div class="page-wrapper">
+                <div class="container-fluid">
+                    <bread-crumb></bread-crumb>
+                    <offline @detected-condition="handleConnectivityChange">
+                        <div slot="online">
+                            <router-view></router-view>
+                        </div>
+                        <!-- Only renders when the device is offline -->
+                        <div slot="offline">
+                          <p>You appear to be offline, that's okay, we can still do things...</p>
+                        </div>
+                    </offline>
+                    
+                </div>
+            </div>
+        </div>
+    </div>
+</template>
+
+<script>
+    import Topbar from "../components/navigations/Topbar.html"
+    import Sidebar from "../components/navigations/Sidebar.html"
+    import BreadCrumb from "../components/navigations/BreadCrumb.html"
+    import offline from 'v-offline';
+    export default {
+        data() {
+            return {
+                onLoad: true
+            }
+        },
+        components: {
+            offline,
+            Topbar,
+            Sidebar,
+            BreadCrumb
+        },
+        async mounted() {
+            this.onLoad = this.$store.state.isPreloader
+            setTimeout(() => {
+                this.$store.commit('setIsPreloader', false)
+                this.onLoad = this.$store.state.isPreloader
+            }, 2500)
+        },
+        methods: {
+            handleConnectivityChange(status) {
+                console.log('cek',status);
+            }
+        }
+    }
+
+</script>

@@ -1,0 +1,50 @@
+<template>
+    <div>
+        <div class="row">
+            <div class="col-md-6 col-lg-3">
+                <div class="card card-body">
+                    <div class="row">
+                        <div class="col p-r-0 align-self-center">
+                            <h2 class="font-light m-b-0">Presence</h2>
+                            <h6 class="text-muted">Today</h6>
+                        </div>
+                        <div class="col text-right ">
+                            <div class="btn btn-xl btn-danger btn-circle" 
+                                style="width: 85px; 
+                                    height: 85px; 
+                                    vertical-align: middle; ">
+                                <div class="notify" style="position: relative;top: 14%; right: 0;"> 
+                                    <span class="heartbit" 
+                                    style="top: 0;
+                                        right: 6px;
+                                        height: 40px;
+                                        width: 40px;"></span> 
+
+                                    <span >
+                                        <i class="mdi mdi-alert-circle" style="position: relative; top: 2px;"></i>
+                                    </span> 
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</template>
+
+<script>
+    export default {
+        beforeCreate() {
+            let pages = {
+                title: 'My Activities',
+                breadcrumb: [
+                    {
+                        name: 'My Activity'
+                    }
+                ]
+            }    
+            this.$root.$store.dispatch('setBreadCrumb', pages)
+        }
+    }
+</script>

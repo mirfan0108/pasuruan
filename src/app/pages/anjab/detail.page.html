@@ -1,0 +1,589 @@
+<template>
+    <div >
+        <div class="card">
+            <div class="card-body">
+                <button class="btn btn-success btn-sm btn-rounded pull-right" @click.prevent="edit()"><i class="fa fa-pencil"></i> Edit</button>
+                <button class="btn btn-danger btn-sm btn-rounded pull-right" @click.prevent="del()"><i class="fa fa-trash"></i> Delete</button>
+                <button class="btn btn-sm btn-secondary btn-rounded pull-left" @click.prevent="$root.$router.back()"> Kembali</button><br>
+                <!-- <button class="btn btn-primary" @click.prevent="prints()"><i class="fa fa-print"></i> Print</button> -->
+                
+                <div class="overlay"  align="center" v-if="onLoad">
+                    <img src="/assets/gif/loading.gif" width="100"><br>
+                    <span>Mohon Tunggu....</span>
+                </div>
+            </div>
+            <div class="card-body" v-if="!onLoad">
+                <h3 class="card-title">PENYUSUNAN ANALISIS JABATAN</h3>
+                <h4 class="card-subtitle">{{dataPosition.name}}</h4>
+                <div id="print-anjab">
+                    <div class="document">
+                        <div class="page">
+                            
+                            <h4 style="font-size: 12pt; text-align: center;">
+                                <strong>{{dataPosition.name}}</strong>
+                                <br>
+                                <strong>URAIAN JABATAN</strong>
+                            </h4>
+                            <table style="margin-left: 50px;margin-top: 20px;">
+                                <tr>
+                                    <th width="15">1.</th>
+                                    <th width="150">
+                                        NAMA JABATAN
+                                    </th>
+                                    <td width="10">:</td>
+                                    <td>{{dataPosition.name}} </td>
+                                </tr>
+                                <tr>
+                                    <th width="15">2.</th>
+                                    <th width="150">
+                                        JENIS JABATAN
+                                    </th>
+                                    <td width="10">:</td>
+                                    <td>{{dataPosition.type}}</td>
+                                </tr>
+                                <tr>
+                                    <th width="15">3.</th>
+                                    <th width="150">
+                                        RINGKASAN TUGAS
+                                    </th>
+                                </tr>
+                                <tr>
+                                    <th>&nbsp;</th>
+                                    <td colspan="3">
+                                        {{TB_ANALYTIC_POSITION.task_summary}}
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <th width="15">4.</th>
+                                    <th width="150">
+                                        HASIL KERJA
+                                    </th>
+                                </tr>
+                                <tr>
+                                    <th >&nbsp;</th>
+                                    <td colspan="3">
+                                        <ol type="a">
+                                            <li v-for="list in TB_ANALYTIC_POSITION.work_result">
+                                                {{list.work_result}}
+                                            </li>
+                                        </ol>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <th width="15">5.</th>
+                                    <th width="150">
+                                        BAHAN KERJA
+                                    </th>
+                                </tr>
+                                <tr>
+                                    <th >&nbsp;</th>
+                                    <td colspan="3">
+                                        <ol type="a">
+                                            <li v-for="list in TB_ANALYTIC_POSITION.work_material">
+                                                {{list.material}}
+                                            </li>
+                                        </ol>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <th width="15">6.</th>
+                                    <th width="150">
+                                        PERALATAN KERJA
+                                    </th>
+                                </tr>
+                                <tr>
+                                    <th >&nbsp;</th>
+                                    <td colspan="3">
+                                        <ol type="a">
+                                            <li v-for="list in TB_ANALYTIC_POSITION.work_equipment">
+                                                {{list.equipment}}
+                                            </li>
+                                        </ol>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <th width="15" >7.</th>
+                                    <th width="150">
+                                        RINCIAN TUGAS
+                                    </th>
+                                </tr>
+                                <tr>
+                                    <th >&nbsp;</th>
+                                    <td colspan="3">
+                                        <ol type="a">
+                                            <li v-for="list in TB_ANALYTIC_POSITION.task_detail">
+                                                {{list.task_detail}}
+                                            </li>
+                                        </ol>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <th width="15">8.</th>
+                                    <th width="150">
+                                        TANGGUNG JAWAB
+                                    </th>
+                                </tr>
+                                <tr>
+                                    <th >&nbsp;</th>
+                                    <td colspan="3">
+                                        <ol type="a">
+                                            <li v-for="list in TB_ANALYTIC_POSITION.responsible">
+                                                {{list.responsible}}
+                                            </li>
+                                        </ol>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <th width="15">9.</th>
+                                    <th width="150">
+                                        WEWENANG
+                                    </th>
+                                </tr>
+                                <tr>
+                                    <th >&nbsp;</th>
+                                    <td colspan="3">
+                                        <ol type="a">
+                                            <li v-for="list in TB_ANALYTIC_POSITION.authority">
+                                                {{list.authority}}
+                                            </li>
+                                        </ol>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <th width="15" >10.</th>
+                                    <th width="250">
+                                        KORELASI JABATAN
+                                    </th>
+                                </tr>
+                            </table>
+                            <table border="1" style="margin-left: 60px; width: 90%; ">
+                                <tr>
+                                    <th style="text-align: center;" width="50">No.</th>
+                                    <th style="text-align: center;" width="200">JABATAN</th>
+                                    <th style="text-align: center;">UNIT KERJA/INSTANSI</th>
+                                    <th style="text-align: center;">HUBUNGAN DALAM TUGAS</th>
+                                </tr>
+                                <tr v-for="(item, index) in TB_ANALYTIC_POSITION.job_correlation" :key="index">
+                                    <td style="text-align: center;" width="50">{{index+1}}</td>
+                                    <td width="200">{{item.position}}</td>
+                                    <td>{{item.opd}}</td>
+                                    <td>{{item.relation}}</td>
+                                </tr>
+                            </table>
+                            <table style="margin-left: 50px;margin-top: 20px;">
+                                <tr>
+                                    <th width="15">11.</th>
+                                    <th width="300" >
+                                        KEADAAN TEMPAT KERJA
+                                    </th>
+                                </tr>
+                            </table>
+                            <table style="margin-left: 60px;  ">
+                                <tr >
+                                    <td width="40">a.</td>
+                                    <td width="200">Tempat Kerja</td>
+                                    <td width="10">:</td>
+                                    <td v-if="TB_ANALYTIC_POSITION.workplace_condition.place">{{TB_ANALYTIC_POSITION.workplace_condition.place}}</td>
+                                </tr>
+                                <tr >
+                                    <td width="40">b.</td>
+                                    <td width="200">Suhu</td>
+                                    <td width="10">:</td>
+                                    <td v-if="TB_ANALYTIC_POSITION.workplace_condition.temperature">{{TB_ANALYTIC_POSITION.workplace_condition.temperature}}</td>
+                                </tr>
+                                <tr>
+                                    <td width="40">c.</td>
+                                    <td width="200">Udara</td>
+                                    <td width="10">:</td>
+                                    <td v-if="TB_ANALYTIC_POSITION.workplace_condition.air">{{TB_ANALYTIC_POSITION.workplace_condition.air}}</td>
+                                </tr>
+                                <tr>
+                                    <td width="40">d.</td>
+                                    <td width="200">Keadaan Ruangan</td>
+                                    <td width="10">:</td>
+                                    <td v-if="TB_ANALYTIC_POSITION.workplace_condition.place_condition">{{TB_ANALYTIC_POSITION.workplace_condition.place_condition}}</td>
+                                </tr>
+                                <tr>
+                                    <td width="40">e.</td>
+                                    <td width="200">Letak</td>
+                                    <td width="10">:</td>
+                                    <td v-if="TB_ANALYTIC_POSITION.workplace_condition.location">{{TB_ANALYTIC_POSITION.workplace_condition.location}}</td>
+                                </tr>
+                                <tr>
+                                    <td width="40">f.</td>
+                                    <td width="200">Penerangan</td>
+                                    <td width="10">:</td>
+                                    <td v-if="TB_ANALYTIC_POSITION.workplace_condition.lighting">{{TB_ANALYTIC_POSITION.workplace_condition.lighting}}</td>
+                                </tr>
+                                <tr>
+                                    <td width="40">g.</td>
+                                    <td width="200">Suara</td>
+                                    <td width="10">:</td>
+                                    <td v-if="TB_ANALYTIC_POSITION.workplace_condition.noise">{{TB_ANALYTIC_POSITION.workplace_condition.noise}}</td>
+                                </tr>
+                            </table>
+                            <table style="margin-left: 50px;margin-top: 20px;">
+                                <tr>
+                                    <th width="15">12.</th>
+                                    <th width="200" >
+                                        UPAYA FISIK
+                                    </th>
+                                </tr>
+                            </table>
+                            <table style="margin-left: 60px;  ">
+                                <tr>
+                                    <td width="40">a)</td>
+                                    <td width="200">Jenis Upaya</td>
+                                </tr>
+                                <tr>
+                                    <th >&nbsp;</th>
+                                    <td >
+                                        <ol type="a">
+                                            <li v-for="list in TB_ANALYTIC_POSITION.physical_effort">
+                                                {{list.effort}}
+                                            </li>
+                                        </ol>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td width="40">b)</td>
+                                    <td width="200">Jenis Daya</td>
+                                </tr>
+                                <tr>
+                                    <th >&nbsp;</th>
+                                    <td >
+                                        <ol type="a">
+                                            <li v-for="list in TB_ANALYTIC_POSITION.power_type">
+                                                {{list.power_type}}
+                                            </li>
+                                        </ol>
+                                    </td>
+                                </tr>
+                            </table>
+                            <table style="margin-left: 50px;margin-top: 20px;">
+                                <tr>
+                                    <th width="15">13.</th>
+                                    <th width="200" colspan="2">
+                                        RESIKO BAHAYA
+                                    </th>
+                                </tr>
+                                <tr>
+                                    <th >&nbsp;</th>
+                                    <td>Fisik</td>
+                                    <td>:</td>
+                                    <td>{{TB_ANALYTIC_POSITION.risk_of_danger.physical}}</td>
+                                </tr>
+                                <tr>
+                                    <th >&nbsp;</th>
+                                    <td>Mental</td>
+                                    <td>:</td>
+                                    <td>{{TB_ANALYTIC_POSITION.risk_of_danger.mentality}}</td>
+                                </tr>
+                            </table>
+                            <table style="margin-left: 50px;margin-top: 20px;">
+                                <tr>
+                                    <th width="15">14.</th>
+                                    <th width="200" colspan="2">
+                                        SYARAT JABATAN
+                                    </th>
+                                </tr>
+                            </table>
+                            <table style="margin-left: 60px;">
+                                <tr>
+                                    <td width="20">a)</td>
+                                    <td width="190">Pangkat/ Golongan</td>
+                                    <td>:</td>
+                                    <td>{{dataPosition.position_class}}</td>
+                                </tr>
+                                <tr>
+                                    <td width="20">b)</td>
+                                    <td width="190">Keahlian</td>
+                                    <td>:</td>
+                                </tr>
+                            </table>
+                            <table style="margin-left: 70px;">
+                                <tr v-for="(list, index) in TB_POSITION_REQUIREMENT.skill" :key="index">
+                                    <td >{{index+1}})</td>
+                                    <td >{{list.skill}}</td>
+                                </tr>
+                            </table>
+                            <table style="margin-left: 60px;">
+                                <tr>
+                                    <td width="20">c)</td>
+                                    <td width="190">Keterampilan</td>
+                                    <td>:</td>
+                                </tr>
+                            </table>
+                            <table style="margin-left: 70px;">
+                                <tr v-for="(list, index) in TB_POSITION_REQUIREMENT.expretise" :key="index">
+                                    <td >{{index+1}})</td>
+                                    <td >{{list.expertise}}</td>
+                                </tr>
+                            </table>
+                            <table style="margin-left: 60px;">
+                                <tr>
+                                    <td width="20">d)</td>
+                                    <td width="190">Pengetahuan</td>
+                                    <td>:</td>
+                                </tr>
+                            </table>
+                            <table style="margin-left: 70px;">
+                                <tr v-for="(list, index) in TB_POSITION_REQUIREMENT.knowledge" :key="index">
+                                    <td >{{index+1}})</td>
+                                    <td >{{list.knowledge}}</td>
+                                </tr>
+                            </table>
+                            <table style="margin-left: 60px;">
+                                <tr>
+                                    <td width="20">e)</td>
+                                    <td width="190">Pendidikan</td>
+                                    <td>:</td>
+                                    <td >{{dataPosition.education}}</td>
+                                </tr>
+                            </table>
+                            <table style="margin-left: 60px;">
+                                <tr>
+                                    <td width="20">f)</td>
+                                    <td width="190">Pelatihan</td>
+                                    <td>:</td>
+                                </tr>
+                            </table>
+                            <table style="margin-left: 70px;">
+                                <tr>
+                                    <td >1)</td>
+                                    <td width="180">Struktural</td>
+                                    <td>:</td>
+                                    <td>{{TB_POSITION_REQUIREMENT.training_structure}}</td>
+                                </tr>
+                            </table>
+                            <table style="margin-left: 70px;">
+                                <tr>
+                                    <td >2)</td>
+                                    <td width="180">Fungsional</td>
+                                    <td>:</td>
+                                </tr>
+                            </table>
+                            <table style="margin-left: 90px;">
+                                <tr v-for="(list, index) in TB_POSITION_REQUIREMENT.training_functional" :key="index">
+                                    <td> - </td>
+                                    <td >{{list.training_func}}</td>
+                                </tr>
+                            </table>
+                            <table style="margin-left: 60px;">
+                                <tr>
+                                    <td width="20">g)</td>
+                                    <td width="190">Pengalaman Kerja</td>
+                                    <td>:</td>
+                                </tr>
+                            </table>
+                            <table style="margin-left: 90px;">
+                                <tr v-for="(list, index) in TB_POSITION_REQUIREMENT.experience" :key="index">
+                                    
+                                    <td >{{list.exp}}</td>
+                                </tr>
+                            </table>
+                            <table style="margin-left: 60px;">
+                                <tr>
+                                    <td width="20">h)</td>
+                                    <td width="190">Kondisi Fisik</td>
+                                    <td>:</td>
+                                </tr>
+                            </table>
+                            <table style="margin-left: 100px;">
+                                <tr>
+                                    <td width="20">1.</td>
+                                    <td width="160">Jenis Kelamin</td>
+                                    <td width="20">:</td>
+                                    <td>{{TB_POSITION_REQUIREMENT.physical_condition.gender}}</td>
+                                </tr>
+                                <tr>
+                                    <td width="20">2.</td>
+                                    <td width="160">Umur</td>
+                                    <td width="20">:</td>
+                                    <td>{{TB_POSITION_REQUIREMENT.physical_condition.age}} Tahun</td>
+                                </tr>
+                                <tr>
+                                    <td width="20">3.</td>
+                                    <td width="160">Tinggi Badan</td>
+                                    <td width="20">:</td>
+                                    <td>{{TB_POSITION_REQUIREMENT.physical_condition.heigh}} cm</td>
+                                </tr>
+                                <tr>
+                                    <td width="20">4.</td>
+                                    <td width="160">Berat Badan</td>
+                                    <td width="20">:</td>
+                                    <td>{{TB_POSITION_REQUIREMENT.physical_condition.weigh}}</td>
+                                </tr>
+                                <tr>
+                                    <td width="20">5.</td>
+                                    <td width="160">Postur Badan</td>
+                                    <td width="20">:</td>
+                                    <td>{{TB_POSITION_REQUIREMENT.physical_condition.posture}}</td>
+                                </tr>
+                                <tr>
+                                    <td width="20">6.</td>
+                                    <td width="160">Penampilan</td>
+                                    <td width="20">:</td>
+                                    <td>{{TB_POSITION_REQUIREMENT.physical_condition.appearance}}</td>
+                                </tr>
+                            </table>
+                            <table style="margin-left: 60px;">
+                                <tr>
+                                    <td width="20">i)</td>
+                                    <td width="190">Kondisi Mental</td>
+                                    <td>:</td>
+                                </tr>
+                            </table>
+                            <table style="margin-left: 100px;">
+                                <tr>
+                                    <td width="20">1.</td>
+                                    <td width="160">Bakat Kerja</td>
+                                </tr>
+                            </table>
+                            <table style="margin-left: 130px;">
+                                <tr v-for="(list, index) in TB_POSITION_REQUIREMENT.work_talent" :key="index">
+                                    <td width="30">{{list.code}}</td>
+                                    <td width="20">=</td>
+                                    <td width="500">{{list.description}}</td>
+                                </tr>
+                                
+                            </table>
+                            <table style="margin-left: 100px;">
+                                <tr>
+                                    <td width="20">2.</td>
+                                    <td width="160">Temperamen Kerja</td>
+                                </tr>
+                            </table>
+                            <table style="margin-left: 130px;">
+                                <tr v-for="(list, index) in TB_POSITION_REQUIREMENT.work_temperament" :key="index">
+                                    <td width="30">{{list.code}}</td>
+                                    <td width="20">=</td>
+                                    <td width="500">{{list.description}}</td>
+                                </tr>
+                            </table>
+                            <table style="margin-left: 60px;">
+                                <tr>
+                                    <td width="20">j)</td>
+                                    <td width="190">Minat Kerja</td>
+                                    <td>:</td>
+                                </tr>
+                            </table>
+                            <table style="margin-left: 130px;">
+                                <tr v-for="(list, index) in TB_POSITION_REQUIREMENT.work_interest" :key="index">
+                                    <td width="30">{{list.code}}</td>
+                                    <td width="20">=</td>
+                                    <td width="500">{{list.interest}}</td>
+                                </tr>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</template>
+
+<script>
+    import ApiAnalytic from "../../services/api/AnalyticPosition.js"
+    import Swal from 'sweetalert2'
+    export default {
+        props: ['position_id'],
+        data() {
+            return {
+                cssText: '',
+                dataPosition: [],
+                TB_ANALYTIC_POSITION: [],
+                TB_POSITION_REQUIREMENT: [],
+                TB_OPD: [],
+                TB_ORGANIZATION: [],
+                onLoad: true
+            }
+        },
+        beforeCreate() {},
+        mounted() {
+            this.getData()
+        },
+        methods: {
+            getData(){
+                ApiAnalytic.getDetail(this.position_id)
+                    .then(resp => {
+                        if(resp) {
+                            this.dataPosition =  resp.data.content
+                            this.TB_ANALYTIC_POSITION = resp.data.content.TB_ANALYTIC_POSITION
+                            this.TB_ANALYTIC_POSITION.work_result = JSON.parse(this.TB_ANALYTIC_POSITION.work_result);
+                            this.TB_ANALYTIC_POSITION.work_material = JSON.parse(this.TB_ANALYTIC_POSITION.work_material);
+                            this.TB_ANALYTIC_POSITION.work_equipment = JSON.parse(this.TB_ANALYTIC_POSITION.work_equipment);
+                            this.TB_ANALYTIC_POSITION.task_detail = JSON.parse(this.TB_ANALYTIC_POSITION.task_detail);
+                            this.TB_ANALYTIC_POSITION.responsible = JSON.parse(this.TB_ANALYTIC_POSITION.responsible);
+                            this.TB_ANALYTIC_POSITION.authority = JSON.parse(this.TB_ANALYTIC_POSITION.authority);
+                            this.TB_ANALYTIC_POSITION.job_correlation = JSON.parse(this.TB_ANALYTIC_POSITION.job_correlation);
+                            this.TB_ANALYTIC_POSITION.workplace_condition = JSON.parse(this.TB_ANALYTIC_POSITION.workplace_condition);
+                            this.TB_ANALYTIC_POSITION.risk_of_danger = JSON.parse(this.TB_ANALYTIC_POSITION.risk_of_danger);
+                            this.TB_ANALYTIC_POSITION.physical_effort = JSON.parse(this.TB_ANALYTIC_POSITION.physical_effort);
+                            this.TB_ANALYTIC_POSITION.power_type = JSON.parse(this.TB_ANALYTIC_POSITION.power_type);
+                            this.TB_OPD = resp.data.content.TB_OPD;
+                            this.TB_ORGANIZATION = resp.data.content.TB_ORGANIZATION;
+                            this.TB_POSITION_REQUIREMENT = this.TB_ANALYTIC_POSITION.TB_POSITION_REQUIREMENT ? this.TB_ANALYTIC_POSITION.TB_POSITION_REQUIREMENT : [];
+                            this.TB_POSITION_REQUIREMENT.expretise =  this.TB_POSITION_REQUIREMENT.expretise ? JSON.parse(this.TB_POSITION_REQUIREMENT.expretise): [];
+                            this.TB_POSITION_REQUIREMENT.skill = this.TB_POSITION_REQUIREMENT.skill ? JSON.parse(this.TB_POSITION_REQUIREMENT.skill) : [];
+                            this.TB_POSITION_REQUIREMENT.knowledge = this.TB_POSITION_REQUIREMENT.knowledge ? JSON.parse(this.TB_POSITION_REQUIREMENT.knowledge) : [];
+                            this.TB_POSITION_REQUIREMENT.training_functional = this.TB_POSITION_REQUIREMENT.training_functional ?  JSON.parse(this.TB_POSITION_REQUIREMENT.training_functional) : [];
+                            this.TB_POSITION_REQUIREMENT.experience = this.TB_POSITION_REQUIREMENT.experience ? JSON.parse(this.TB_POSITION_REQUIREMENT.experience) : []
+                            this.TB_POSITION_REQUIREMENT.physical_condition = this.TB_POSITION_REQUIREMENT.physical_condition ? JSON.parse(this.TB_POSITION_REQUIREMENT.physical_condition) : []
+                            this.TB_POSITION_REQUIREMENT.work_talent =  this.TB_POSITION_REQUIREMENT.work_talent ? JSON.parse(this.TB_POSITION_REQUIREMENT.work_talent) : []
+                            this.TB_POSITION_REQUIREMENT.work_temperament = this.TB_POSITION_REQUIREMENT.work_temperament ? JSON.parse(this.TB_POSITION_REQUIREMENT.work_temperament) : []
+                            this.TB_POSITION_REQUIREMENT.work_interest = this.TB_POSITION_REQUIREMENT.work_interest ? JSON.parse(this.TB_POSITION_REQUIREMENT.work_interest) : []
+                        }
+                    })
+                    .catch(err => {
+                        console.log(err)
+                        setTimeout(() => {
+                            this.onLoad = false
+                        }, 1000)
+                    })
+                    .finally(() => {
+                        setTimeout(() => {
+                            this.onLoad = false
+                        }, 1000)
+                    })
+            },
+            edit() {
+                this.$root.$router.push({
+                    name: 'analytic.position.form.modify',
+                    params: {
+                        position_id: this.dataPosition.id
+                    }
+                })
+            },
+            del() {
+                Swal.fire({
+                    title: `Anda yakin ingin menghapus data ini ?`,
+                    text: "Data yang telah dihapus tidak dapat dikembalikan!",
+                    icon: 'warning',
+                    showCancelButton: true,
+                    confirmButtonColor: '#d33',
+                    cancelButtonColor: '#b3b3b3',
+                    confirmButtonText: 'Ya, delete it!',
+                }).then((result) => {
+                    if (result.value) {
+                        ApiAnalytic.deleteAnjab(this.TB_ANALYTIC_POSITION.id)
+                            .then(resp => resp)
+                            .catch(err => console.log(err))
+                            .finally(() => {
+                                Swal.fire(
+                                        'Berhasil',
+                                        `Data ini telah dihapus`,
+                                        'success'
+                                    )
+                                    .then(this.$router.replace({
+                                        name: 'anjab-abk'
+                                    }))
+
+                            })
+
+                    }
+                })
+            }
+        }
+    }
+</script>

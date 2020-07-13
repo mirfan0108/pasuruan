@@ -1,0 +1,245 @@
+<template>
+    <div class="row">
+        <div class="col-md-12 col-lg-12">
+            <div class="card">
+                <div class="card-body">
+                    <button class="pull-right btn btn-sm btn-rounded btn-success" data-toggle="modal" data-target="#modal-equipment-add">Tambah Alat Kerja</button>
+                    <h4 class="card-title">Alat Kerja</h4>
+                    <div class="table-responsive" style="margin-top: 35px;">
+                        <table class="table color-table success-table">
+                            <thead>
+                                <tr>
+                                    <th colspan="3">
+                                        <input placeholder="Cari..." v-model="search" class="form-control" type="text">
+                                    </th>
+                                </tr>
+                                <tr>
+                                    <th width="50">#</th>
+                                    <th>Nama Alat</th>
+                                    <th width="200"></th>
+                                </tr>
+                            </thead>
+                            <tbody v-if="!onLoad && Equipments.length > 0">
+                                <tr v-for="(eq, index) in Equipments">
+                                    <td width="50">
+                                        {{(currentPage - 1 == 0 ? (index+1) : (currentPage-1)+''+(index+1))}}
+                                    </td>
+                                    <td>{{eq.name}}</td>
+                                    <td>
+                                        <a href="javascript:void(0)" @click.prevent="modifyEquipment(eq)">
+                                            <i class="mdi mdi-lead-pencil"></i> Ubah
+                                        </a> |
+                                        <a href="javascript:void(0)" class="text-danger" @click.prevent="deleteEquipment(eq)">
+                                            <i class="mdi mdi-delete"></i> Hapus
+                                        </a>
+                                    </td>
+                                </tr>
+                            </tbody>
+                            <tbody v-if="!onLoad && Equipments.length == 0">
+                                <tr >
+                                    <td colspan="3" style="text-align: center;">Tidak tersedia.</td>
+                                </tr>
+                            </tbody>
+                            <tbody v-if="onLoad">
+                                <tr>
+                                    <td colspan="3" align="center">
+                                        <img src="assets/images/loading.gif" alt="loading" width="180">
+                                    </td>
+                                </tr>
+                            </tbody>
+                            <tfoot>
+                                <tr>
+                                    <td colspan="3">
+                                        <div class="pull-right">
+                                            <b-pagination
+                                                    v-model="currentPage"
+                                                    :total-rows="totalEquipments"
+                                                    :per-page="perPage"
+                                                    align="fill"
+                                                    size="md"></b-pagination>
+                                        </div>
+                                    </td>
+                                </tr>
+                            </tfoot>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- START FORM ADD EQUIPMENTS -->
+        <div class="modal fade " tabindex="-1" id="modal-equipment-add" role="dialog" aria-labelledby="Tambah Alat Kerja" style="display: none;" aria-hidden="true">
+            <div class="modal-dialog modal-lg">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h4 class="modal-title" id="myLargeModalLabel">Tambah Alat Kerja</h4>
+                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true" @click.prevent="formAdd.name = null">×</button>
+                    </div>
+                    <div class="modal-body">
+                        <form role="form" @submit.prevent="submitted">
+                            <div class="form-group">
+                                <label>Nama Alat Kerja </label>
+                                <input type="text" class="form-control" placeholder="Masukan alat kerja" v-model="formAdd.name">
+                            </div>
+                        </form>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-danger waves-effect text-left" data-dismiss="modal" id="close-modal-add-eq" @click.prevent="formAdd.name = null">Close</button>
+                        <button type="button" class="btn btn-primary waves-effect text-left" :disabled="onLoad" @click.prevent="submitted"> {{onLoad ? 'Please Wait...': 'Submit'}}</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- END FORM ADD EQUIPMENTS -->
+
+        <!-- START FORM MODIFY EQUIPMENTS -->
+        <button  data-toggle="modal" data-target="#modal-equipment-modify" style="display: none;" id="open-modify-modal"></button>
+        <div class="modal fade " tabindex="-1" id="modal-equipment-modify" role="dialog" aria-labelledby="Tambah Alat Kerja" style="display: none;" aria-hidden="true">
+            <div class="modal-dialog modal-lg">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h4 class="modal-title" id="myLargeModalLabel">Ubah Alat Kerja</h4>
+                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true" @click.prevent="formModify.name = null; idModify = null">×</button>
+                    </div>
+                    <div class="modal-body">
+                        <form role="form" @submit.prevent="submitModify">
+                            <div class="form-group">
+                                <label>Nama Alat Kerja </label>
+                                <input type="text" class="form-control" placeholder="Masukan alat kerja" v-model="formModify.name">
+                            </div>
+                        </form>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-danger waves-effect text-left" data-dismiss="modal" id="close-modal-modify-eq" @click.prevent="formModify.name = null; idModify = null">Close</button>
+                        <button type="button" class="btn btn-primary waves-effect text-left" :disabled="onLoad" @click.prevent="submitModify"> {{onLoad ? 'Please Wait...': 'Submit'}}</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- END FORM MODIFY EQUIPMENTS -->
+    </div>
+</template>
+
+<script>
+    import { mapState } from 'vuex';
+    import Swal from 'sweetalert2'
+    export default {
+        data() {
+            return {
+                search: '',
+                perPage: 10,
+                currentPage: 1,
+                formAdd: {
+                    name: null
+                },
+                idModify: null,
+                formModify: {
+                    name: null
+                }
+            }
+        },
+        computed: mapState(['onLoad', 'Equipments', 'totalEquipments']),
+        beforeCreate() {
+            let pages = {
+                title: 'Master File',
+                breadcrumb: [
+                    {
+                        name: 'Alat Kerja'
+                    }
+                ]
+            }    
+            this.$root.$store.dispatch('setBreadCrumb', pages)
+        },
+        watch: {
+            'currentPage': function(newVal, oldVal) {
+                this.init()
+            },
+            'search': async function(newVal, oldVal) {
+                this.currentPage = await 1
+                this.init()
+            }
+        },
+        mounted() {
+            // this.resetData()
+            this.init()
+        },
+        methods: {
+            async resetData() {
+                this.search         = await ''
+                this.formAdd.name   = null
+                this.perPage        = await 10
+                this.currentPage    = await 1
+                this.totalItem      = await 0
+                this.idModify       = null
+                this.formModify.name = null
+            },
+            async init() {
+                this.$root.$store.dispatch('getEquipments', {page: this.currentPage, limit: this.perPage, search: this.search})
+                .catch(_err => _err)
+            },
+
+            deleteEquipment(data) {
+                Swal.fire({
+                    title: `Anda yakin ingin menghapus ${data.name} ?`,
+                    text: "Data yang telah dihapus tidak dapat dikembalikan!",
+                    icon: 'warning',
+                    showCancelButton: true,
+                    confirmButtonColor: '#d33',
+                    cancelButtonColor: '#b3b3b3',
+                    confirmButtonText: 'Ya, Hapus itu!',
+                }).then((result) => {
+                    if (result.value) {
+                        this.$root.$store.dispatch('deleteEquipment', data.id)
+                        .then(_resp => _resp)
+                        .finally(() => {
+                            Swal.fire({
+                                icon: 'success',
+                                title: `${data.name} berhasil dihapus!`,
+                                onClose: () => {
+                                    
+                                    this.init()
+                                }
+                            })
+                        })
+                    }
+                })
+            },
+
+            submitted() {
+                this.$root.$store.dispatch('addEquipments', this.formAdd)
+                .then(_resp => $("#close-modal-add-eq").click())
+                .finally(() => {
+                    
+                    Swal.fire({
+                        icon: 'success',
+                        title: 'Berhasil menambahkan alat baru',
+                        onClose: () => {
+                            this.resetData()
+                            this.init()
+                        }
+                    })
+                })
+            },
+
+            modifyEquipment(data) {
+                this.idModify = data.id
+                this.formModify.name = data.name
+                $("#open-modify-modal").click()
+            },
+
+            submitModify() {
+                this.$root.$store.dispatch('modifyEquipment', {id: this.idModify, form: this.formModify})
+                .then(_resp => $("#close-modal-modify-eq").click())
+                .finally(() => {
+                    
+                    Swal.fire({
+                        icon: 'success',
+                        title: 'Berhasil di ubah',
+                        onClose: () => {
+                            this.init()
+                        }
+                    })
+                })
+            }
+        }
+    }
+</script>

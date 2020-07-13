@@ -1,0 +1,1945 @@
+<template>
+    <div>
+        <div class="card">
+            <div class="card-body">
+                <h4 class="card-subtitle"> Berikut adalah informasi terkait jabatan yang akan dianalisa : </h4>
+                <div class="row">
+                    <div class="col-md-12"> 
+                        <label for="name">Nama Jabatan</label><br>
+                        {{positionData.name}}<br>
+                    </div>
+                    <div class="col-md-6"> 
+                        <label for="name">Tipe Jabatan</label><br>
+                        {{positionData.type}}<br>
+                    </div>
+                    <div class="col-md-6"> 
+                        <label for="name">Golongan</label><br>
+                        {{positionData.position_class}}<br>
+                    </div>
+
+                    <div class="col-md-12"> 
+                        <label for="name">Minimal Pendidikan</label><br>
+                        {{positionData.education}}
+                    </div>
+                </div>
+                <hr>
+                <div class="row">
+                    <div class="col-md-4 col-lg-4">
+                        <div class="list-group"> 
+                            <a @click.prevent="step = 'task-summary';" href="javascript:void(0)" 
+                                :class="step == 'task-summary' ? 'list-group-item active' : 'list-group-item'">Ringkasan Tugas</a> 
+                            <a href="javascript:void(0)" @click.prevent="step = 'work-result';" 
+                                :class="step == 'work-result' ? 'list-group-item active' : 'list-group-item'">Hasil Kerja</a>
+                            <a href="javascript:void(0)" @click.prevent="step = 'material';" 
+                                :class="step == 'material' ? 'list-group-item active' : 'list-group-item'">Bahan Kerja</a>
+                            <a href="javascript:void(0)" @click.prevent="step = 'equipment';" 
+                                :class="step == 'equipment' ? 'list-group-item active' : 'list-group-item'">Alat Kerja</a>
+                            <a href="javascript:void(0)" @click.prevent="step = 'task-detail';" 
+                                :class="step == 'task-detail' ? 'list-group-item active' : 'list-group-item'">Rincian Tugas</a>
+                            <a href="javascript:void(0)" @click.prevent="step = 'responsible';" 
+                                :class="step == 'responsible' ? 'list-group-item active' : 'list-group-item'">Tanggung Jawab</a>
+                            <a href="javascript:void(0)" @click.prevent="step = 'authority';" 
+                                :class="step == 'authority' ? 'list-group-item active' : 'list-group-item'">Wewenang</a>
+                            <a href="javascript:void(0)" @click.prevent="step = 'correlation';" 
+                                :class="step == 'correlation' ? 'list-group-item active' : 'list-group-item'">Korelasi Jabatan</a>
+                            <a href="javascript:void(0)" @click.prevent="step = 'place-work';" 
+                                :class="step == 'place-work' ? 'list-group-item active' : 'list-group-item'">Keadaan Tempat Kerja</a>
+                            <a href="javascript:void(0)" @click.prevent="step = 'effort';" 
+                                :class="step == 'effort' ? 'list-group-item active' : 'list-group-item'">Jenis Upaya</a>
+                            <a href="javascript:void(0)" @click.prevent="step = 'power';" 
+                                :class="step == 'power' ? 'list-group-item active' : 'list-group-item'">Jenis Daya</a>
+                            <a href="javascript:void(0)" @click.prevent="step = 'risk-danger';" 
+                                :class="step == 'risk-danger' ? 'list-group-item active' : 'list-group-item'">Risiko Bahaya</a>
+                            <a href="javascript:void(0)" class="list-group-item active"><b>PERSYARATAN JABATAN</b></a>
+                            <a href="javascript:void(0)" @click.prevent="step = 'position-classes';" 
+                                :class="step == 'position-classes' ? 'list-group-item active' : 'list-group-item'">Keahlian, Keterampilan & Pengetahuan</a>
+                            <a href="javascript:void(0)" @click.prevent="step = 'study-training';" 
+                                :class="step == 'study-training' ? 'list-group-item active' : 'list-group-item'">Pelatihan dan  Pengalaman Kerja</a>
+                            <a href="javascript:void(0)" @click.prevent="step = 'condition';" 
+                                :class="step == 'condition' ? 'list-group-item active' : 'list-group-item'">Kondisi Fisik</a>
+                            <a href="javascript:void(0)" @click.prevent="step = 'talent';" 
+                                :class="step == 'talent' ? 'list-group-item active' : 'list-group-item'">Bakat Kerja</a>
+                            <a href="javascript:void(0)" @click.prevent="step = 'temperament';" 
+                                :class="step == 'temperament' ? 'list-group-item active' : 'list-group-item'">Temperamen Kerja</a>
+                            <a href="javascript:void(0)" @click.prevent="step = 'interest';" 
+                                :class="step == 'interest' ? 'list-group-item active' : 'list-group-item'">Minat Kerja</a>
+                        </div>
+                    </div>
+                    <div class="col-md-8 col-lg-8">
+                        <!-- TASK SUMMARY -->
+                        <div v-if="step == 'task-summary'">
+                            <div class="box-body">
+                                <div class="row">
+                                    <div class="col-md-12">
+                                        <div class="form-group">
+                                            <label>Ringkasan Tugas</label>
+                                            <textarea class="form-control" placeholder="Ketik disini..."  rows="4" v-model="formAnalytic.task_summary"></textarea>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- WORK RESULT -->
+                        <div v-if = "step == 'work-result'">
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <div class="card">
+                                        <div class="card-body">
+                                            <h6 class="card-title">Hasil Kerja</h6>
+                                            <textarea  class="form-control" placeholder="Ketik disini ..."  rows="9" v-model="formWorkResult"></textarea>
+                                            <button  class="btn btn-success btn-sm btn-rounded pull-right" @click.prevent="addToList('work-result')">
+                                                <i class="fa fa-plus-square"></i> Tambahkan
+                                            </button>
+                                        </div>
+                                    </div><hr>
+                                    <div class="card">
+                                        <div class="card-body">
+                                            <table class="table">
+                                                <tr v-for="work_rest in listWorkResult" >
+                                                    <td>
+                                                        {{work_rest.work_result}}
+                                                    </td>
+                                                    <td>
+                                                        <button class="btn btn-danger btn-sm btn-rounded pull-right" @click.prevent="spliceList(work_rest, 'work-result')">
+                                                            <i class="fa fa-minus-square"></i>
+                                                        </button>
+                                                    </td>
+                                                </tr>
+                                            </table>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- MATERIAL  -->
+                        <div v-if = "step == 'material'" >
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <div class="card">
+                                        <div class="card-body">
+                                            <h6 class="card-title">Bahan Kerja</h6>
+                                            <table class="table">
+                                                <tr v-for="(material, index) in masterMaterial">
+                                                    <td style="width: 100%;">
+                                                        <input v-model="material.selected" type="checkbox" v-bind:id="'basic_checkbox_'+index" class="filled-in" checked="">
+                                                        
+                                                        <label v-bind:for="'basic_checkbox_'+index" style="margin-left: 5px;">{{material.name}}</label>
+                                                        <!-- <input v-model="material.selected" type="checkbox" > -->
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                    <td >
+                                                        <input v-model="isOtherMaterials" type="checkbox" id="basic_checkbox_material_other" class="filled-in" checked="">
+                                                        <label for="basic_checkbox_material_other" style="margin-left: 5px;">Lainnya</label>
+                                                    </td>
+                                                </tr>
+                                            </table>
+                                            <hr>
+                                        </div>
+                                        <div class="card-body">
+                                            <div class="form-group" v-if="isOtherMaterials">
+                                                <label>Bahan Kerja Lainnya</label>
+                                                <div class="input-group ">
+                                                    <textarea class="form-control" rows="2" v-model="formOtherMaterial" placeholder="Ketik disini"></textarea>
+                                                </div>
+                                                <button type="button" class="btn btn-success btn-sm pull-right btn-rounded" @click.prevent="addToList('work-material')"><i class="fa fa-plus-square"></i> Tambahkan</button>
+                                            </div>
+                                            <hr>
+                                            <div  v-if="listOtherMaterials.length > 0 && isOtherMaterials">
+                                                <table class="table">
+                                                    <tr v-for="materials in listOtherMaterials" >
+                                                        <td>
+                                                            {{materials.material}}
+                                                        </td>
+                                                        <td>
+                                                            <button class="btn btn-danger  pull-right" @click.prevent="spliceList(materials, 'work-material')">
+                                                                <i class="fa fa-minus-square"></i>
+                                                            </button>
+                                                        </td>
+                                                    </tr>
+                                                </table>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- EQUIPMENT  -->
+                        <div v-if = "step == 'equipment'" style="height: 480px; overflow-x: hidden; overflow-y: scroll;">
+                            <div class="row">
+                                <div class="card">
+                                    <div class="card-body">
+                                        <h6 class="card-title">Alat Kerja</h6>
+                                        <table class="table">
+                                            <tr v-for="equipment in masterEquipment">
+                                                <td style="width: 35px;">
+                                                    <input type="checkbox" value="true" v-model="equipment.selected" class="checkbox-component icheckbox_flat-green" >
+                                                </td>
+                                                <td>
+                                                    {{equipment.name}}
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td style="width: 35px;">
+                                                    <input type="checkbox" value="true" v-model="isOtherEquipment" id="other-equipment" class="checkbox-component icheckbox_flat-green">
+                                                </td>
+                                                <td>
+                                                    Lainnya
+                                                </td>
+                                            </tr>
+                                        </table>
+                                    </div>
+                                    <hr>
+                                    <div class="card-body" v-if="isOtherEquipment">
+                                        <div class="form-group" >
+                                            <label>Alat Kerja Lainnya</label>
+                                            <div class="input-group ">
+                                                <textarea class="form-control" rows="2" v-model="formOtherEquipment" placeholder="Contoh : Pulpen, Komputer .."></textarea>
+                                                <span class="input-group-btn">
+                                                    <button type="button" class="btn btn-success" @click.prevent="addToList('work-equipment')">
+                                                        <i class="fa fa-plus-square"></i>
+                                                    </button>
+                                                </span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <hr>
+                                    <div class="card-body" v-if="listOtherEquipment.length > 0 && isOtherEquipment">
+                                        <table class="table">
+                                            <tr v-for="equipments in listOtherEquipment" >
+                                                <td>
+                                                    {{equipments.equipment}}
+                                                    
+                                                </td>
+                                                <td>
+                                                    <button class="btn btn-danger pull-right" @click.prevent="spliceList(equipments, 'work-equipment')">
+                                                        <i class="fa fa-minus-square"></i>
+                                                    </button>
+                                                </td>
+                                            </tr>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                        </div>
+
+                        <!-- WORK LIST -->
+                        <div v-if = "step == 'task-detail'">
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <div class="card">
+                                        <div class="card-body">
+                                            <h6 class="card-title">Rincian Tugas</h6>
+                                            <div class="form-group">
+                                                <div class="input-group">
+                                                    <textarea  class="form-control" placeholder="Ketik disini ..."  rows="3" v-model="formWorkList"></textarea>
+                                                </div>
+                                                <button type="button" class="btn btn-success btn-sm btn-rounded pull-right" @click.prevent="addToList('work-list')">
+                                                    <i class="fa fa-plus-square"></i>
+                                                </button>
+                                            </div>
+                                            <hr>
+                                            <div style="margin-top: 5px;" v-if="listWorkList.length > 0">
+                                                <table class="table">
+                                                    <tr v-for="work_list in listWorkList" >
+                                                        <td>
+                                                            {{work_list.task_detail}}
+                                                            
+                                                        </td>
+                                                        <td>
+                                                            <button class="btn btn-danger pull-right" @click.prevent="spliceList(work_list, 'work-list')">
+                                                                <i class="fa fa-minus-square"></i>
+                                                            </button>
+                                                        </td>
+                                                    </tr>
+                                                </table>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- RESPONSIBILITY & AUTHORITY -->
+                        <div v-if = "step == 'responsible'">
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <div class="card">
+                                        <div class="card-body">
+                                            <div class="form-group">
+                                                <label>Tanggung Jawab Kerja</label>
+                                                <table class="table">
+                                                    <tr v-for="responsibility in masterResponsibility">
+                                                        <td style="width: 35px;">
+                                                            <input type="checkbox" value="true" v-model="responsibility.selected" class="checkbox-component icheckbox_flat-green" >
+                                                        </td>
+                                                        <td>
+                                                            {{responsibility.name}}
+                                                        </td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td style="width: 35px;">
+                                                            <input type="checkbox" value="true" v-model="isOtherResponsibility" id="other-responsibility" class="checkbox-component icheckbox_flat-green">
+                                                        </td>
+                                                        <td>
+                                                            Lainnya
+                                                        </td>
+                                                    </tr>
+                                                </table>
+                                            </div>
+                                            <hr>
+                                            <div class="form-group" v-if="isOtherResponsibility">
+                                                <label>Tanggung Jawab Kerja Lainnya</label>
+                                                <div class="input-group ">
+                                                    <textarea class="form-control" rows="2" v-model="formOtherResponsibility" placeholder="Ketik disini .."></textarea>
+                                                </div>
+                                                <button type="button" class="btn btn-success btn-sm btn-rounded pull-right" @click.prevent="addToList('work-responsibility')">
+                                                    <i class="fa fa-plus-square"></i>
+                                                </button>
+                                            </div>
+                                            <hr>
+                                            <div style="margin-top: 5px;" v-if="listOtherResponsibility.length > 0 && isOtherResponsibility">
+                                                <table class="w3-table-all">
+                                                    <tr v-for="responsibilities in listOtherResponsibility" >
+                                                        <td>
+                                                            {{responsibilities.responsible}}
+                                                        </td>
+                                                        <td>
+                                                            <button class="btn btn-dangerpull-right" @click.prevent="spliceList(responsibilities, 'work-responsibility')">
+                                                                <i class="fa fa-minus-square"></i>
+                                                            </button>
+                                                        </td>
+                                                    </tr>
+                                                </table>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div v-if = "step == 'authority'">
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <div class="card">
+                                        <div class="card-body">
+                                            <h6 class="card-title">Wewenang Kerja</h6>
+                                            <table class="table">
+                                                <tr v-for="authority in masterAuthority">
+                                                    <td style="width: 35px;">
+                                                        <input type="checkbox" value="true" v-model="authority.selected" class="checkbox-component icheckbox_flat-green" >
+                                                    </td>
+                                                    <td>
+                                                        {{authority.name}}
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                    <td style="width: 35px;">
+                                                        <input type="checkbox" value="true" v-model="isOtherAuthority" id="other-authority" class="checkbox-component icheckbox_flat-green">
+                                                    </td>
+                                                    <td>
+                                                        Lainnya
+                                                    </td>
+                                                </tr>
+                                            </table>
+                                            <hr>
+                                        </div>
+                                        <div class="card-body" v-if="isOtherAuthority">
+                                            <div class="form-group" >
+                                                <label>Wewenang Kerja Lainnya</label>
+                                                <div class="input-group ">
+                                                    <textarea class="form-control" rows="2" v-model="formOtherAuthority" placeholder="Ketik disini .."></textarea>
+                                                    
+                                                </div>
+                                                <button type="button" class="btn btn-success pull-right btn-sm btn-rounded" @click.prevent="addToList('work-authority')">
+                                                    <i class="fa fa-plus-square"></i>
+                                                </button>
+                                            </div>
+                                        </div>
+                                        <hr>
+                                        <div class="card-body" v-if="listOtherAuthority.length > 0 && isOtherAuthority">
+                                            <table class="w3-table-all">
+                                                <tr v-for="authorities in listOtherAuthority" >
+                                                    <td>
+                                                        {{authorities.authority}}
+                                                        <button class="btn btn-danger btn-xs pull-right" @click.prevent="spliceList(authorities, 'work-authority')">
+                                                            <i class="fa fa-minus-square"></i>
+                                                        </button>
+                                                    </td>
+                                                </tr>
+                                            </table>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- KORELASI -->
+                        <div v-if="step == 'correlation'">
+                            <correlation-selection @data-correlation="getDataCorrelation"></correlation-selection>
+                            <div v-if="listCorelation.length > 0">
+                                <table class="table">
+                                    <tr>
+                                        <td>No</td>
+                                        <td>OPD</td>
+                                        <td>Jabatan</td>
+                                        <td>Hubungan</td>
+                                        <td style="text-align: center;">#</td>
+                                    </tr>
+                                    <tr v-for="(corelation, index) in listCorelation">
+                                        <td>{{index + 1}}</td>
+                                        <td>{{corelation.opd}}</td>
+                                        <td>{{corelation.position}}</td>
+                                        <td>{{corelation.relation}}</td>
+                                        <td>
+                                            <button class="btn btn-danger btn-sm btn-rounded pull-right" @click.prevent="spliceList(corelation, 'corelation')">
+                                                <i class="fa fa-minus-square"></i>
+                                            </button>
+                                        </td>
+                                    </tr>
+                                </table>
+                            </div>
+                        </div>
+
+                        <!-- TEMPAT KERJA -->
+                        <div v-if = "step == 'place-work'">
+                            <div class="card">
+                                <div class="card-body">
+                                    <div class="row">
+                                        <div class="col-md-4">
+                                            <div class="form-group">
+                                                <label>Tempat Kerja</label>
+                                                <select v-model="formAnalytic.analytic_workPlace" id="work-place" class="form-control select2 " style="width: 100%;" data-select2-id="1" tabindex="-1" aria-hidden="true">
+                                                    <option selected disabled>---PILIH TEMPAT KERJA---</option>
+                                                    <option value="Dalam Ruangan">Dalam Ruangan</option>
+                                                    <option value="Luar Ruangan">Luar Ruangan</option>
+                                                </select>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-4">
+                                            <div class="form-group">
+                                                <label>Suhu</label>
+                                                <select v-model="formAnalytic.analytic_temperature" id="temperature"class="form-control select2 " style="width: 100%;" data-select2-id="1" tabindex="-1" aria-hidden="true">
+                                                    <option selected disabled>---PILIH SUHU---</option>
+                                                    <option value="Dingin">Dingin</option>
+                                                    <option value="Panas">Panas</option>
+                                                </select>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-4">
+                                            <div class="form-group">
+                                                <label>Udara</label>
+                                                <select v-model="formAnalytic.analytic_air" id="air" class="form-control select2 " style="width: 100%;" data-select2-id="1" tabindex="-1" aria-hidden="true">
+                                                    <option selected disabled>---PILIH UDARA---</option>
+                                                    <option value="Sejuk">Sejuk</option>
+                                                    <option value="Kering">Kering</option>
+                                                    <option value="Lembap">Lembap</option>
+                                                </select>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-4">
+                                            <div class="form-group">
+                                                <label>Keadaan Ruangan</label>
+                                                <select v-model="formAnalytic.analytic_conditionRoom" id="condition-room" class="form-control select2 " style="width: 100%;" data-select2-id="1" tabindex="-1" aria-hidden="true">
+                                                    <option selected disabled>---PILIH KEADAAN RUANGAN---</option>
+                                                    <option value="Baik">Baik</option>
+                                                    <option value="Cukup">Cukup</option>
+                                                    <option value="Tidak Baik">Tidak Baik</option>             
+                                                </select>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-4">
+                                            <div class="form-group">
+                                                <label>Letak</label>
+                                                <select v-model="formAnalytic.analytic_place" id="place" class="form-control select2 " style="width: 100%;" data-select2-id="1" tabindex="-1" aria-hidden="true">
+                                                    <option selected disabled>---PILIH LETAK---</option>
+                                                    <option value="Strategis">Strategis</option>
+                                                    <option value="Tidak Strategis">Tidak Strategis</option>
+                                                                    
+                                                </select>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-4">
+                                            <div class="form-group">
+                                                <label>Penerangan</label>
+                                                <select v-model="formAnalytic.analytic_light" id="light" class="form-control select2 " style="width: 100%;" data-select2-id="1" tabindex="-1" aria-hidden="true">
+                                                    <option selected disabled>---PILIH KEADAAN RUANGAN---</option>
+                                                    <option value="Terang">Terang</option>
+                                                    <option value="Redup">Redup</option>
+                                                    <option value="Gelap">Gelap</option>
+                                                </select>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-4">
+                                            <div class="form-group">
+                                                <label>Suara</label>
+                                                <select v-model="formAnalytic.analytic_sound" id="sound" class="form-control select2 " style="width: 100%;" data-select2-id="1" tabindex="-1" aria-hidden="true">
+                                                    <option selected disabled>---PILIH KEBISINGAN TEMPAT KERJA---</option>
+                                                    <option value="Tenang">Tenang</option>
+                                                    <option value="Bising">Bising</option>
+                                                                            
+                                                </select>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-4">
+                                            <div class="form-group">
+                                                <label>Keadaan Tempat Kerja</label>
+                                                <select v-model="formAnalytic.analytic_conditionWork" id="condition-work" class="form-control select2 " style="width: 100%;" data-select2-id="1" tabindex="-1" aria-hidden="true">
+                                                    <option selected disabled>---PILIH KEBISINGAN TEMPAT KERJA---</option>
+                                                    <option value="Bersih dan rapi">Bersih dan rapi</option>
+                                                    <option value="Tidak teratur">Tidak Teratur</option>                  
+                                                </select>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-4">
+                                            <div class="form-group">
+                                                <label>Getaran</label>
+                                                <select v-model="formAnalytic.analytic_vibration" id="vibration" class="form-control select2 " style="width: 100%;" data-select2-id="1" tabindex="-1" aria-hidden="true">
+                                                    <option selected disabled>---PILIH GETARAN---</option>
+                                                    <option value="Ada">Ada</option>
+                                                    <option value="Tidak ada">Tidak Ada</option>           
+                                                </select>
+                                            </div>
+                                        </div>
+                                    </div> 
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- EFFORT & POWERTYPE -->
+                        <div v-if = "step == 'effort'">
+                            <div class="card">
+                                <div class="card-body">
+                                    <h6 class="card-title"> Jenis Upaya</h6>
+                                    <div class="row">
+                                        <div class="col-md-6" v-for="effort in masterEffort">
+                                            
+                                            <div class="form-group">
+                                               
+                                                    <tr>
+                                                        <td style="width: 35px;">
+                                                            <input type="checkbox" value="true" v-model="effort.selected" class="checkbox-component icheckbox_flat-green" >
+                                                        </td>
+                                                        <td style="font-size: 11pt;">
+                                                            {{effort.name}}
+                                                        </td>
+                                                    </tr>
+                                                
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div v-if = "step == 'power'">
+                            <div class="card">
+                                <div class="card-body">
+                                    <h6 class="card-title">Jenis Daya</h6>
+                                </div>
+                                <div class="card-body">
+                                    <div class="row">
+                                        <div class="col-md-6" v-for="powertype in masterPowertype">
+                                            <div class="form-group">
+                                                <table class="table">
+                                                    <tr >
+                                                        <td style="width: 35px;">
+                                                            <input type="checkbox" value="true" v-model="powertype.selected" class="checkbox-component icheckbox_flat-green" >
+                                                        </td>
+                                                        <td style="font-size: 11pt;">
+                                                            {{powertype.name}}
+                                                        </td>
+                                                    </tr>
+                                                </table>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- RISK -->
+                        <div v-if = "step == 'risk-danger'">
+                            <div class="card">
+                                <div class="card-body">
+                                    <h6 class="card-title">Resiko Bahaya Kerja</h6>
+                                    <table class="table">
+                                        <tr>
+                                            <td>Pilih</td>
+                                            <td colspan="2">Resiko Kerja</td>
+                                            <!-- <td>Keterangan</td> -->
+                                        </tr>
+                                        <tr>
+                                            <td style="width: 35px;">
+                                                <input type="checkbox" v-model="noRisk" id="have-not-risk" value="true" class="checkbox-component icheckbox_flat-green" >
+                                            </td>
+                                            <td colspan="2">Tidak ada</td>
+                                        </tr>
+                                        <tr v-if="!noRisk">
+                                            <td style="width: 35px;">
+                                                <input type="checkbox" v-model="phys_risk" id="fisik-risk" value="true" class="checkbox-component icheckbox_flat-green" >
+                                            </td>
+                                            <td colspan="2">Risiko Kerja Fisik</td>
+                                        </tr>
+                                        <tr v-if="phys_risk">
+                                            <td colspan="3">
+                                                <input v-model="phys_form" type="text" class="form-control" placeholder="ketik disini...">
+                                            </td>
+                                        </tr>
+                                        <tr v-if="!noRisk">
+                                            <td style="width: 35px;">
+                                                <input type="checkbox" v-model="ment_risk" id="mentality-risk" value="true" class="checkbox-component icheckbox_flat-green" >
+                                            </td>
+                                            <td colspan="2">Risiko Kerja Mental</td>
+                                        </tr>
+                                        <tr v-if="ment_risk">
+                                            <td colspan="3">
+                                                <input type="text" v-model="ment_form" class="form-control" placeholder="ketik disini...">
+                                            </td>
+                                        </tr>
+                                    </table> 
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- PANGKAT GOLONGAN, KEAHLIAN, KETERAMPILAN, PENGETAHUAN-->
+                        <div v-if = "step == 'position-classes'">
+                            <div class="card">
+                                <div class="card-body">
+                                    <h6 class="card-title">Keahlian</h6>
+                                    <div class="form-group">
+                                        <div class="input-group input-group-sm">
+                                            <textarea rows="3" class="form-control" placeholder="Ketik disini ..." v-model="formSkill"></textarea>
+                                        </div>
+                                        <button type="button" class="btn btn-success pull-right" @click.prevent="addToList('skill')">
+                                            <i class="fa fa-plus-square"></i>
+                                        </button>
+                                    </div>
+                                    <table class="table" v-if="listSkill.length > 0">
+                                        <tr v-for="skill in listSkill" >
+                                            <td>
+                                                {{skill.skill}}
+                                            </td>
+                                            <td>
+                                                <button class="btn btn-danger pull-right" @click.prevent="spliceList(skill, 'skill')">
+                                                    <i class="fa fa-minus-square"></i>
+                                                </button>
+                                            </td>
+                                        </tr>
+                                    </table>
+                                </div> 
+                                <hr>
+                                <div class="card-body">
+                                    <h6 class="card-title">Keterampilan</h6>
+                                    <div class="form-group">
+                                        <div class="input-group input-group-sm">
+                                            <textarea rows="3" class="form-control" placeholder="Ketik disini ..." v-model="formExpertise"></textarea>
+                                        </div>
+                                        <button type="button" class="btn btn-success pull-right" @click.prevent="addToList('expertise')">
+                                            <i class="fa fa-plus-square"></i>
+                                        </button>
+                                    </div>
+                                    <table class="table" v-if="listExpertise.length > 0">
+                                        <tr v-for="expertise in listExpertise" >
+                                            <td>
+                                                {{expertise.expertise}}
+                                            </td>
+                                            <td>
+                                                <button class="btn btn-danger pull-right" @click.prevent="spliceList(expertise, 'expertise')">
+                                                    <i class="fa fa-minus-square"></i>
+                                                </button>
+                                            </td>
+                                        </tr>
+                                    </table>
+                                </div>
+                                <hr>
+                                <div class="card-body">
+                                    <h6 class="card-title">Pengetahuan</h6>
+                                    <div class="form-group">
+                                        <div class="input-group input-group-sm">
+                                            <textarea rows="3" class="form-control" placeholder="Ketik disini ..." v-model="formKnowladge"></textarea>
+                                        </div>
+                                        <button type="button" class="btn btn-success pull-right" @click.prevent="addToList('knowladge')">
+                                            <i class="fa fa-plus-square"></i>
+                                        </button>
+                                    </div>
+                                    <table class="table" v-if="listKnowladge.length > 0">
+                                        <tr v-for="knowladge in listKnowladge" >
+                                            <td>
+                                                {{knowladge.knowledge}}
+                                            </td>
+                                            <td>
+                                                <button class="btn btn-danger pull-right" @click.prevent="spliceList(knowladge, 'knowladge')">
+                                                    <i class="fa fa-minus-square"></i>
+                                                </button>
+                                            </td>
+                                        </tr>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- PENDIDIKAN, PELATIHAN & PENGALAMAN KERJA-->
+                        <div v-if = "step == 'study-training' ">
+                            <div class="card">
+                                <div class="card-body">
+                                    <h6 class="card-title">Pelatihan Struktural</h6>
+                                    <div class="form-group">
+                                        <select v-model="formReq.training_structure" id="training" class="form-control " style="width: 100%;" data-select2-id="1" tabindex="-1" aria-hidden="true">
+                                            <option value="" selected disabled>---PILIH PELATIHAN STURKTURAL</option>
+                                            <option value="-">-</option>
+                                            <option value="PIM IV">PIM IV</option>
+                                            <option value="PIM III">PIM III</option>
+                                            <option value="PIM II">PIM II</option>
+                                         </select>
+                                    </div>
+                                </div>
+                                <hr>
+                                <div class="card-body">
+                                    <h6 class="card-title">Pelatihan Fungsional</h6>
+                                    <div class="form-group">
+                                        <div class="input-group input-group-sm">
+                                            <textarea rows="3" class="form-control" placeholder="Ketik disini ..." v-model="formFunctional"></textarea>
+                                        </div>
+                                        <button type="button" class="btn btn-success pull-right" @click.prevent="addToList('functional')">
+                                            <i class="fa fa-plus-square"></i>
+                                        </button>
+                                    </div>
+                                    <table class="w3-table-all" v-if="listFunctional.length > 0">
+                                        <tr v-for="functional in listFunctional" >
+                                            <td>
+                                                {{functional.training_func}}
+                                                <button class="btn btn-danger btn-xs pull-right" @click.prevent="spliceList(functional, 'functional')">
+                                                    <i class="fa fa-minus-square"></i>
+                                                </button>
+                                            </td>
+                                        </tr>
+                                    </table>
+                                </div>
+                                <hr>
+                                <div class="card-body">
+                                    <h6 class="card-title">Pengalaman Kerja</h6>
+                                    <div class="form-group">
+                                        <textarea rows="2" class="form-control" placeholder="Ketik disini ..." v-model="formReq.experience"></textarea>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- KONDISI FISIK-->
+                        <div v-if = "step == 'condition'">
+                            <div class="card">
+                                <div class="card-body">
+                                    <h6 class="card-title">Kondisi Fisik</h6>
+                                    <table class="table" style="font-size: 9;">
+                                        <tr>
+                                            <td>
+                                                Jenis Kelamin 
+                                            </td>
+                                            <td colspan="2">
+                                                <input type="radio" v-model="physi_conditional.gender" name="gender" value="Pria" class="checkbox-component iradio_flat-green" > 
+                                                <label style="font-size: 8;">Pria </label> <br>
+                                                <input type="radio" v-model="physi_conditional.gender" name="gender" value="Wanita" class="checkbox-component iradio_flat-green" > 
+                                                <label style="font-size: 8;" value="Wanita">Wanita </label>
+                                            </td>
+                                            <td>
+                                                <input type="radio" value="Pria / Wanita" v-model="physi_conditional.gender" name="gender" class="checkbox-component iradio_flat-green" > 
+                                                <label >Pria/ Wanita </label>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td>Umur (Tahun)</td>
+                                            <td colspan="2">
+                                                <input type="radio" value="Tidak ada batasan" v-model="physi_conditional.age_limit" name="age" class="checkbox-component iradio_flat-green" > 
+                                                <label >Tidak ada batasan</label> <br>
+                                                <input type="radio" value="batasan" v-model="physi_conditional.age_limit" name="age" class="checkbox-component iradio_flat-green" > 
+                                                <label >Batasan </label>
+                                            </td>
+                                            <td>
+                                                <input type="number" v-model="physi_conditional.age_form" class="form-control" :disabled="physi_conditional.age_limit != 'batasan' ? true:false" placeholder="ketik batasan disini">
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td>Berat Badan (Kg)</td>
+                                            <td colspan="2">
+                                                <input type="radio" value="Tidak ada batasan" v-model="physi_conditional.weigh_limit" name="weigh" class="checkbox-component iradio_flat-green" > 
+                                                <label >Tidak ada batasan</label> <br>
+                                                <input type="radio" name="weigh" value="batasan" v-model="physi_conditional.weigh_limit" class="checkbox-component iradio_flat-green" > 
+                                                <label >Batasan </label>
+                                            </td>
+                                            <td>
+                                                <input type="number" v-model="physi_conditional.weigh_form" class="form-control" :disabled="physi_conditional.weigh_limit != 'batasan' ? true:false" placeholder="ketik batasan disini">
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td>Tinggi Badan (Cm)</td>
+                                            <td colspan="2">
+                                                <input type="radio" v-model="physi_conditional.heigh_limit" name="heigh" value="Tidak ada batasan" class="checkbox-component iradio_flat-green" > 
+                                                <label >Tidak ada batasan</label> <br>
+                                                <input type="radio" v-model="physi_conditional.heigh_limit" name="heigh" value="batasan" class="checkbox-component iradio_flat-green" > 
+                                                <label >Batasan </label>
+                                            </td>
+                                            <td>
+                                                <input type="number" v-model="physi_conditional.heigh_form" class="form-control" :disabled="physi_conditional.heigh_limit != 'batasan' ? true:false" placeholder="ketik batasan disini">
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td>Postur Badan</td>
+                                            <td colspan="2">
+                                                <input type="radio" name="posture" v-model="physi_conditional.posture_limit" value="Tidak ada batasan" class="checkbox-component iradio_flat-green" > 
+                                                <label >Tidak ada batasan</label> <br>
+                                                <input type="radio" name="posture" value="batasan" v-model="physi_conditional.posture_limit" class="checkbox-component iradio_flat-green" > 
+                                                <label >Batasan </label>
+                                            </td>
+                                            <td>
+                                                <input type="text" v-model="physi_conditional.posture_form" class="form-control" :disabled="physi_conditional.posture_limit != 'batasan' ? true:false" placeholder="ketik batasan disini">
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td>Penampilan</td>
+                                            <td colspan="2">
+                                                <input type="radio" name="appear" value="Tidak ada batasan" v-model="physi_conditional.appear_limit" class="checkbox-component iradio_flat-green" > 
+                                                <label >Tidak ada batasan</label> <br>
+                                                <input type="radio" name="appear" value="batasan" v-model="physi_conditional.appear_limit" class="checkbox-component iradio_flat-green" > 
+                                                <label >Batasan </label>
+                                            </td>
+                                            <td>
+                                                <input type="text" v-model="physi_conditional.appear_form" class="form-control" :disabled="physi_conditional.appear_limit != 'batasan' ? true:false" placeholder="ketik batasan disini">
+                                            </td>
+                                        </tr>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- TALENT & TEMPERAMENT -->
+                        <div v-if = "step == 'talent'">
+                            <div class="box-header">
+                                <h1 class="box-title"> 
+                                    Bakat Kerja
+                                </h1>
+                            </div>
+                            <div class = "box-body">
+                                <div class="row">
+                                    <div class="col-md-6" v-for="talent in masterTalent">
+                                        <div class="form-group">
+                                            <tr>
+                                                <td style="width: 35px;">
+                                                    <input type="checkbox" value="true" v-model="talent.selected" class="checkbox-component icheckbox_flat-green" >
+                                                </td>
+                                                <td style="font-size: 11pt;">
+                                                    {{talent.code }} = {{talent.description}} 
+                                                    
+                                                </td>
+                                            </tr>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div v-if = "step == 'temperament'">
+                            <div class="card">
+                                <div class="card-body">
+                                    <h6 class="card-title">Temperamen Kerja</h6>
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-6" v-for="temperament in masterTemperament">
+                                        <div class="form-group" style="height: 130px;">
+                                            <tr >
+                                                <td style="width: 35px;">
+                                                    <input type="checkbox" value="true" v-model="temperament.selected" class="checkbox-component icheckbox_flat-green" >
+                                                </td>
+                                                <td style="font-size: 9pt;">
+                                                    {{temperament.code}} = {{temperament.description}}
+                                                </td>
+                                            </tr>
+                                            
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- INTEREST -->
+                        <div v-if = "step == 'interest'">
+                            <div class="card">
+                                <div class="card-body">
+                                    <h6 class="card-title">Minat Kerja</h6>
+                                    <div class="row">
+                                        <div class="col-md-6" v-for="interest in masterInterest">
+                                            <div class="form-group" style="height: 72px">
+                                                <tr>
+                                                    <td style="width: 35px;">
+                                                        <input type="checkbox" value="true" v-model="interest.selected" class="checkbox-component icheckbox_flat-green" >
+                                                    </td>
+                                                    <th style="font-size: 11pt;">
+                                                        {{interest.code}} = {{interest.name}}
+                                                    </th>
+                                                </tr>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <button v-if="step == 'interest'" class="btn btn-primary pull-right" @click.prevent="doPost()">Simpan</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</template>
+
+<script>
+    //IMPORT 
+    import ApiMaterial from "../../services/api/MasterMaterial.js"
+    import ApiEquipment from "../../services/api/MasterEquipment.js"
+    import ApiResponsibility from "../../services/api/MasterResponsible.js"
+    import ApiAuthority from "../../services/api/MasterAuthority.js"
+    import ApiEffort from "../../services/api/MasterEffort.js"
+    import ApiPowertype from "../../services/api/MasterPower.js"
+    import ApiTalent from "../../services/api/MasterTalent.js"
+    import ApiTemperament from "../../services/api/MasterTemperament.js"
+    import ApiInterest from "../../services/api/MasterInterest.js"
+    import ApiAnalytic from "../../services/api/AnalyticPosition.js"
+    import ApiOpd from '../../services/api/ManagementOpd.js';
+    import ApiPosition from '../../services/api/ManagementPosition.js';
+
+    import AnjabPosition from '@/app/Components/functions/anjab.position.selection.html'
+    import OpdSelections from '@/app/Components/functions/anjab.opd.selection.html'
+    import CorrelationSelection from '@/app/Components/functions/anjab.correlation.html'
+    import Swal from 'sweetalert2'
+
+    export default {
+        components: {
+            OpdSelections,
+            CorrelationSelection,
+            AnjabPosition
+        },
+        data() {
+            var query = this.$root.$route.query
+            query.position = JSON.parse(query.position)
+            var dateNow = new Date()
+            return {
+                is_update: false,
+                dataUpdateAnalytic: [],
+                dataUpdateReq: [],
+                positionData: query.position,
+                opdId: query.opd_id,
+                noRisk: false,
+
+                phys_risk: false,
+                phys_form: '',
+
+                ment_risk: false,
+                ment_form: '',
+
+
+
+                step: 'eselon',
+                compOpd: {
+                    opd_id: null,
+                    position_id: null
+                },
+
+                physi_conditional: {
+                    gender: '',
+                    age_limit: '',
+                    age_form: '',
+                    weigh_limit: '',
+                    weigh_form: '',
+                    heigh_limit: '',
+                    heigh_form: '',
+                    posture_limit: '',
+                    posture_form: '',
+                    appear_limit: '',
+                    appear_form: '',
+                },
+
+                //MASTER FILE
+                masterMaterial: [],
+                masterEquipment: [],
+                masterResponsibility: [],
+                masterAuthority: [],
+                masterEffort: [],
+                masterPowertype: [],
+                masterTalent: [],
+                masterTemperament: [],
+                masterInterest: [],
+                masterOPD: [],
+                corellationPositionSelection: [],
+                // OTHER MATERIALS
+                isOtherMaterials: false,
+                formOtherMaterial: '',
+                listOtherMaterials: [],
+                defaultListMaterial: [],
+
+                // OTHER EQUIPMENT
+                isOtherEquipment: false,
+                formOtherEquipment: '',
+                listOtherEquipment: [],
+                defaultListEquiment: [],
+
+                // OTHER RESPONSIBILITY
+                isOtherResponsibility: false,
+                formOtherResponsibility: '',
+                listOtherResponsibility: [],
+                defaultListResponsibility: [],
+
+
+                // OTHER AUTHORITY
+                isOtherAuthority: false,
+                formOtherAuthority: '',
+                listOtherAuthority: [],
+                defaultListAuthority: [],
+
+                //WORK RESULT
+                formWorkResult: '',
+                listWorkResult: [],
+
+                //WORK LIST
+                formWorkList: '',
+                listWorkList: [],
+
+                formSkill: '',
+                listSkill: [],
+
+                //FUNCTIONAL
+                formFunctional: '',
+                listFunctional: [],
+
+                //KNOWLADGE
+                formKnowladge: '',
+                listKnowladge: [],
+
+                //EXPERTISE
+                formExpertise: '',
+                listExpertise: [],
+
+                // EDUCATION
+                formEducation: {},
+                listEducation: [],
+                //CORELATION
+                formCorelation: {
+                    position: '',
+                    departement: '',
+                    relation: ''
+                },
+                listCorelation: [],
+                counterCorelation: 1,
+
+
+                formAnalytic: {
+                    position_id: 0,
+                    year: dateNow.getFullYear(),
+                    task_summary: '',
+                    work_result: [],
+                    analytic_workList: [],
+                    analytic_materials: [],
+                    analytic_equipments: [],
+                    analytic_responsibility: [],
+                    analytic_authority: [],
+                    analytic_corelation: [],
+                    analytic_workPlace: '',
+                    analytic_temperature: '',
+                    analytic_air: '',
+                    analytic_conditionRoom: '',
+                    analytic_place: '',
+                    analytic_light: '',
+                    analytic_sound: '',
+                    analytic_conditionWork: '',
+                    analytic_vibration: '',
+                    analytic_class: '',
+                    analytic_expertise: [],
+                    analytic_knowladge: [],
+                    analytic_training: '',
+                    analytic_functional: [],
+                    analytic_experiance: ''
+                },
+
+                formReq: {
+                    class: '',
+                    expretise: '',
+                    skill: '',
+                    knowledge: '',
+                    education: '',
+                    training_structure: '',
+                    training_functional: '',
+                    experience: '',
+                    physical_condition: '',
+                    work_talent: '',
+                    work_temperament: '',
+                    work_interest: '',
+                }
+            }
+        },
+        beforeCreate() {
+            this.$root.page = {
+                title: "Formulir",
+                subtitle: "Analisa Jabatan"
+            }
+        },
+
+        mounted() {
+            // console.log('position data', this.positionData)
+            $('.select2').select2()
+            $('#positionSelection').prop("disabled", true)
+
+            $('#position-selection').on('select2:select', (e) => {
+                var selected = $('#position-selection').val()
+                this.formAnalytic.position_id = selected
+            });
+
+            $('#opdSelection').on('select2:select', (e) => {
+                var selected = $('#opdSelection').val()
+                this.fetchPosition(selected)
+            });
+
+            //GET MASTERFILE
+            $('.select2').select2()
+            this.fetchMasterFile()
+            this.DataUpdate()
+            $('.checkbox-component').iCheck({
+                checkboxClass: 'icheckbox_flat-green'
+            })
+
+            $('#other-materials').iCheck({
+                checkboxClass: 'icheckbox_flat-green'
+            })
+
+            //EVENT CHECKBOX IS OTHER EQUIPMENT
+            $('#other-equipment').iCheck({
+                checkboxClass: 'icheckbox_flat-green'
+            })
+
+            //EVENT CHECKBOX IS OTHER RESPONSIBILITY
+            $('#other-responsibility').iCheck({
+                checkboxClass: 'icheckbox_flat-green'
+            })
+
+            //EVENT CHECKBOX IS OTHER AUTHORITY
+            $('#other-authority').iCheck({
+                checkboxClass: 'icheckbox_flat-green'
+            })
+
+
+
+
+        },
+
+        methods: {
+            DataUpdate() {
+                if (this.$route.query.do == 'update') {
+                    this.is_update = true
+                        // console.log("will update");
+                    let data = this.$route.query.position;
+                    console.log("data", data)
+                    let analytic = this.dataUpdateAnalytic = data.TB_ANALYTIC_POSITIONs[0];
+                    
+                    this.formAnalytic.position_id = analytic.position_id;
+                    this.formAnalytic.year = analytic.year;
+                    this.formAnalytic.task_summary = analytic.task_summary;
+                    this.formAnalytic.analytic_workPlace = analytic.workplace_condition.place;
+                    this.formAnalytic.analytic_temperature = analytic.workplace_condition.temperature;
+                    this.formAnalytic.analytic_air = analytic.workplace_condition.air;
+                    this.formAnalytic.analytic_conditionRoom = analytic.workplace_condition.place_condition;
+                    this.formAnalytic.analytic_place = analytic.workplace_condition.location;
+                    this.formAnalytic.analytic_light = analytic.workplace_condition.lighting;
+                    this.formAnalytic.analytic_sound = analytic.workplace_condition.noise;
+                    this.formAnalytic.analytic_conditionWork = analytic.workplace_condition.work_condition;
+                    this.formAnalytic.analytic_vibration = analytic.workplace_condition.vibration;
+                    // -------- analytic
+                    this.listWorkResult = analytic.work_result;
+                    this.masterMaterial = analytic.work_material;
+                    this.listWorkList = analytic.task_detail;
+                    this.listCorelation = analytic.job_correlation;
+                    let risk_of_danger = analytic.risk_of_danger;
+                    if (risk_of_danger == false)
+                        this.noRisk = true
+                    else {
+                        if (risk_of_danger.physical != 'n/b') {
+                            this.phys_risk = true
+                            this.phys_form = risk_of_danger.physical
+                        }
+                        if (risk_of_danger.mentality != 'n/b') {
+                            this.ment_risk = true
+                            this.ment_form = risk_of_danger.mentality
+                        }
+                    }
+                    // -------- requirement
+                    let requirements = this.dataUpdateReq = data.TB_ANALYTIC_POSITIONs[0].TB_POSITION_REQUIREMENT;
+                    this.formReq.training_structure = requirements.training_structure
+                    this.formReq.experience = requirements.experience[0].exp
+                    let physi = requirements.physical_condition;
+                    this.physi_conditional.gender = physi.gender
+                    if (isNaN(physi.age))
+                        this.physi_conditional.age_limit = 'Tidak ada batasan'
+                    else if ("" == physi.age) {
+                        this.physi_conditional.age_limit = ''
+                    } else {
+                        this.physi_conditional.age_limit = 'batasan'
+                        this.physi_conditional.age_form = physi.age
+                    }
+
+                    if (isNaN(physi.weigh))
+                        this.physi_conditional.weigh_limit = 'Tidak ada batasan'
+                    else if ("" == physi.weigh) {
+                        this.physi_conditional.weigh_limit = ''
+                    } else {
+                        this.physi_conditional.weigh_limit = 'batasan'
+                        this.physi_conditional.weigh_form = physi.weigh
+                    }
+
+                    if (isNaN(physi.heigh))
+                        this.physi_conditional.heigh_limit = 'Tidak ada batasan'
+                    else if ("" == physi.heigh) {
+                        this.physi_conditional.heigh_limit = ''
+                    } else {
+                        this.physi_conditional.heigh_limit = 'batasan'
+                        this.physi_conditional.heigh_form = physi.heigh
+                    }
+
+                    if (isNaN(physi.posture))
+                        this.physi_conditional.posture_limit = 'Tidak ada batasan'
+                    else if ("" == physi.posture) {
+                        this.physi_conditional.posture_limit = ''
+                    } else {
+                        this.physi_conditional.posture_limit = 'batasan'
+                        this.physi_conditional.posture_form = physi.posture
+                    }
+
+                    if (isNaN(physi.appearance))
+                        this.physi_conditional.appear_limit = 'Tidak ada batasan'
+                    else if ("" == physi.appearance) {
+                        this.physi_conditional.appear_limit = ''
+                    } else {
+                        this.physi_conditional.appear_limit = 'batasan'
+                        this.physi_conditional.appear_form = physi.appearance
+                    }
+                    this.listSkill = requirements.skill;
+                    this.listExpertise = requirements.expretise;
+                    this.listKnowladge = requirements.knowledge;
+                    this.listFunctional = requirements.training_functional;
+                };
+            },
+            check(field) {
+                let status = false
+                this.dataUpdateAnalytic.work_material.forEach(element => {
+                    if (element.material === field)
+                        status = true
+                });
+                return status
+            },
+            fetchMasterFile() {
+                ApiMaterial.getAll()
+                    .then(respMaterial => {
+                        if (this.is_update) {
+                            this.dataUpdateAnalytic.work_material.forEach(check => {
+                                let is_same = false
+                                respMaterial.data.data.forEach(element => {
+                                    if (check.material === element.name) {
+                                        element.selected = true
+                                        is_same = true
+                                    } else if (element.selected != true) {
+                                        element.selected = false
+                                    }
+                                });
+                                if (!is_same) {
+                                    this.isOtherMaterials = true
+                                    this.listOtherMaterials.push({
+                                        material: check.material
+                                    })
+                                }
+                            })
+                        } else {
+                            respMaterial.data.data.forEach(element => {
+                                element.selected = false
+                            });
+                        }
+                        this.masterMaterial = respMaterial.data.data
+                        ApiEquipment.getAll()
+                            .then(respEquipment => {
+                                if (this.is_update) {
+                                    this.dataUpdateAnalytic.work_equipment.forEach(check => {
+                                        let is_same = false
+                                        respEquipment.data.data.forEach(element => {
+                                            if (check.equipment === element.name) {
+                                                element.selected = true
+                                                is_same = true
+                                            } else if (element.selected != true) {
+                                                element.selected = false
+                                            }
+                                        });
+                                        if (!is_same) {
+                                            this.isOtherEquipment = true
+                                            this.listOtherEquipment.push({
+                                                equipment: check.equipment
+                                            })
+                                        }
+                                    })
+                                } else {
+                                    respEquipment.data.data.forEach(element => {
+                                        element.selected = false
+                                    });
+                                }
+                                this.masterEquipment = respEquipment.data.data
+                                ApiResponsibility.getAll()
+                                    .then(respResponsibility => {
+                                        if (this.is_update) {
+                                            this.dataUpdateAnalytic.responsible.forEach(check => {
+                                                let is_same = false
+                                                respResponsibility.data.data.forEach(element => {
+                                                    if (check.responsible === element.name) {
+                                                        element.selected = true
+                                                        is_same = true
+                                                    } else if (element.selected != true) {
+                                                        element.selected = false
+                                                    }
+                                                });
+                                                if (!is_same) {
+                                                    this.isOtherResponsibility = true
+                                                    this.listOtherResponsibility.push({
+                                                        responsible: check.responsible
+                                                    })
+                                                }
+                                            })
+                                        } else {
+                                            respResponsibility.data.data.forEach(element => {
+                                                element.selected = false
+                                            });
+                                        }
+                                        this.masterResponsibility = respResponsibility.data.data
+                                        ApiAuthority.getAll()
+                                            .then(respAuthority => {
+                                                if (this.is_update) {
+                                                    this.dataUpdateAnalytic.authority.forEach(check => {
+                                                        let is_same = false
+                                                        respAuthority.data.data.forEach(element => {
+                                                            if (check.authority === element.name) {
+                                                                element.selected = true
+                                                                is_same = true
+                                                            } else if (element.selected != true) {
+                                                                element.selected = false
+                                                            }
+                                                        });
+                                                        if (!is_same) {
+                                                            this.isOtherAuthority = true
+                                                            this.listOtherAuthority.push({
+                                                                authority: check.authority
+                                                            })
+                                                        }
+                                                    })
+                                                } else {
+                                                    respAuthority.data.data.forEach(element => {
+                                                        element.selected = false
+                                                    });
+                                                }
+                                                this.masterAuthority = respAuthority.data.data
+                                                ApiEffort.getAll()
+                                                    .then(respEffort => {
+                                                        respEffort.data.data.forEach(element => {
+                                                            element.selected = false
+                                                            if (this.is_update) {
+                                                                this.dataUpdateAnalytic.physical_effort.forEach(check => {
+                                                                    if (check.effort === element.name)
+                                                                        element.selected = true
+                                                                });
+                                                            }
+                                                        })
+                                                        this.masterEffort = respEffort.data.data
+                                                        ApiPowertype.getAll()
+                                                            .then(respPowertype => {
+
+                                                                respPowertype.data.data.forEach(element => {
+                                                                    element.selected = false
+                                                                    if (this.is_update) {
+                                                                        this.dataUpdateAnalytic.power_type.forEach(check => {
+                                                                            if (check.power_type === element.name)
+                                                                                element.selected = true
+                                                                        });
+                                                                    }
+                                                                })
+                                                                this.masterPowertype = respPowertype.data.data
+                                                                ApiTalent.getAll()
+                                                                    .then(respTalent => {
+                                                                        // console.log("Talent ", respTalent)
+                                                                        respTalent.data.data.forEach(element => {
+                                                                            element.selected = false
+                                                                            if (this.is_update) {
+                                                                                this.dataUpdateReq.work_talent.forEach(check => {
+                                                                                    if (check.code === element.code)
+                                                                                        element.selected = true
+                                                                                });
+                                                                            }
+                                                                        })
+                                                                        this.masterTalent = respTalent.data.data
+                                                                        ApiTemperament.getAll()
+                                                                            .then(respTemperament => {
+                                                                                // console.log("temperament", respTemperament)
+                                                                                respTemperament.data.data.forEach(element => {
+                                                                                    element.selected = false
+                                                                                    if (this.is_update) {
+                                                                                        // console.log(this.dataUpdateReq.work_temperament);
+                                                                                        this.dataUpdateReq.work_temperament.forEach(check => {
+                                                                                            if (check.code === element.code)
+                                                                                                element.selected = true
+                                                                                        });
+                                                                                    }
+                                                                                })
+                                                                                this.masterTemperament = respTemperament.data.data
+                                                                                ApiInterest.getAll()
+                                                                                    .then(respInterest => {
+                                                                                        // console.log("interes", respInterest)
+                                                                                        respInterest.data.data.forEach(element => {
+                                                                                            if (this.is_update) {
+                                                                                                element.selected = false
+                                                                                                this.dataUpdateReq.work_interest.forEach(check => {
+                                                                                                    if (check.code === element.code)
+                                                                                                        element.selected = true
+                                                                                                });
+                                                                                            }
+                                                                                        })
+                                                                                        this.masterInterest = respInterest.data.data
+                                                                                            // ApiOpd.getList()
+                                                                                            // .then(resp => {
+                                                                                            //     // $("#opd-selection").html("<option value='0'>---PILIH OPD---</option>")
+                                                                                            //     // resp.data.opd.forEach(item => {
+                                                                                            //     //     $("#opd-selection").html("<option value='"+item.id+"'>"+item.name+"</option>")
+                                                                                            //     // })
+                                                                                            //     this.masterOPD = resp.data.opd
+                                                                                            // })
+                                                                                            // ApiPosition.getList()
+                                                                                            // .then(resp => {
+                                                                                            //     console.log(resp)
+                                                                                            //     this.masterPosition = resp.data.position
+                                                                                            // })
+                                                                                    })
+
+                                                                            })
+
+                                                                    })
+
+                                                            })
+
+                                                    })
+                                            })
+                                    })
+                            })
+                    })
+
+
+
+
+
+
+
+            },
+            fetchPosition(id) {
+                ApiPosition.getListByOpd(id)
+                    .then(resp => {
+                        $("#positionSelection").html("<option selected disabled>---PILIH JABATAN---</option>")
+                        resp.data.position.forEach(_item => {
+                            $("#positionSelection").append("<option value='" + _item.id + "'>" + _item.position_name + "</option>")
+                        })
+                    })
+                    .finally(() => {
+                        $('#positionSelection').prop("disabled", false)
+                    })
+            },
+
+
+            addToList(nameList) {
+                switch (nameList) {
+                    case 'work-result':
+                        if (this.formWorkResult != '') {
+                            this.listWorkResult.push({
+                                work_result: this.formWorkResult
+                            })
+                            this.formWorkResult = ''
+                        }
+                        break;
+                    case 'skill':
+                        if (this.formSkill != '') {
+                            this.listSkill.push({
+                                skill: this.formSkill
+                            })
+                            this.formSkill = ''
+                        }
+                        break;
+                    case 'work-material':
+                        if (this.formOtherMaterial != '') {
+                            this.listOtherMaterials.push({
+                                material: this.formOtherMaterial
+                            })
+                            this.formOtherMaterial = ''
+                        }
+                        break;
+                    case 'work-equipment':
+                        if (this.formOtherEquipment != '') {
+                            this.listOtherEquipment.push({
+                                equipment: this.formOtherEquipment
+                            })
+                            this.formOtherEquipment = ''
+                        }
+                        break;
+                    case 'work-list':
+                        if (this.formWorkList != '') {
+                            this.listWorkList.push({
+                                task_detail: this.formWorkList
+                            })
+                            this.formWorkList = ''
+                        }
+                        break;
+
+                    case 'work-responsibility':
+                        if (this.formOtherResponsibility != '') {
+                            this.listOtherResponsibility.push({
+                                responsible: this.formOtherResponsibility
+                            })
+                            this.formOtherResponsibility = ''
+                        }
+                        break;
+
+                    case 'work-authority':
+                        if (this.formOtherAuthority != '') {
+                            this.listOtherAuthority.push({
+                                authority: this.formOtherAuthority
+                            })
+                            this.formOtherAuthority = ''
+                        }
+                        break;
+
+                    case 'corelation':
+                        let opdSelected;
+                        let positoinSelected;
+                        this.masterOPD.forEach(opd => {
+                            if (opd.id == $("#opdSelection").val()) {
+                                opdSelected = opd.name
+                            }
+                        })
+                        this.masterPosition.forEach(position => {
+                            if (position.id == $("#positionSelection").val()) {
+                                positoinSelected = position.position_name
+                            }
+                        })
+                        let payload = {
+                                position: positoinSelected,
+                                opd: opdSelected,
+                                relation: this.formCorelation.relation
+                            }
+                            // console.log(payload)
+                        if (this.formCorelation.relation != '') {
+                            this.listCorelation.push(payload)
+                            this.formCorelation.relation = ''
+                        }
+                        console.log(this.listCorelation)
+                        break;
+
+                    case 'functional':
+                        if (this.formFunctional != '') {
+                            this.listFunctional.push({
+                                training_func: this.formFunctional
+                            })
+                            this.formFunctional = ''
+                        }
+                        break;
+
+                    case 'knowladge':
+                        if (this.formKnowladge != '') {
+                            this.listKnowladge.push({
+                                knowledge: this.formKnowladge
+                            })
+                            this.formKnowladge = ''
+                        }
+                        break;
+
+                    case 'expertise':
+                        if (this.formExpertise != '') {
+                            this.listExpertise.push({
+                                expertise: this.formExpertise
+                            })
+                            this.formExpertise = ''
+                        }
+                        break;
+                    case 'education':
+                        this.listEducation.push(this.formEducation)
+                        this.formEducation = {}
+                        break;
+                    default:
+                        break;
+                }
+            },
+
+            spliceList(keyList, nameList) {
+                switch (nameList) {
+                    case 'work-result':
+                        this.listWorkResult.splice(this.listWorkResult
+                            .findIndex(_item => _item === keyList), 1);
+                        break;
+                    case 'education':
+                        this.listEducation.splice(this.listEducation
+                            .findIndex(_item => _item === keyList), 1);
+                        break;
+                    case 'skill':
+                        this.listSkill.splice(this.listSkill
+                            .findIndex(_item => _item === keyList), 1);
+                        break;
+
+                    case 'work-material':
+                        this.listOtherMaterials.splice(this.listOtherMaterials
+                            .findIndex(_item => _item === keyList), 1);
+                        break;
+
+                    case 'work-equipment':
+                        this.listOtherEquipment.splice(this.listOtherEquipment
+                            .findIndex(_item => _item === keyList), 1);
+                        break;
+
+                    case 'work-list':
+                        this.listWorkList.splice(this.listWorkList
+                            .findIndex(_item => _item === keyList), 1);
+                        break;
+
+                    case 'work-responsibility':
+                        this.listOtherResponsibility.splice(this.listOtherResponsibility
+                            .findIndex(_item => _item === keyList), 1);
+                        break;
+
+                    case 'work-authority':
+                        this.listOtherAuthority.splice(this.listOtherAuthority
+                            .findIndex(_item => _item === keyList), 1);
+                        break;
+
+                    case 'corelation':
+                        this.listCorelation.splice(this.listCorelation
+                            .findIndex(_item => _item.relation == keyList.relation && _item.opd == keyList.opd && _item.position == keyList.position), 1);
+                        break;
+
+                    case 'functional':
+                        this.listFunctional.splice(this.listFunctional
+                            .findIndex(_item => _item === keyList), 1);
+                        break;
+
+                    case 'knowladge':
+                        this.listKnowladge.splice(this.listKnowladge
+                            .findIndex(_item => _item === keyList), 1);
+                        break;
+
+                    case 'expertise':
+                        this.listExpertise.splice(this.listExpertise
+                            .findIndex(_item => _item === keyList), 1);
+                        break;
+
+                    default:
+                        break;
+                }
+            },
+            doPost() {
+                this.formAnalytic.work_result = this.listWorkResult
+                this.formAnalytic.analytic_workList = this.listWorkList
+                this.formAnalytic.analytic_corelation = this.listCorelation
+                this.formAnalytic.analytic_responsibility = this.mergingArrResponsibility(this.masterResponsibility, this.listOtherResponsibility)
+                this.formAnalytic.analytic_materials = this.mergingArrMaterial(this.masterMaterial, this.listOtherMaterials)
+                this.formAnalytic.analytic_equipments = this.mergingArrEquipment(this.masterEquipment, this.listOtherEquipment)
+                this.formAnalytic.analytic_authority = this.mergingArrAuthority(this.masterAuthority, this.listOtherAuthority)
+                this.formAnalytic.analytic_class = $('#class').val()
+                this.formAnalytic.analytic_expertise = this.listExpertise
+                this.formAnalytic.analytic_knowladge = this.listKnowladge
+                this.formAnalytic.analytic_training = $('#training').val()
+                this.formAnalytic.analytic_functional = this.listFunctional
+
+                let tempEffort = []
+                this.masterEffort.forEach(item => {
+                    if (item.selected) {
+                        tempEffort.push({
+                            effort: item.name
+                        })
+                    }
+                })
+
+                let tempPowerType = []
+                this.masterPowertype.forEach(item => {
+                    if (item.selected) {
+                        tempPowerType.push({
+                            power_type: item.name
+                        })
+                    }
+                })
+
+                let tempRisk = {
+                    physical: 'n/b',
+                    mentality: 'n/b',
+
+                }
+                if (this.noRisk) {
+                    tempRisk = false
+                } else {
+                    if (this.phys_risk) {
+                        tempRisk.physical = this.phys_form
+                    }
+                    if (this.ment_risk) {
+                        tempRisk.mentality = this.ment_form
+                    }
+
+                }
+
+                let payloads = {
+                    task_summary: this.formAnalytic.task_summary,
+                    year: this.formAnalytic.year,
+                    work_result: JSON.stringify(this.formAnalytic.work_result),
+                    work_material: JSON.stringify(this.formAnalytic.analytic_materials),
+                    work_equipment: JSON.stringify(this.formAnalytic.analytic_equipments),
+                    task_detail: JSON.stringify(this.formAnalytic.analytic_workList),
+                    responsible: JSON.stringify(this.formAnalytic.analytic_responsibility),
+                    authority: JSON.stringify(this.formAnalytic.analytic_authority),
+                    job_correlation: JSON.stringify(this.formAnalytic.analytic_corelation),
+                    workplace_condition: JSON.stringify({
+                        air: this.formAnalytic.analytic_air,
+                        lighting: this.formAnalytic.analytic_light,
+                        location: this.formAnalytic.analytic_place,
+                        noise: this.formAnalytic.analytic_sound,
+                        place: this.formAnalytic.analytic_workPlace,
+                        place_condition: this.formAnalytic.analytic_conditionRoom,
+                        temperature: this.formAnalytic.analytic_temperature,
+                        vibration: this.formAnalytic.analytic_vibration,
+                        work_condition: this.formAnalytic.analytic_conditionWork
+                    }),
+                    risk_of_danger: JSON.stringify(tempRisk),
+                    physical_effort: JSON.stringify(tempEffort),
+                    power_type: JSON.stringify(tempPowerType),
+                    is_published: 0,
+                    status: 1,
+                    opd_id: this.opdId,
+                    position_id: this.positionData.id
+                }
+
+                let tempWorkTalent = []
+                this.masterTalent.forEach(item => {
+                    if (item.selected) {
+                        tempWorkTalent.push({
+                            code: item.code,
+                            description: item.description
+                        })
+                    }
+                })
+
+                let tempWorkTemperament = []
+                this.masterTemperament.forEach(item => {
+                    if (item.selected) {
+                        tempWorkTemperament.push({
+                            code: item.code,
+                            description: item.description
+                        })
+                    }
+                })
+
+                let tempWorkInterest = []
+                this.masterInterest.forEach(item => {
+                    if (item.selected) {
+                        tempWorkInterest.push({
+                            code: item.code,
+                            interest: item.name
+                        })
+                    }
+                })
+
+                let payloadReq = {
+                    class: JSON.stringify({
+                        position_class: this.classesText(this.formReq.class),
+                        code: this.formReq.class
+                    }),
+                    expretise: JSON.stringify(this.formAnalytic.analytic_expertise),
+                    skill: JSON.stringify(this.listSkill),
+                    knowledge: JSON.stringify(this.formAnalytic.analytic_knowladge),
+                    training_structure: this.formReq.training_structure,
+                    training_functional: JSON.stringify(this.formAnalytic.analytic_functional),
+                    experience: JSON.stringify([{
+                        exp: this.formReq.experience
+                    }]),
+                    physical_condition: JSON.stringify({
+                        gender: this.physi_conditional.gender,
+                        age: this.physi_conditional.age_limit == "batasan" ?
+                            this.physi_conditional.age_form : this.physi_conditional.age_limit,
+                        appearance: this.physi_conditional.appear_limit == "batasan" ?
+                            this.physi_conditional.appear_form : this.physi_conditional.appear_limit,
+                        weigh: this.physi_conditional.weigh_limit == "batasan" ?
+                            this.physi_conditional.weigh_form : this.physi_conditional.weigh_limit,
+                        heigh: this.physi_conditional.heigh_limit == "batasan" ?
+                            this.physi_conditional.heigh_form : this.physi_conditional.heigh_limit,
+                        posture: this.physi_conditional.posture_limit == "batasan" ?
+                            this.physi_conditional.posture_form : this.physi_conditional.posture_limit,
+
+                    }),
+                    work_talent: JSON.stringify(tempWorkTalent),
+                    work_temperament: JSON.stringify(tempWorkTemperament),
+                    work_interest: JSON.stringify(tempWorkInterest)
+                }
+
+                let FetchPayload = {
+                    analytics: payloads,
+                    requirements: payloadReq
+                }
+                if (!this.is_update) {
+                    ApiAnalytic.postAnjab(FetchPayload)
+                        .then(resp => console.log(resp))
+                        .catch(err => console.log(err))
+                        .finally(() => {
+                            this.$root.$router.replace({
+                                name: 'anjab-abk'
+                            })
+                        })
+                } else {
+                    FetchPayload.id = FetchPayload.analytics.id = FetchPayload.requirements.id = this.dataUpdateAnalytic.id
+                    try {
+                        ApiAnalytic.modifyAnjab(FetchPayload)
+                            .then(resp => resp)
+                            .catch(err => console.log(err))
+                            .finally(() => {
+                                this.$root.$router.replace({
+                                    name: 'anjab-abk'
+                                })
+                            })
+                    } catch (error) {
+                        console.log(error)
+                    }
+                }
+            },
+            mergingArrEquipment(defaultArr, otherArr) {
+                let resMerge = []
+                defaultArr.forEach(item => {
+                    if (item.selected) {
+                        resMerge.push({
+                            equipment: item.name
+                        })
+                    }
+                })
+                otherArr.forEach(item => {
+                    resMerge.push(item)
+                })
+                return resMerge
+            },
+            classesText(code) {
+                switch (code) {
+                    case "Ia":
+                        return "Pangkat Juru Muda"
+                        break;
+                    case "Ib":
+                        return "Pangkat Juru Muda Tingkat 1"
+                        break;
+                    case "Ic":
+                        return "Pangkat Juru"
+                        break;
+                    case "Id":
+                        return "Pangkat Juru Tingkat 1"
+                        break;
+                    case "IIa":
+                        return "Pangkat Pengatur Muda"
+                        break;
+                    case "IIb":
+                        return "Pangkat Pengatur Muda Tingkat 1"
+                        break;
+                    case "IIc":
+                        return "Pangkat Pengatur"
+                        break;
+                    case "IId":
+                        return "Pangkat Pengatur Tingkat 1"
+                        break;
+                    case "IIIa":
+                        return "Pangkat Penata Muda"
+                        break;
+                    case "IIIb":
+                        return "Pangkat Penata Muda Tingkat 1"
+                        break;
+                    case "IIIc":
+                        return "Pangkat Penata"
+                        break;
+                    case "IIId":
+                        return "Pangkat Penata Tingkat 1"
+                        break;
+                    case "IVa":
+                        return "Pangkat Pembina"
+                        break;
+                    case "IVb":
+                        return "Pangkat Pembina Tingkat 1"
+                        break;
+                    case "IVc":
+                        return "Pangkat Pembina Utama Muda"
+                        break;
+                    case "IVd":
+                        return "Pangkat Pembina Utama Madya"
+                        break;
+                    case "IVe":
+                        return "Pangkat Pembina Utama"
+                        break;
+
+                    default:
+                        break;
+                }
+            },
+
+            mergingArrMaterial(defaultArr, otherArr) {
+                let resMerge = []
+                defaultArr.forEach(item => {
+                    if (item.selected) {
+                        resMerge.push({
+                            material: item.name
+                        })
+                    }
+                })
+                otherArr.forEach(item => {
+                    resMerge.push(item)
+                })
+                return resMerge
+            },
+
+            mergingArrResponsibility(defaultArr, otherArr) {
+                let resMerge = []
+                defaultArr.forEach(item => {
+                    if (item.selected) {
+                        resMerge.push({
+                            responsible: item.name
+                        })
+                    }
+                })
+                otherArr.forEach(item => {
+                    resMerge.push(item)
+                })
+                return resMerge
+            },
+
+            mergingArrAuthority(defaultArr, otherArr) {
+                let resMerge = []
+                defaultArr.forEach(item => {
+                    if (item.selected) {
+                        resMerge.push({
+                            authority: item.name
+                        })
+                    }
+                })
+                otherArr.forEach(item => {
+                    resMerge.push(item)
+                })
+                return resMerge
+            },
+            getOpdData(data) {
+                this.formAnalytic.position_id = data.position_id
+                this.compOpd.opd_id = data.opd_id
+                this.compOpd.position_id = data.position_id
+            },
+            getDataCorrelation(data) {
+                // console.log(data)
+                if (data.relation != '') {
+                    this.listCorelation.push(data)
+                }
+            },
+            getDataEducation(data) {
+                this.formEducation = data
+                this.addToList('education')
+            }
+
+        },
+    }
+</script>

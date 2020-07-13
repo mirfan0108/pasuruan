@@ -1,0 +1,95 @@
+<template>
+    <div>
+        <div class="row">
+            <div class="col-md-8">
+                <div class="form-group" >
+                    <label>OPD</label>
+                    <select  class="select2 form-control" id="opd-selection">
+                    </select>
+                </div>
+            </div>
+            <div class="col-md-8">
+                <div class="form-group">
+                    <label>Jabatan</label>
+                    <select  class="select2 form-control" id="position-selection">
+                        <option value="0" selected disabled>--- PILIH JABATAN ---</option>
+                    </select>
+                </div>
+            </div>
+        </div>
+    </div>
+</template>
+
+<script>
+    import ApiOpd from '../../services/api/ManagementOpd.js';
+    import ApiAnalytic from '../../services/api/AnalyticPosition.js';
+    export default {
+        props: ['opdId'],
+        data() {
+            return {
+                masterOPD: []
+            }
+        },
+        mounted() {
+            $('.select2').select2()
+            this.fetchOpd()
+            if(this.opdId.opd_id) {
+                this.fetchPosition(this.opdId.opd_id)
+            } else {
+                $('#position-selection').prop("disabled", true)
+            }
+            $('#opd-selection').on('select2:select', (e) => {
+                var selected = $('#opd-selection').val()
+                this.fetchPosition(selected)
+                
+                this.handleData()
+            });
+            $('#position-selection').on('select2:select', (e) => {
+                this.handleData()
+            });
+        },
+        methods: {
+            fetchOpd() {
+                ApiOpd.getOpd()
+                    .then(resp => {
+                    if(!this.opdId.opd_id) {
+                        $("#opd-selection").html("<option value='0' selected disabled>---PILIH OPD---</option>")
+                    }
+                        resp.data.opd.forEach(item => {
+                            if(this.opdId.opd_id == item.id) {
+                                $("#opd-selection").append("<option value='"+item.id+"' selected>"+item.name+"</option>")
+                            } else {
+                                $("#opd-selection").append("<option value='"+item.id+"'>"+item.name+"</option>")
+                            }
+                        })
+                        this.masterOPD = resp.data.opd
+                    })
+            },
+            fetchPosition(id) {
+                ApiAnalytic.getListPositionBaseOnOpd(id)
+                .then(resp => {
+                    if(!this.opdId.position_id) {
+                        $("#position-selection").html("<option selected disabled>---PILIH JABATAN---</option>")
+                    }
+                    resp.data.position.forEach(_item => {
+                        if(_item.id == this.opdId.position_id) {
+                            $("#position-selection").append("<option value='"+_item.id+"' selected>"+_item.position_name+"</option>")
+                        } else {
+                            $("#position-selection").append("<option value='"+_item.id+"'>"+_item.position_name+"</option>")
+                        }
+                    })
+                })
+                .finally(() => {
+                    $('#position-selection').prop("disabled", false)
+                })
+            },
+            handleData() {
+                let payload = {
+                    opd_id: $("#opd-selection").val(),
+                    position_id: $("#position-selection").val()
+                }
+                this.$emit('data-opd', payload)
+            }
+        }
+    }
+</script>
