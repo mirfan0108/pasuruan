@@ -26,6 +26,10 @@ class MasterPosition {
         return axios.get(ENV+`/position/all/${id}`)
     }
 
+    static getOneById(id) {
+        return axios.get(ENV+ "/position/one/" + id)
+    }
+
 }
 
 export default MasterPosition

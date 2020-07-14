@@ -3,161 +3,92 @@
         <div class="col-md-12 col-lg-12">
             <div class="card">
                 <div class="card-body">
-                    <button class="pull-right btn btn-sm btn-rounded btn-success" @click.prevent="createPosition()" :disabled="opdSelected == 0">Tambah Jabatan</button>
+                    <!-- <button class="pull-right btn btn-sm btn-rounded btn-success" @click.prevent="createPosition()" >Tambah Jabatan</button> -->
                     <h4 class="card-title">Jabatan</h4>
-                    <div class="table-responsive" style="margin-top: 35px;">
-                        <div class="row">
-                            <div class="col-md-6">
-                                <select class="select2 form-control" id="opd-selection" style="width: 100%;">
-                                    <option value="0" disabled selected>Pilih Opd</option>
-                                </select>
-                            </div>
-                            <div class="col-md-6">
-                                <select class="select2 form-control" id="type-selection" style="width: 100%;">
-                                    <option value="Struktural" selected>Struktural</option>
-                                    <option value="Struktural" selected>Fungsional</option>
-                                </select>
-                            </div>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <select class="select2 form-control" id="opd-selection" style="width: 100%;">
+                                <option value="0" disabled selected>Pilih Opd</option>
+                            </select>
                         </div>
-                        <table style="width: 100%; margin-top: 20px;" border="1"> 
-                            <thead>
-                                <tr>
-                                    <th rowspan="2" style="width: 5%; text-align: center;">No</th>
-                                    <th rowspan="2" style="width: 20%; text-align: center;" >Nama Jabatan</th>
-                                    <th rowspan="2" style="width: 5%; text-align: center;">JC</th>
-                                    <th rowspan="2" style="text-align: center; width: 5%;">Job Value</th>
-                                    <th rowspan="2" style="text-align: center; width: 10%;">F1 Ruang Lingkup + Dampak L5</th>
-                                    <th rowspan="2" style="text-align: center; width: 10%;">F2 Pengaturan Organisasi L3</th>
-                                    <th rowspan="2" style="text-align: center; width: 10%;">F3 Wewenang Penyeliaan + Manajerial L3</th>
-                                    <th colspan="2" style="text-align: center;">F4 Hubugan Personal</th>
-                                    <th rowspan="2" style="text-align: center; width: 10%;">F5 Kesulitan Pengarahan Pekerjaan L8</th>
-                                    <th rowspan="2" style="text-align: center; width: 10%;">F6 Kondisi Lain F6</th>
-                                    <th rowspan="2" style="width: 5%;text-align: center;">B</th>
-                                    <th rowspan="2" style="width: 5%; text-align: center;">K</th>
-                                </tr>
-                                <tr>
-                                    <th>Sifat Hub</th>
-                                    <th>Tujuan Hub</th>
-                                </tr>
-                            </thead>
-                            <tbody v-if="dumData.length > 0">
-                                <tr v-for="(dt, index) in dumData">
-                                    <td>{{index+1}}</td>
-                                    <td>Kepala Jabatan</td>
-                                    <td></td>
-                                    <td>{{dt.f1}}</td>
-                                    <td>{{dt.f2}}</td>
-                                    <td>{{dt.f3}}</td>
-                                    <td>{{dt.f4}}</td>
-                                    <td>{{dt.f5}}</td>
-                                    <td>{{dt.f1}}</td>
-                                    <td>{{dt.f3}}</td>
-                                    <td>{{dt.f2}}</td>
-                                    <td>1</td>
-                                    <td>1</td>
-                                </tr>
-                            </tbody>
-                        </table>
+                        <div class="col-md-6">
+                            <select class="select2 form-control" id="type-selection" style="width: 100%;" v-model="tipe">
+                                <option value="Struktural" selected>Struktural</option>
+                                <option value="Fungsional">Fungsional</option>
+                            </select>
+                        </div>
                     </div>
+                    <table style="width: 100%; margin-top: 20px; font-size:small;" class="table"> 
+                        <thead style="border: 1pt solid black;">
+                            <tr style="border: 1pt solid black;">
+                                <th rowspan="2"  style="width: 5%; text-align: center;border: 1pt solid black; vertical-align : middle;">No</th>
+                                <th rowspan="2" style="width: 20%; text-align: center;border: 1pt solid black; vertical-align : middle;" >Nama Jabatan</th>
+                                <th rowspan="2" style="width: 5%; text-align: center;border: 1pt solid black; vertical-align : middle;">JC</th>
+                                <th rowspan="2"  style="text-align: center; width: 5%;border: 1pt solid black; vertical-align : middle;">Job Value</th>
+                                <th rowspan="2" colspan="2" style="text-align: center; width: 10%;border: 1pt solid black; vertical-align : middle;">F1 Ruang Lingkup + Dampak L5</th>
+                                <th rowspan="2" colspan="2" style="text-align: center; width: 10%;border: 1pt solid black; vertical-align : middle;">F2 Pengaturan Organisasi L3</th>
+                                <th rowspan="2" colspan="2" style="text-align: center; width: 10%;border: 1pt solid black; vertical-align : middle;">F3 Wewenang Penyeliaan + Manajerial L3</th>
+                                <th colspan="4" style="text-align: center;border: 1pt solid black;">F4 Hub.Personal</th>
+                                <th rowspan="2" colspan="2" style="text-align: center; width: 10%;border: 1pt solid black; vertical-align : middle;">F5 Kesulitan Pengarahan Pekerjaan L8</th>
+                                <th rowspan="2" colspan="2" style="text-align: center; width: 10%;border: 1pt solid black; vertical-align : middle;">F6 Kondisi Lain F6</th>
+                                <th rowspan="2"  style="width: 5%;text-align: center;border: 1pt solid black; vertical-align : middle;">B</th>
+                                <th rowspan="2"  style="width: 5%; text-align: center;border: 1pt solid black; vertical-align : middle;">K</th>
+                            </tr>
+                            <tr style="border: 1pt solid black;">
+                                <th colspan="2" style="border: 1pt solid black;">Sifat.Hub</th>
+                                <th colspan="2" style="border: 1pt solid black;">Tujuan.Hub</th>
+                            </tr>
+                        </thead>
+                        <tbody v-if="dataStruktur.length > 0 && tipe == 'Struktural'">
+                            <tr v-for="(dt, index) in dataStruktur" >
+                                <td style="text-align: center;border: 1pt solid black;">{{index+1}}</td>
+                                <td style="border: 1pt solid black;">{{dt.name}}</td>
+                                <td colspan="16" v-if="!dt.fes" style="text-align: center;border: 1pt solid black;" align="center">
+                                    <button class="btn btn-sm btn-rounded btn-success" style="font-size: small;" @click.prevent="$root.$router.push({name: 'struktural.form.evjab', params: {id: dt.id}})">Masukan Nilai</button>
+                                </td>
+                                <td v-if="dt.fes" style="text-align: center;border: 1pt solid black;"></td>
+                                <td v-if="dt.fes" style="text-align: center;border: 1pt solid black;"></td>
+                                <td style="text-align: center;border: 1pt solid black;" v-if="dt.fes">{{dt.fes.f1}}</td>
+                                <td style="text-align: center;border: 1pt solid black;" v-if="dt.fes">{{counterF1(dt.fes.f1)}}</td>
+                                <td style="text-align: center;border: 1pt solid black;" v-if="dt.fes">{{dt.fes.f2}}</td>
+                                <td style="text-align: center;border: 1pt solid black;" v-if="dt.fes">{{counterF2(dt.fes.f2)}}</td>
+                                <td style="text-align: center;border: 1pt solid black;" v-if="dt.fes">{{dt.fes.f3}}</td>
+                                <td style="text-align: center;border: 1pt solid black;" v-if="dt.fes">{{counterF3(dt.fes.f3)}}</td>
+                                <td style="text-align: center;border: 1pt solid black;" v-if="dt.fes">{{dt.fes.f4_1}}</td>
+                                <td style="text-align: center;border: 1pt solid black;" v-if="dt.fes">{{counterF41(dt.fes.f4_1)}}</td>
+                                <td style="text-align: center;border: 1pt solid black;" v-if="dt.fes">{{dt.fes.f4_2}}</td>
+                                <td style="text-align: center;border: 1pt solid black;" v-if="dt.fes">{{counterF42(dt.fes.f4_2)}}</td>
+                                <td style="text-align: center;border: 1pt solid black;" v-if="dt.fes">{{dt.fes.f5}}</td>
+                                <td style="text-align: center;border: 1pt solid black;" v-if="dt.fes">{{counterF5(dt.fes.f5)}}</td>
+                                <td style="text-align: center;border: 1pt solid black;" v-if="dt.fes">{{dt.fes.f6}}</td>
+                                <td style="text-align: center;border: 1pt solid black;" v-if="dt.fes">{{counterF6(dt.fes.f6)}}</td>
+                                <td style="text-align: center;border: 1pt solid black;">{{dt.current_stickholder}}</td>
+                                <td style="text-align: center;border: 1pt solid black;">{{formatNumber(Math.round(createTotal(dt.needed_stickholder)))}}</td>
+                            </tr>
+                        </tbody>
+                    </table>
                 </div>
             </div>
         </div>
-        <!-- START FORM ADD PositionS -->
-        <div class="modal fade " tabindex="-1" id="modal-Position-add" role="dialog" aria-labelledby="Tambah Jabatan" style="display: none;" aria-hidden="true">
-            <div class="modal-dialog modal-lg">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h4 class="modal-title" id="myLargeModalLabel">Tambah</h4>
-                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true" @click.prevent="formAdd.name = null">×</button>
-                    </div>
-                    <div class="modal-body">
-                        <form role="form" @submit.prevent="submitted">
-                            <div class="form-group">
-                                <label>Jabatan </label>
-                                <textarea class="form-control" cols="50" rows="2" v-model="formAdd.name" placeholder="max. 500 karakter" maxlength="500" ></textarea>
-                            </div>
-                        </form>
-                    </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-danger waves-effect text-left" data-dismiss="modal" id="close-modal-add-Position" @click.prevent="formAdd.name = null">Close</button>
-                        <button type="button" class="btn btn-primary waves-effect text-left" :disabled="onLoad" @click.prevent="submitted"> {{onLoad ? 'Please Wait...': 'Submit'}}</button>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <!-- END FORM ADD PositionS -->
-
-        <!-- START FORM MODIFY PositionS -->
-        <button  data-toggle="modal" data-target="#modal-Position-modify" style="display: none;" id="open-modify-modal"></button>
-        <div class="modal fade " tabindex="-1" id="modal-Position-modify" role="dialog" aria-labelledby="Tambah Jabatan" style="display: none;" aria-hidden="true">
-            <div class="modal-dialog modal-lg">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h4 class="modal-title" id="myLargeModalLabel">Ubah Jabatan</h4>
-                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true" @click.prevent="formModify.name = null; idModify = null">×</button>
-                    </div>
-                    <div class="modal-body">
-                        <form role="form" @submit.prevent="submitModify">
-                            <div class="form-group">
-                                <label>Jabatan </label>
-                                <textarea class="form-control" cols="50" rows="2" v-model="formModify.name" placeholder="max. 500 karakter" maxlength="500" ></textarea>
-                            </div>
-                        </form>
-                    </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-danger waves-effect text-left" data-dismiss="modal" id="close-modal-modify-Position" @click.prevent="formModify.name = null; idModify = null">Close</button>
-                        <button type="button" class="btn btn-primary waves-effect text-left" :disabled="onLoad" @click.prevent="submitModify"> {{onLoad ? 'Please Wait...': 'Submit'}}</button>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <!-- END FORM MODIFY PositionS -->
     </div>
 </template>
 
 <script>
+    import ApiEvjab from '../../services/api/Evjab.js';
+    import generator from "./generator.js"
     import { mapState } from 'vuex';
     import Swal from 'sweetalert2'
     export default {
         data() {
             return {
                 dumData: [],
-                search: '',
-                perPage: 10,
-                currentPage: 1,
-                formAdd: {
-                    opd_id: 0,
-                    name: null
-                },
-                idModify: null,
-                formModify: {
-                    opd_id: 0,
-                    name: null
-                },
-                opdSelected: 0
+                dataStruktur: [],
+                tipe: 'Struktural'
             }
         },
         computed: mapState(['onLoad', 'Positions', 'totalPositions', 'accessToken']),
-        beforeCreate() {
-            let pages = {
-                title: 'Master File',
-                breadcrumb: [
-                    {
-                        name: 'Jabatan'
-                    }
-                ]
-            }    
-            this.$root.$store.dispatch('setBreadCrumb', pages)
-        },
-        watch: {
-            'currentPage': function(newVal, oldVal) {
-                this.init()
-            },
-            'search': async function(newVal, oldVal) {
-                this.currentPage = await 1
-                this.init()
-            }
-        },
+        beforeCreate() {},
+        watch: {},
         mounted() {
             if(localStorage.getItem('FES')) {
                 let temp = JSON.parse(localStorage.getItem('FES'))
@@ -197,22 +128,15 @@
             })
 
             $('#opd-selection').on('select2:select', async (e) => {
-                this.opdSelected = await $("#opd-selection").val()
-                console.log(this.opdSelected)
-                this.$root.$store.dispatch('setOpd_Data', {id: e.params.data.id, name: e.params.data.name})
-                this.formAdd.opd_id = await $("#opd-selection").val()
-                this.formModify.opd_id = await $("#opd-selection").val()
-                localStorage.setItem('__opd', e.params.data.id)
                 this.init()
             })
             
             if(localStorage.getItem('__opd')) {
                 this.$root.$store.dispatch('getOne_Opd', localStorage.getItem('__opd'))
                 .then(_res => {
-                    this.opdSelected = _res.opd.id
                     this.$root.$store.dispatch('setOpd_Data', {id: _res.opd.id, name: _res.opd.name})
                     $("#opd-selection").append(`
-                        <option selected>${_res.opd.name}</option>
+                        <option selected value="${_res.opd.id}">${_res.opd.name}</option>
                     `)
                     this.init()
                     // $("#opd-selection").trigger('change');
@@ -223,90 +147,156 @@
             
         },
         methods: {
-            async resetData() {
-                this.search         = await ''
-                this.formAdd.name   = null
-                this.perPage        = await 10
-                this.currentPage    = await 1
-                this.totalItem      = await 0
-                this.idModify       = null
-                this.formModify.name = null
-            },
             async init() {
-                if(this.opdSelected != 0) {
-                    this.$root.$store.dispatch('getPositions', {page: this.currentPage, limit: this.perPage, search: this.search, id: this.opdSelected})
-                    .catch(_err => _err)
-                } 
-            },
-
-            createPosition() {
-                // this.$root.$store.dispatch('setOpd', {})
-                this.$root.$router.push({name: 'struktural.form.evjab'})
-            },
-
-            deletePosition(data) {
-                Swal.fire({
-                    title: `Anda yakin ingin menghapus ${data.name} ?`,
-                    text: "Data yang telah dihapus tidak dapat dikembalikan!",
-                    icon: 'warning',
-                    showCancelButton: true,
-                    confirmButtonColor: '#d33',
-                    cancelButtonColor: '#b3b3b3',
-                    confirmButtonText: 'Ya, Hapus itu!',
-                }).then((result) => {
-                    if (result.value) {
-                        this.$root.$store.dispatch('deletePosition', data.id)
-                        .then(_resp => _resp)
-                        .finally(() => {
-                            Swal.fire({
-                                icon: 'success',
-                                title: `${data.name} berhasil dihapus!`,
-                                onClose: () => {
-                                    
-                                    this.init()
-                                }
-                            })
-                        })
+                ApiEvjab.getAll($("#opd-selection").val())
+                .then(resp => {
+                    console.log('fes', resp)
+                    if($("#type-selection").val() == "Struktural") {
+                        this.doStructure(resp.data)
                     }
+                })    
+            },
+            
+            doStructure(data) {
+                generator.generateStructure(data)
+                .then(_resp => {
+                    console.log('generated', _resp)
+                    this.dataStruktur = _resp
                 })
             },
-
-            submitted() {
-                this.$root.$store.dispatch('addPositions', this.formAdd)
-                .then(_resp => $("#close-modal-add-Position").click())
-                .finally(() => {
-                    
-                    Swal.fire({
-                        icon: 'success',
-                        title: 'Data berhasil ditambahkan!',
-                        onClose: () => {
-                            this.resetData()
-                            this.init()
-                        }
-                    })
+            createTotal (data) {
+                let total = 0
+                
+                data.map(_val => {
+                    total += parseFloat(_val.ket)
                 })
+                
+                return total/1250
+            },
+            generateTotalValue(fes) {
+                
+            },
+            generateClass() {
+
             },
 
-            modifyPosition(data) {
-                this.idModify = data.id
-                this.formModify.name = data.name
-                $("#open-modify-modal").click()
-            },
+            formatNumber(angka, prefix = "", Sparators = "."){
+                let string_number = angka.toString()
+                var number_string = string_number.replace(/[^,\d]/g, '').toString(),
+                split   		= number_string.split(','),
+                sisa     		= split[0].length % 3,
+                rupiah     		= split[0].substr(0, sisa),
+                ribuan     		= split[0].substr(sisa).match(/\d{3}/gi);
+                if(ribuan){
+                    let separator = sisa ? Sparators : '';
+                    rupiah += separator + ribuan.join('.');
+                }
+                rupiah = split[1] != undefined ? rupiah + ',' + split[1] : rupiah;
+                return prefix == undefined ? rupiah : (rupiah ? '' + rupiah : '');
 
-            submitModify() {
-                this.$root.$store.dispatch('modifyPosition', {id: this.idModify, form: this.formModify})
-                .then(_resp => $("#close-modal-modify-Position").click())
-                .finally(() => {
-                    
-                    Swal.fire({
-                        icon: 'success',
-                        title: 'Berhasil di ubah',
-                        onClose: () => {
-                            this.init()
-                        }
-                    })
-                })
-            }
+            },
+            counterF1(number) {
+                if(number == 1) {
+                    return 175
+                } else if (number == 2) {
+                    return 350
+                } else if (number == 3) {
+                    return 550
+                } else if (number == 4) {
+                    return 775
+                } else if (number == 5) {
+                    return 900
+                } else {
+                    return "-"
+                }
+            },
+            counterF2(number) {
+                if(number == 1) {
+                    return 100
+                } else if (number == 2) {
+                    return 250
+                } else if (number == 3) {
+                    return 350
+                } else {
+                    return "-"
+                }
+            },
+            counterF3(number) {
+                if(number == 1) {
+                    return 450
+                } else if (number == 2) {
+                    return 775
+                } else if (number == 3) {
+                    return 900
+                } else {
+                    return "-"
+                }
+            },
+            counterF41(number) {
+                if(number == 1) {
+                    return 25
+                } else if (number == 2) {
+                    return 50
+                } else if (number == 3) {
+                    return 75
+                } else if (number == 4) {
+                    return 100
+                } else {
+                    return "-"
+                }
+            },
+            counterF42(number) {
+                if(number == 1) {
+                    return 30
+                } else if (number == 2) {
+                    return 75
+                } else if (number == 3) {
+                    return 100
+                } else if (number == 4) {
+                    return 125
+                } else {
+                    return "-"
+                }
+            },
+            counterF5(number) {
+                if(number == 1) {
+                    return 75
+                } else if (number == 2) {
+                    return 205
+                } else if (number == 3) {
+                    return 340
+                } else if (number == 4) {
+                    return 505
+                } else if (number == 5) {
+                    return 650
+                } else if (number == 6) {
+                    return 800
+                } else if (number == 7) {
+                    return 930
+                } else if (number == 8) {
+                    return 1030
+                } else {
+                    return "-"
+                }
+            },
+            counterF6(number) {
+                if(number == 1) {
+                    return 310
+                } else if (number == 2) {
+                    return 575
+                } else if (number == 3) {
+                    return 975
+                } else if (number == 4) {
+                    return 1120
+                } else if (number == 5) {
+                    return 1225
+                } else if (number == 6) {
+                    return 1325
+                } else {
+                    return "-"
+                }
+            },
+            
         }
     }
 </script>

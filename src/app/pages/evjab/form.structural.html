@@ -3,179 +3,141 @@
         <div class="card">
             <div class="card-body">
                 <h4 class="card-title">Form Evaluasi Jabatan Struktural</h4>
-                
+                <h4 class="card-subtitle">Informasi Jabatan</h4>
+                <table class="table" v-if="infoJabatan">
+                    <tr>
+                        <td>Nama OPD</td>
+                        <td><strong v-if="infoJabatan.TB_OPD">{{infoJabatan.TB_OPD.name}}</strong></td>
+                    </tr>
+                    <tr>
+                        <td>Nama Jabatan</td>
+                        <td><strong>{{infoJabatan.name}}</strong> </td>
+                    </tr>
+                    
+                </table>
+            </div>
+        </div>
+        <div class="card">
+            <div class="card-body">
+                <h4 class="card-subtitle">Nilai FES</h4>
                 <table class="table">
                     <tr>
-                        <th>Nama OPD</th>
-                        <td>Dinas Pendidikan</td>
-                    </tr>
-                    <tr>
-                        <th>Nama Jabatan</th>
-                        <td>Kepala Dinas Pendidikan</td>
-                    </tr>
-                    <tr>
-                        <th colspan="2">F1 Ruang Lingkup + Dampak L5</th>
-                    </tr>
-                    <tr>
-                        <td>
-                            <div class="row">
-                                <div class="form-group col-md-4">
-                                    <select  v-model="numb_f1" id="fSatu" class="form-control select2 " style="width: 100%;" data-select2-id="1" tabindex="-1" aria-hidden="true">
-                                        <option value="0" selected disabled> --- PILIH F1 ---</option>
-                                        <option value="1">1</option>
-                                        <option value="2">2</option>
-                                        <option value="3">3</option>
-                                        <option value="4">4</option>
-                                        <option value="5">5</option>                            
-                                    </select>
-                                </div>
-                                <div class="col-md-3">
-                                    <th colspan="3">{{counter(numb_f1)}}</th> 
-                                </div>
-                            </div>
+                        <th>F1 Ruang Lingkup + Dampak L5</th>
+                        <td style="width: 30%;">
+                            <select  v-model="numb_f1" id="fSatu" class="form-control select2 " style="width: 100%;" data-select2-id="1" tabindex="-1" aria-hidden="true">
+                                <option value="0" selected disabled> --- PILIH F1 ---</option>
+                                <option value="1">1</option>
+                                <option value="2">2</option>
+                                <option value="3">3</option>
+                                <option value="4">4</option>
+                                <option value="5">5</option>                            
+                            </select>
                         </td>
-                    </tr>
-                    
-                    <tr>
-                        <th colspan="2">F2 PENGATURAN ORGANISASI L3</th>
-                    </tr>
-                    <tr>
-                        <td>
-                            <div class="row">
-                                <div class="form-group col-md-4">
-                                    <select  v-model="numb_f2" id="fDua" class="form-control select2 " style="width: 100%;" data-select2-id="1" tabindex="-1" aria-hidden="true">
-                                        <option value="0" selected disabled> --- PILIH F2 ---</option>
-                                        <option value="1">1</option>
-                                        <option value="2">2</option>
-                                        <option value="3">3</option>
-                                        <option value="4">4</option>
-                                        <option value="5">5</option>                            
-                                    </select>
-                                </div>
-                                <div class="col-md-3">
-                                    <th colspan="3">{{counter(numb_f2)}}</th> 
-                                </div>
-                            </div>
+                        <td style="width: 20%; text-align: center;">
+                            {{counterF1(numb_f1)}}
                         </td>
                     </tr>
                     <tr>
-                        <th colspan="2">F3 WEWENANG PENYELIAAN + MANAJERIAL L3</th>
-                    </tr>
-                    <tr>
-                        <td>
-                            <div class="row">
-                                <div class="form-group col-md-4">
-                                    <select  v-model="numb_f3" id="fTiga" class="form-control select2 " style="width: 100%;" data-select2-id="1" tabindex="-1" aria-hidden="true">
-                                        <option value="0" selected disabled> --- PILIH F3 ---</option>
-                                        <option value="1">1</option>
-                                        <option value="2">2</option>
-                                        <option value="3">3</option>
-                                        <option value="4">4</option>
-                                        <option value="5">5</option>                            
-                                    </select>
-                                </div>
-                                <div class="col-md-3">
-                                    <th colspan="3">{{counter(numb_f3)}}</th> 
-                                </div>
-                            </div>
+                        <th>F2 PENGATURAN ORGANISASI L3</th>
+                        <td style="width: 30%;">
+                            <select  v-model="numb_f2" id="fDua" class="form-control select2 " style="width: 100%;" data-select2-id="1" tabindex="-1" aria-hidden="true">
+                                <option value="0" selected disabled> --- PILIH F2 ---</option>
+                                <option value="1">1</option>
+                                <option value="2">2</option>
+                                <option value="3">3</option>                        
+                            </select>
+                        </td>
+                        <td style="width: 20%; text-align: center;">
+                            {{counterF2(numb_f2)}}
                         </td>
                     </tr>
                     <tr>
-                        <th colspan="2">F4 HUBUNGAN PERSONAL</th>
-
-                        <tr>
-                            <td>
-                                <div class="row">
-                                    <div class="form-group col-md-4">
-                                        <label> Sifat Hubungan</label>
-                                        <select  v-model="numb_f41" id="fEmpatSatu" class="form-control select2 " style="width: 100%;" data-select2-id="1" tabindex="-1" aria-hidden="true">
-                                            <option value="0" selected disabled> --- PILIH F4.1 ---</option>
-                                            <option value="1">1</option>
-                                            <option value="2">2</option>
-                                            <option value="3">3</option>
-                                            <option value="4">4</option>
-                                            <option value="5">5</option>                            
-                                        </select>
-                                    </div>
-                                    <div class="col-md-3">
-                                        <th colspan="3">{{counter(numb_f41)}}</th> 
-                                    </div>
-                                </div>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td>
-                                <div class="row">
-                                    <div class="form-group col-md-4">
-                                        <label>Tujuan Hubungan</label>
-                                        <select  v-model="numb_f42" id="fEmpatDua" class="form-control select2 " style="width: 100%;" data-select2-id="1" tabindex="-1" aria-hidden="true">
-                                            <option value="0" selected disabled> --- PILIH F4.2 ---</option>
-                                            <option value="1">1</option>
-                                            <option value="2">2</option>
-                                            <option value="3">3</option>
-                                            <option value="4">4</option>
-                                            <option value="5">5</option>                            
-                                        </select>
-                                    </div>
-                                    <div class="col-md-3">
-                                        <th colspan="3">{{counter(numb_f42)}}</th> 
-                                    </div>
-                                </div>
-                            </td>
-                        </tr>
-
-                    </tr>
-                    <tr>
-                        <th colspan="2">F5 KESULITAN PENGARAHAN PEKERJAAN L8</th>
-                    </tr>
-                    <tr>
-                        <td>
-                            <div class="row">
-                                <div class="form-group col-md-4">
-                                    <select  v-model="numb_f5" id="fLima" class="form-control select2 " style="width: 100%;" data-select2-id="1" tabindex="-1" aria-hidden="true">
-                                        <option value="0" selected disabled> --- PILIH F5 ---</option>
-                                        <option value="1">1</option>
-                                        <option value="2">2</option>
-                                        <option value="3">3</option>
-                                        <option value="4">4</option>
-                                        <option value="5">5</option>                            
-                                    </select>
-                                </div>
-                                <div class="col-md-3">
-                                    <th colspan="3">{{counter(numb_f5)}}</th> 
-                                </div>
-                            </div>
+                        <th>F3 WEWENANG PENYELIAAN + MANAJERIAL L3</th>
+                        <td style="width: 30%;">
+                            <select  v-model="numb_f3" id="fTiga" class="form-control select2 " style="width: 100%;" data-select2-id="1" tabindex="-1" aria-hidden="true">
+                                <option value="0" selected disabled> --- PILIH F3 ---</option>
+                                <option value="1">1</option>
+                                <option value="2">2</option>
+                                <option value="3">3</option>                           
+                            </select>
+                        </td>
+                        <td style="width: 20%; text-align: center;">
+                            {{counterF3(numb_f3)}}
                         </td>
                     </tr>
                     <tr>
-                        <th colspan="2">F6 KONDISI LAIN F6</th>
-                    </tr>
-                    
-                    <tr>
-                        <td>
-                            <div class="row">
-                                <div class="form-group col-md-4">
-                                    <select  v-model="numb_f6" id="fEnam" class="form-control select2 " style="width: 100%;" data-select2-id="1" tabindex="-1" aria-hidden="true">
-                                        <option value="0" selected disabled> --- PILIH F6 ---</option>
-                                        <option value="1">1</option>
-                                        <option value="2">2</option>
-                                        <option value="3">3</option>
-                                        <option value="4">4</option>
-                                        <option value="5">5</option>                            
-                                    </select>
-                                </div>
-                                <div class="col-md-3">
-                                    <th colspan="3">{{counter(numb_f6)}}</th> 
-                                </div>
-                            </div>
+                        <th>F4 HUBUNGAN PERSONAL (Sifat Hubungan)</th>
+                        <td style="width: 30%;">
+                            <select  v-model="numb_f41" id="fEmpatSatu" class="form-control select2 " style="width: 100%;" data-select2-id="1" tabindex="-1" aria-hidden="true">
+                                <option value="0" selected disabled> --- PILIH F4.1 ---</option>
+                                <option value="1">1</option>
+                                <option value="2">2</option>
+                                <option value="3">3</option>
+                                <option value="4">4</option>                         
+                            </select>
+                        </td>
+                        <td style="width: 20%; text-align: center;">
+                            {{counterF41(numb_f41)}}
                         </td>
                     </tr>
                     <tr>
-                        <th colspan="2"> Job Valuegit </th>
+                        <th>F4 HUBUNGAN PERSONAL (Tujuan Hubungan)</th>
+                        <td style="width: 30%;">
+                            <select  v-model="numb_f42" id="fEmpatDua" class="form-control select2 " style="width: 100%;" data-select2-id="1" tabindex="-1" aria-hidden="true">
+                                <option value="0" selected disabled> --- PILIH F4.2 ---</option>
+                                <option value="1">1</option>
+                                <option value="2">2</option>
+                                <option value="3">3</option>
+                                <option value="4">4</option>                           
+                            </select>
+                        </td>
+                        <td style="width: 20%; text-align: center;">
+                            {{counterF42(numb_f42)}}
+                        </td>
                     </tr>
                     <tr>
-                        <td colspan="2">
-                            <button class="btn btn-success" @click.prevent="simpan()"> Simpan</button>
+                        <th>F5 KESULITAN PENGARAHAN PEKERJAAN L8</th>
+                        <td style="width: 30%;">
+                            <select  v-model="numb_f5" id="fLima" class="form-control select2 " style="width: 100%;" data-select2-id="1" tabindex="-1" aria-hidden="true">
+                                <option value="0" selected disabled> --- PILIH F5 ---</option>
+                                <option value="1">1</option>
+                                <option value="2">2</option>
+                                <option value="3">3</option>
+                                <option value="4">4</option>
+                                <option value="5">5</option> 
+                                <option value="6">6</option>
+                                <option value="7">7</option>
+                                <option value="8">8</option>                            
+                            </select>
+                        </td>
+                        <td style="width: 20%; text-align: center;">
+                            {{counterF5(numb_f5)}}
+                        </td>
+                    </tr>
+                    <tr>
+                        <th>F6 KONDISI LAIN F6</th>
+                        <td style="width: 30%;">
+                            <select  v-model="numb_f6" id="fEnam" class="form-control select2 " style="width: 100%;" data-select2-id="1" tabindex="-1" aria-hidden="true">
+                                <option value="0" selected disabled> --- PILIH F6 ---</option>
+                                <option value="1">1</option>
+                                <option value="2">2</option>
+                                <option value="3">3</option>
+                                <option value="4">4</option>
+                                <option value="5">5</option>
+                                <option value="6">6</option>                            
+                            </select>
+                        </td>
+                        <td style="width: 20%; text-align: center;">
+                            {{counterF6(numb_f6)}}
+                        </td>
+                    </tr>
+                    <tr>
+                        <th colspan="2" style="text-align: end;"> Job Value </th>
+                        <th style="text-align: center;">{{formatNumber(jobValue())}}</th>
+                    </tr>
+                    <tr>
+                        <td colspan="3">
+                            <button class="btn btn-success pull-right" :disabled="numb_f1 == 0 || numb_f2 == 0 || numb_f3 == 0 || numb_f41 == 0 || numb_f42 == 0 || numb_f5 == 0 || numb_f6 == 0 " @click.prevent="simpan()"> Simpan</button>
                         </td>
                     </tr>
                     
@@ -186,20 +148,42 @@
 </template>
 
 <script>
+    import ApiPosition from '../../services/api/ManagementPosition.js';
+    import ApiEvjab from '../../services/api/Evjab.js';
     export default {
+        props: ['id'],
         data() {
             return {
+                infoJabatan: {},
                 numb_f1: 0,
                 numb_f2: 0,
                 numb_f3: 0,
                 numb_f41: 0,
                 numb_f42:0,
                 numb_f5: 0,
-                numb_f6: 0
+                numb_f6: 0,
+                formFes: {
+                    position_id: 0,
+                    f1: 0,
+                    f2: 0,
+                    f3: 0,
+                    f4_1: 0,
+                    f4_2: 0,
+                    f5: 0,
+                    f6: 0
+                },
+                totalValue: 0
             }
         },
+        mounted() {
+            ApiPosition.getOneById(this.id)
+            .then(_resp => {
+                this.infoJabatan = _resp.data.position
+            })
+        },
         methods: {
-            counter(number) {
+            counterF1(number) {
+                this.formFes.f1 = parseInt(number)
                 if(number == 1) {
                     return 175
                 } else if (number == 2) {
@@ -214,13 +198,134 @@
                     return "-"
                 }
             },
+            counterF2(number) {
+                this.formFes.f2 = parseInt(number)
+                if(number == 1) {
+                    return 100
+                } else if (number == 2) {
+                    return 250
+                } else if (number == 3) {
+                    return 350
+                } else {
+                    return "-"
+                }
+            },
+            counterF3(number) {
+                this.formFes.f3 = parseInt(number)
+                if(number == 1) {
+                    return 450
+                } else if (number == 2) {
+                    return 775
+                } else if (number == 3) {
+                    return 900
+                } else {
+                    return "-"
+                }
+            },
+            counterF41(number) {
+                this.formFes.f4_1 = parseInt(number)
+                if(number == 1) {
+                    return 25
+                } else if (number == 2) {
+                    return 50
+                } else if (number == 3) {
+                    return 75
+                } else if (number == 4) {
+                    return 100
+                } else {
+                    return "-"
+                }
+            },
+            counterF42(number) {
+                this.formFes.f4_2 = parseInt(number)
+                if(number == 1) {
+                    return 30
+                } else if (number == 2) {
+                    return 75
+                } else if (number == 3) {
+                    return 100
+                } else if (number == 4) {
+                    return 125
+                } else {
+                    return "-"
+                }
+            },
+            counterF5(number) {
+                this.formFes.f5 = parseInt(number)
+                if(number == 1) {
+                    return 75
+                } else if (number == 2) {
+                    return 205
+                } else if (number == 3) {
+                    return 340
+                } else if (number == 4) {
+                    return 505
+                } else if (number == 5) {
+                    return 650
+                } else if (number == 6) {
+                    return 800
+                } else if (number == 7) {
+                    return 930
+                } else if (number == 8) {
+                    return 1030
+                } else {
+                    return "-"
+                }
+            },
+            counterF6(number) {
+                this.formFes.f6 = parseInt(number)
+                if(number == 1) {
+                    return 310
+                } else if (number == 2) {
+                    return 575
+                } else if (number == 3) {
+                    return 975
+                } else if (number == 4) {
+                    return 1120
+                } else if (number == 5) {
+                    return 1225
+                } else if (number == 6) {
+                    return 1325
+                } else {
+                    return "-"
+                }
+            },
+
+
             jobValue(){
-                total = numb_f1 + numb_f2 + numb_f3 + numb_f41 + numb_f42 + numb_f5 + numb_f6
+                let total = 0
+                total += this.numb_f1 != 0 ? this.counterF1(this.numb_f1) : 0
+                total += this.numb_f2 != 0 ? this.counterF2(this.numb_f2) : 0
+                total += this.numb_f3 != 0 ? this.counterF3(this.numb_f3) : 0
+                total += this.numb_f41 != 0 ? this.counterF41(this.numb_f41) : 0
+                total += this.numb_f42 != 0 ? this.counterF42(this.numb_f42) : 0
+                total += this.numb_f5 != 0 ? this.counterF5(this.numb_f5) : 0
+                total += this.numb_f6 != 0 ? this.counterF6(this.numb_f6) : 0
+
                 return total
             },
+            formatNumber(angka, prefix = "", Sparators = "."){
+                let string_number = angka.toString()
+                var number_string = string_number.replace(/[^,\d]/g, '').toString(),
+                split   		= number_string.split(','),
+                sisa     		= split[0].length % 3,
+                rupiah     		= split[0].substr(0, sisa),
+                ribuan     		= split[0].substr(sisa).match(/\d{3}/gi);
+                if(ribuan){
+                    let separator = sisa ? Sparators : '';
+                    rupiah += separator + ribuan.join('.');
+                }
+                rupiah = split[1] != undefined ? rupiah + ',' + split[1] : rupiah;
+                return prefix == undefined ? rupiah : (rupiah ? '' + rupiah : '');
+
+            },
             simpan() {
-                localStorage.setItem('FES', JSON.stringify({f1: this.numb_f1, f2: this.numb_f2, f3: this.numb_f3, f4: this.numb_f4, f5: this.numb_f5}))
-                this.$root.$router.replace({name: 'list.evjab'})
+                this.formFes.position_id = parseInt(this.id)
+                ApiEvjab.Create(this.formFes)
+                .then(resp => resp)
+                .finally(() => {
+                    this.$root.$router.replace({name: 'list.evjab'})
+                })
             }
         }
     }

@@ -14,8 +14,9 @@ export default [
         component: ListEvjab
     },
     {
-        path: 'evaluasi-jabatan/input-struktural',
+        path: 'evaluasi-jabatan/input-struktural/:id',
         name: 'struktural.form.evjab',
+        props: true,
         component: FormStrukturalPage
     },
 ]
