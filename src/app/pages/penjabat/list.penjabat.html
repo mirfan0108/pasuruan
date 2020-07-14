@@ -19,33 +19,179 @@
                 </div>
                 
                 <table class="table color-bordered-table dark-bordered-table">
-                    <tr>
-                        <td >Nama </td>
-                        <td >Golongan</td>
-                        <td><button class="btn btn-sm btn-info btn-rounded pull-right">Tambahkan</button></td>
-                    </tr>
-                    <tr>
-                        <td style="width: 70%;">Mr. Ahmad S.I</td>
-                        <td >IIV</td>
-                        <td style="width: 20%;">
-                            <button class="btn btn-sm btn-success btn-rounded pull-right" style="margin-left: 10px;">Edit</button>
-                            <button class="btn btn-sm btn-danger btn-rounded pull-right">Hapus</button>
-                        </td>
-                    </tr>
+                    <thead>
+                        <tr>
+                            <td >Nama </td>
+                            <td >Golongan</td>
+                            <td><button v-if="formPenjabat.position_id != 0" class="btn btn-sm btn-info btn-rounded pull-right" data-toggle="modal" data-target="#modal-penjabat-add">Tambahkan</button></td>
+                        </tr>
+                    </thead>
+                    <tbody v-if="dataPenjabat.length > 0 && !onLoad">
+                        <tr v-for="pj in dataPenjabat">
+                            <th style="width: 70%;">{{pj.name}} ({{pj.nip}})</th>
+                            <th style="text-align: center;">{{pj.golongan}}</th>
+                            <td style="width: 20%;">
+                                <button class="btn btn-sm btn-success btn-rounded pull-right" style="margin-left: 10px;" @click.prevent="selectToModify(pj)">Edit</button>
+                                <button class="btn btn-sm btn-danger btn-rounded pull-right" @click.prevent="deletePenjabat(pj)">Hapus</button>
+                            </td>
+                        </tr>
+                    </tbody>
+                    <tbody v-if="dataPenjabat.length == 0 && !onLoad">
+                        <tr>
+                            <td style="text-align: center;" colspan="3">Tidak ada penjabat yang menepati jabatan ini</td>
+                        </tr>
+                    </tbody>
+                    <tbody v-if="onLoad">
+                        <tr>
+                            <td colspan="3" align="center">
+                                <img src="assets/images/loading.gif" alt="loading" width="180">
+                            </td>
+                        </tr>
+                    </tbody>
                 </table>
+
             </div>
         </div>
+        <!-- START FORM ADD Penjabat -->
+        <div class="modal fade " tabindex="-1" id="modal-penjabat-add" role="dialog" aria-labelledby="Tambah Wewenang" style="display: none;" aria-hidden="true">
+            <div class="modal-dialog modal-lg">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h4 class="modal-title" id="myLargeModalLabel">Tambah Penjabat</h4>
+                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true" @click.prevent="formAdd.name = null">×</button>
+                    </div>
+                    <div class="modal-body">
+                        <form role="form" @submit.prevent="submitted">
+                            <div class="form-group">
+                                <label>Nama Penjabat </label>
+                                <input type="text" class="form-control" v-model="formPenjabat.name" placeholder="Masukan Nama Penjabat">
+                            </div>
+                            <div class="form-group">
+                                <label>NIP </label>
+                                <input type="number" class="form-control" v-model="formPenjabat.nip" placeholder="Masukan NIP">
+                            </div>
+                            <div class="form-group">
+                                <label>Golongan </label>
+                                <select v-model="formPenjabat.golongan" id="class-position" class="select2 form-control " style="width: 100%;" >
+                                    <option selected disabled value="">Pilih Pangkat / Golongan</option>
+                                    <option value="Ia" >Golongan Ia = Pangkat Juru Muda</option>
+                                    <option value="Ib">Golongan Ib = Pangkat Juru Muda Tingkat 1</option>
+                                    <option value="Ic">Golongan Ic = Pangkat Juru </option>
+                                    <option value="Id">Golongan Id = Pangkat Juru Tingkat 1</option>
+                                    <option value="IIa">Golongan IIa = Pangkat Juru Muda</option>
+                                    <option value="IIb">Golongan IIb = Pangkat Juru Muda Tingkat 1</option>
+                                    <option value="IIc">Golongan IIc = Pangkat Pengatur </option>
+                                    <option value="IId">Golongan IId = Pangkat Pengatur Tingkat 1</option>
+                                    <option value="IIIa">Golongan IIIa = Pangkat Penata Muda</option>
+                                    <option value="IIIb">Golongan IIIb = Pangkat Penata Muda Tingkat 1</option>
+                                    <option value="IIIc">Golongan IIIc = Pangkat Penata </option>
+                                    <option value="IIId">Golongan IIId = Pangkat Penata Tingkat 1</option>
+                                    <option value="IVa">Golongan IVa = Pangkat Pembina</option>
+                                    <option value="IVb">Golongan IVb = Pangkat Pembina Tingkat 1</option>
+                                    <option value="IVc">Golongan IVc = Pangkat Pembina Utama Muda </option>
+                                    <option value="IVd">Golongan IVd = Pangkat Pembina Utama Madya</option>
+                                    <option value="IVe">Golongan IVe = Pangkat Pembina Utama</option>
+                                </select>
+                            </div>
+                        </form>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-danger waves-effect text-left" data-dismiss="modal" id="close-modal-add-Penjabat" @click.prevent="formAdd.name = null">Close</button>
+                        <button type="button" class="btn btn-primary waves-effect text-left"  @click.prevent="submitted"> Simpan</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- END FORM ADD Penjabat -->
+
+        <!-- START FORM MODIFY Authorities -->
+        <button id="modifPenjabat"  data-toggle="modal" data-target="#modal-Penjabat-modify" style="display: none;" ></button>
+        <div class="modal fade " tabindex="-1" id="modal-Penjabat-modify" role="dialog" aria-labelledby="Tambah Wewenang" style="display: none;" aria-hidden="true">
+            <div class="modal-dialog modal-lg">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h4 class="modal-title" id="myLargeModalLabel">Ubah Data Penjabat</h4>
+                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true" @click.prevent="formModify.name = null; idModify = null">×</button>
+                    </div>
+                    <div class="modal-body">
+                        <form role="form" @submit.prevent="submitModify">
+                            <div class="form-group">
+                                <label>Nama Penjabat </label>
+                                <input type="text" class="form-control" v-model="formModify.name" placeholder="Masukan Nama Penjabat">
+                            </div>
+                            <div class="form-group">
+                                <label>NIP </label>
+                                <input type="number" class="form-control" v-model="formModify.nip" placeholder="Masukan NIP">
+                            </div>
+                            <div class="form-group">
+                                <label>Golongan </label>
+                                <select v-model="formModify.golongan" id="class-position-modify" class="select2 form-control " style="width: 100%;" >
+                                    <option selected disabled value="">Pilih Pangkat / Golongan</option>
+                                    <option value="Ia" >Golongan Ia = Pangkat Juru Muda</option>
+                                    <option value="Ib">Golongan Ib = Pangkat Juru Muda Tingkat 1</option>
+                                    <option value="Ic">Golongan Ic = Pangkat Juru </option>
+                                    <option value="Id">Golongan Id = Pangkat Juru Tingkat 1</option>
+                                    <option value="IIa">Golongan IIa = Pangkat Juru Muda</option>
+                                    <option value="IIb">Golongan IIb = Pangkat Juru Muda Tingkat 1</option>
+                                    <option value="IIc">Golongan IIc = Pangkat Pengatur </option>
+                                    <option value="IId">Golongan IId = Pangkat Pengatur Tingkat 1</option>
+                                    <option value="IIIa">Golongan IIIa = Pangkat Penata Muda</option>
+                                    <option value="IIIb">Golongan IIIb = Pangkat Penata Muda Tingkat 1</option>
+                                    <option value="IIIc">Golongan IIIc = Pangkat Penata </option>
+                                    <option value="IIId">Golongan IIId = Pangkat Penata Tingkat 1</option>
+                                    <option value="IVa">Golongan IVa = Pangkat Pembina</option>
+                                    <option value="IVb">Golongan IVb = Pangkat Pembina Tingkat 1</option>
+                                    <option value="IVc">Golongan IVc = Pangkat Pembina Utama Muda </option>
+                                    <option value="IVd">Golongan IVd = Pangkat Pembina Utama Madya</option>
+                                    <option value="IVe">Golongan IVe = Pangkat Pembina Utama</option>
+                                </select>
+                            </div>
+                        </form>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-danger waves-effect text-left" data-dismiss="modal" id="close-modal-modify-Penjabat" @click.prevent="formModify.name = null; idModify = null">Close</button>
+                        <button type="button" class="btn btn-primary waves-effect text-left"  @click.prevent="submitModify"> Simpan</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- END FORM MODIFY Authorities -->
+
     </div>
 </template>
 
 <script>
     import ApiPosition from '../../services/api/ManagementPosition.js';
+    import ApiJabatan from '../../services/api/Penjabat.js';
+    import Swal from 'sweetalert2'
     export default {
+        data() {
+            return {
+                onLoad: false,
+                dataPenjabat: [],
+                formPenjabat: {
+                    position_id: 0,
+                    name: '',
+                    nip: '',
+                    golongan: ''
+                },
+                formModify: {
+                    id: 0,
+                    name: '',
+                    nip: '',
+                    golongan: ''
+                }
+            }
+        },
         mounted() {
             this.fetchOpd()
             $("#positionSelections").select2()
             $('#opdSelections').on('select2:select', (e) => {
                 this.fetchPosition($('#opdSelections').val())
+            });
+            $('#positionSelections').on('select2:select', (e) => {
+                this.formPenjabat.position_id = parseInt($('#positionSelections').val())
+                this.fetchJabatan($('#positionSelections').val())
             });
         },
         methods: {
@@ -98,11 +244,89 @@
                 .then(resp => {
                     $("#positionSelections").html("<option selected disabled>---PILIH JABATAN---</option>")
                     resp.data.position.forEach(_item => {
-                        $("#positionSelections").append("<option value='"+JSON.stringify(_item)+"'>"+_item.name+"</option>")
+                        $("#positionSelections").append("<option value='"+_item.id+"'>"+_item.name+"</option>")
                     })
                 })
                 .finally(() => {
                     $('#positionSelections').prop("disabled", false)
+                })
+            },
+
+            fetchJabatan(id) {
+                this.onLoad = true
+                ApiJabatan.getAll(id)
+                .then(resp => {
+                    this.dataPenjabat = resp.data.position
+                    console.log('penjabat', resp)
+                })
+                .finally(() => {
+                    setTimeout(() => {
+                        this.onLoad = false
+                    }, 500)
+                })
+            },
+
+            submitted() {
+                this.onLoad = true
+                ApiJabatan.addPenjabat(this.formPenjabat)
+                .then(resp => resp)
+                .finally(() => {
+                    Swal.fire({
+                        icon: 'success',
+                        title: 'Data berhasil ditambahkan!',
+                        onClose: () => {
+                            this.fetchJabatan($('#positionSelections').val())
+                        }
+                    })
+                })
+            },
+            selectToModify(data) {
+                this.formModify.id = data.id
+                this.formModify.name = data.name
+                this.formModify.golongan = data.golongan
+                this.formModify.nip = data.nip
+                $("#modifPenjabat").click()
+            },
+            submitModify() {
+                this.onLoad = true
+                ApiJabatan.modifyPenjabat(this.formModify.id, this.formModify)
+                .then(resp => {
+                    $("#close-modal-modify-Penjabat").click()
+                })
+                .finally(() => {
+                    Swal.fire({
+                        icon: 'success',
+                        title: 'Data berhasil diubah!',
+                        onClose: () => {
+                            this.fetchJabatan($('#positionSelections').val())
+                        }
+                    })
+                })
+            },
+            deletePenjabat(data) {
+                Swal.fire({
+                    title: `Anda yakin ingin menghapus ${data.name} ?`,
+                    text: "Data yang telah dihapus tidak dapat dikembalikan!",
+                    icon: 'warning',
+                    showCancelButton: true,
+                    confirmButtonColor: '#d33',
+                    cancelButtonColor: '#b3b3b3',
+                    confirmButtonText: 'Ya, Hapus itu!',
+                }).then((result) => {
+                    if (result.value) {
+                        this.onLoad = true;
+                        ApiJabatan.deletePenjabat(data.id)
+                        .then(_resp => _resp)
+                        .finally(() => {
+                            Swal.fire({
+                                icon: 'success',
+                                title: `${data.name} berhasil dihapus!`,
+                                onClose: () => {
+                                    this.fetchJabatan($('#positionSelections').val())
+                                }
+                            })
+                        })
+                    }
                 })
             },
         }
