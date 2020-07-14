@@ -1,0 +1,169 @@
+<template>
+    <div>
+        <div class="card">
+            <div class="card-body">
+                <h4 class="card-title">Peta Jabatan</h4>
+                <select class="select2 form-control" id="opd-selection" style="width: 100%;">
+                    <option value="0" disabled selected>Pilih Opd</option>
+                </select>
+            </div>
+        </div>
+        <div class="card">
+            <div class="card-body">
+                <div id="tree" ref="tree"></div>
+            </div>
+        </div>
+    </div>
+</template>
+
+<script>
+    import ApiEvjab from '../../services/api/Evjab.js';
+    import OrgChart from '@balkangraph/orgchart.js/orgchart'
+    import generator from "./generator.js"
+
+    import { mapState } from 'vuex';
+    export default {
+        name: 'tree',
+        computed: mapState(['onLoad', 'Positions', 'totalPositions', 'accessToken']),
+        data() {
+            return {
+                nodes: [
+                    { id: 1, name: "Buzzeting (1)", title: "Kepala Dinas" },
+                    { id: 2, pid: 1, name: "Jabatan Fungsional", title: "Jabatan Fungsional", tags: ["jft-group", "group"]},
+                                
+                    { id: 3, pid: 1,name: "Buzzeting (1)", title: "", tags: ["subLevels1","uptd-group", "group"] },
+                    { id: 5, pid: 1,name: "Buzzeting (1)", title: "Kepala Dinas", },
+                    { id: 6, stpid: 3,name: "Buzzeting (1)", title: "Kepala Dinas"},
+                    { id: 7, pid: 6,name: "Buzzeting (1)", title: "Jabatan Pelaksana", tags: ["jft-group", "group"] },
+                    { id: 8, stpid:  2, name: "Buzzeting (1)", title: "Kepala Dinas",},
+                    { id: 9, stpid:  2, name: "Buzzeting (1)", title: "Kepala Dinas",},
+                    { id: 10, stpid:  2, name: "Buzzeting (1)", title: "Kepala Dinas",},
+                    { id: 11, stpid:  7, name: "Buzzeting (1)", title: "Kepala Dinas",},
+                    { id: 12, stpid:  7, name: "Buzzeting (1)", title: "Kepala Dinas",},
+                    { id: 13, stpid:  7, name: "Buzzeting (1)", title: "Kepala Dinas",}
+                ]
+            }
+        },
+
+        methods: {
+            oc: function(domEl, x) {
+                this.chart = new OrgChart(domEl, {
+                    scaleInitial: 0.5,
+                    menu: {
+                        pdf: { text: "Export PDF" },
+                        png: { text: "Export PNG" },
+                        svg: { text: "Export SVG" },
+                        csv: { text: "Export CSV" }
+                    },
+                    nodeMenu: {
+                        pdf: { text: "Export PDF" },
+                        png: { text: "Export PNG" },
+                        svg: { text: "Export SVG" }
+                    },
+                    template: 'ana',
+                    enableSearch: false,
+                    nodeBinding: {
+                        field_0:  "title",
+                        field_1: "name",
+                        html: "html"
+                    },
+
+                    tags: {
+                        "group": {
+                            template: "group",
+                        },
+                        "jft-group": {
+                            subTreeConfig: {
+                                columns: 3
+                            }
+                        },
+                        "uptd-group": {
+                            subTreeConfig: {
+                                columns: 3
+                            }
+                        },
+                        "subLevels0": {
+                            subLevels: 0
+                        },
+                        "subLevels1": {
+                            subLevels: 1
+                        },
+                        "subLevels2": {
+                            subLevels: 2
+                        },
+                        "subLevels3": {
+                            subLevels: 3
+                        },
+                        "subLevels4": {
+                            subLevels: 4
+                        }
+                    },
+                    nodes: this.nodes
+                })
+            },
+            async init() {
+                ApiEvjab.getAll($("#opd-selection").val())
+                .then(resp => {
+                    console.log('fes', resp)
+                    if(resp.data && resp.data.length > 0) {
+                        if(resp.data.findIndex(_val => _val.type == "Fungsional")) {
+                            generator.generateStructure(resp.data)
+                            .then(_peta => {
+                                this.nodes = _peta
+                            })
+                            .finally(() => {
+                                this.oc(this.$refs.tree, this.nodes)
+                            })
+                        }
+                    }
+                })    
+            },
+      },
+
+      mounted(){
+        OrgChart.templates.group.link = '<path stroke-linejoin="round" stroke="#aeaeae" stroke-width="1px" fill="none" d="M{xa},{ya} {xb},{yb} {xc},{yc} L{xd},{yd}" />';
+        OrgChart.templates.group.nodeMenuButton = '';
+        OrgChart.templates.group.min = Object.assign({}, OrgChart.templates.group);
+        OrgChart.templates.group.min.description = '<text width="230" text-overflow="multiline" style="font-size: 14px;" fill="#aeaeae" x="125" y="100" text-anchor="middle">{val}</text>';
+        OrgChart.templates.ana.field_0 = '<text class="field_0"  style="font-size: 12px; text-align: center" fill="#ffffff" x="125" y="30" text-anchor="middle">{val}</text>';
+        OrgChart.templates.ana.field_1 = '<text class="field_1"  style="font-size: 9px;" fill="#ffffff" x="125" y="50" text-anchor="middle">{val}</text>';
+        OrgChart.templates.ana.field_2 = '<text class="field_2"  style="font-size: 9px;" fill="#ffffff" x="125" y="70" text-anchor="middle">{val}</text>';
+        OrgChart.templates.ana.field_3 = '<text class="field_3"  style="font-size: 9px;" fill="#ffffff" x="125" y="90" text-anchor="middle">{val}</text>';
+        OrgChart.templates.ana.html = '<foreignobject class="node" x="20" y="10" width="200" height="100">{val}</foreignobject>';
+
+        $("#opd-selection").select2({
+            ajax: {
+                url: process.env.BASE_API+"/opd",
+                headers: {
+                    "Authorization": `Bearer ${this.accessToken.access_token}`,
+                },
+                delay: 1000,
+                data: function (params) {
+                    var query = {
+                        search: params.term,
+                        limit: 10,
+                        page: params.page || 1
+                    }
+                    return query;
+                },
+                processResults: function (data, params) {
+                    
+                    params.page = params.page || 1;
+                    data.content.forEach( _val => {
+                        _val.text = _val.name
+                    })
+                    return {
+                        results: data.content,
+                        pagination: {
+                            more: (params.page * 10) < data.total
+                        }
+                    };
+                }
+            }
+        }).on('select2:select', async (e) => { this.init() })
+      }
+    }
+</script>
+
+<style scoped>
+</style>

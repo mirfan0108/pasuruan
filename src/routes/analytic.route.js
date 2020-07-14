@@ -13,6 +13,8 @@ import FormCPage from "@/app/pages/abk/form.c.page.html"
 import FormDPage from "@/app/pages/abk/form.d.page.html"
 import FormEPage from "@/app/pages/abk/form.e.page.html"
 
+import PetaJabatan from "@/app/pages/peta/peta.jabatan.html"
+
 export default [
     {
         path: 'anjab',
@@ -78,5 +80,10 @@ export default [
         path: 'form-e',
         name: 'form.e.page',
         component: FormEPage
+    },
+    {
+        path: 'peta-jabatan',
+        name: 'peta.jabatan.page',
+        component: PetaJabatan
     }
 ]
