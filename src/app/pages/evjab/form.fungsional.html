@@ -2,7 +2,7 @@
     <div>
         <div class="card">
             <div class="card-body">
-                <h4 class="card-title">Form Evaluasi Jabatan Struktural</h4>
+                <h4 class="card-title">Form Evaluasi Jabatan Fungsional dan Pelaksana</h4>
                 
                 <table class="table">
                     <tr>
@@ -11,10 +11,10 @@
                     </tr>
                     <tr>
                         <th>Nama Jabatan</th>
-                        <td>Kepala Dinas Pendidikan</td>
+                        <td>Pengelola Database</td>
                     </tr>
                     <tr>
-                        <th colspan="2">F1 Ruang Lingkup + Dampak L5</th>
+                        <th colspan="2">FACTOR 1 Pengetahuan</th>
                     </tr>
                     <tr>
                         <td>
@@ -22,11 +22,13 @@
                                 <div class="form-group col-md-4">
                                     <select  v-model="numb_f1" id="fSatu" class="form-control select2 " style="width: 100%;" data-select2-id="1" tabindex="-1" aria-hidden="true">
                                         <option value="0" selected disabled> --- PILIH F1 ---</option>
-                                        <option value="175">1</option>
-                                        <option value="250">2</option>
-                                        <option value="550">3</option>
-                                        <option value="775">4</option>
-                                        <option value="900">5</option>                            
+                                        <option value="1">1</option>
+                                        <option value="2">2</option>
+                                        <option value="3">3</option>
+                                        <option value="4">4</option>
+                                        <option value="5">5</option> 
+                                        <option value="6">6</option>
+                                        <option value="7">7</option>                          
                                     </select>
                                 </div>
                                 <div class="col-md-3" >
@@ -45,9 +47,13 @@
                                 <div class="form-group col-md-4">
                                     <select  v-model="numb_f2" id="fDua" class="form-control select2 " style="width: 100%;" data-select2-id="1" tabindex="-1" aria-hidden="true">
                                         <option value="0" selected disabled> --- PILIH F2 ---</option>
-                                        <option value="100">1</option>
-                                        <option value="250">2</option>
-                                        <option value="350">3</option>                        
+                                        <option value="1">1</option>
+                                        <option value="2">2</option>
+                                        <option value="3">3</option>
+                                        <option value="4">4</option>
+                                        <option value="5">5</option> 
+                                        <option value="6">6</option>
+                                        <option value="7">7</option>
                                     </select>
                                 </div>
                                 <div class="col-md-3">
@@ -65,10 +71,11 @@
                                 <div class="form-group col-md-4">
                                     <select  v-model="numb_f3" id="fTiga" class="form-control select2 " style="width: 100%;" data-select2-id="1" tabindex="-1" aria-hidden="true">
                                         <option value="0" selected disabled> --- PILIH F3 ---</option>
-                                        <option value="450">1</option>
-                                        <option value="775">2</option>
-                                        <option value="900">3</option>
-                                                                    
+                                        <option value="1">1</option>
+                                        <option value="2">2</option>
+                                        <option value="3">3</option>
+                                        <option value="4">4</option>
+                                        <option value="5">5</option>                            
                                     </select>
                                 </div>
                                 <div class="col-md-3">
@@ -87,11 +94,11 @@
                                         <label> Sifat Hubungan</label>
                                         <select  v-model="numb_f41" id="fEmpatSatu" class="form-control select2 " style="width: 100%;" data-select2-id="1" tabindex="-1" aria-hidden="true">
                                             <option value="0" selected disabled> --- PILIH F4.1 ---</option>
-                                            <option value="25">1</option>
-                                            <option value="50">2</option>
-                                            <option value="75">3</option>
-                                            <option value="100">4</option>
-                           
+                                            <option value="1">1</option>
+                                            <option value="2">2</option>
+                                            <option value="3">3</option>
+                                            <option value="4">4</option>
+                                            <option value="5">5</option>                            
                                         </select>
                                     </div>
                                     <div class="col-md-3">
@@ -107,11 +114,11 @@
                                         <label>Tujuan Hubungan</label>
                                         <select  v-model="numb_f42" id="fEmpatDua" class="form-control select2 " style="width: 100%;" data-select2-id="1" tabindex="-1" aria-hidden="true">
                                             <option value="0" selected disabled> --- PILIH F4.2 ---</option>
-                                            <option value="30">1</option>
-                                            <option value="75">2</option>
-                                            <option value="100">3</option>
-                                            <option value="125">4</option>
-                                            
+                                            <option value="1">1</option>
+                                            <option value="2">2</option>
+                                            <option value="3">3</option>
+                                            <option value="4">4</option>
+                                            <option value="5">5</option>                            
                                         </select>
                                     </div>
                                     <div class="col-md-3">
@@ -131,14 +138,11 @@
                                 <div class="form-group col-md-4">
                                     <select  v-model="numb_f5" id="fLima" class="form-control select2 " style="width: 100%;" data-select2-id="1" tabindex="-1" aria-hidden="true">
                                         <option value="0" selected disabled> --- PILIH F5 ---</option>
-                                        <option value="75">1</option>
-                                        <option value="205">2</option>
-                                        <option value="340">3</option>
-                                        <option value="505">4</option>
-                                        <option value="650">5</option>                            
-                                        <option value="800">6</option>
-                                        <option value="930">7</option>
-                                        <option value="1030">8</option>                          
+                                        <option value="1">1</option>
+                                        <option value="2">2</option>
+                                        <option value="3">3</option>
+                                        <option value="4">4</option>
+                                        <option value="5">5</option>                            
                                     </select>
                                 </div>
                                 <div class="col-md-3">
@@ -157,12 +161,11 @@
                                 <div class="form-group col-md-4">
                                     <select  v-model="numb_f6" id="fEnam" class="form-control select2 " style="width: 100%;" data-select2-id="1" tabindex="-1" aria-hidden="true">
                                         <option value="0" selected disabled> --- PILIH F6 ---</option>
-                                        <option value="310">1</option>
-                                        <option value="575">2</option>
-                                        <option value="975">3</option>
-                                        <option value="1120">4</option>
-                                        <option value="1225">5</option>
-                                        <option value="1325">6</option>                            
+                                        <option value="1">1</option>
+                                        <option value="2">2</option>
+                                        <option value="3">3</option>
+                                        <option value="4">4</option>
+                                        <option value="5">5</option>                            
                                     </select>
                                 </div>
                                 <div class="col-md-3">
@@ -172,7 +175,7 @@
                         </td>
                     </tr>
                     <tr>
-                        <th colspan="2"> </th>
+                        <th colspan="2">  </th>
                     </tr>
                     <tr>
                         <td colspan="2">
@@ -197,21 +200,26 @@
                 numb_f42:0,
                 numb_f5: 0,
                 numb_f6: 0,
+
+                f1:0,
+                f2:0,
+                f3:0,
+                f41:0,
+                f42:0,
+                f5:0,
+                f6:0
             }
         },
         methods: {
             counter(number) {
-                if(number != 0) {
-                   return number
-                } else {
-                    return "-"
+                let nilai = number
+                    return nilai
                 }
             },
 
             jobValue(){
-                
-                let total = numb_f1 + numb_f2 + numb_f3 + numb_f41 + numb_f42 + numb_f5 + numb_f6
-                return Math.round(total) 
+                total = f1 + f2 + f3 + f41 + f42 + f5 + f6
+                return Math.round(f1) 
             },
             simpan() {
                 localStorage.setItem('FES', JSON.stringify({f1: this.numb_f1, f2: this.numb_f2, f3: this.numb_f3, f4: this.numb_f4, f5: this.numb_f5}))
