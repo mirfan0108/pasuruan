@@ -14,7 +14,7 @@ class Fes {
                     needed_stickholder: _position.formA
                 })
                 id_number.push(_position.id)
-            } else if (_position.parent_id == id_head) {
+            } else if (_position.parent_id == id_head && _position.type == "Struktural") {
                 structure.push({
                     id: _position.id,
                     bold: true,
@@ -28,15 +28,17 @@ class Fes {
         })
         id_number.map(_id => {
             position.map(_position => {
-                if(_position.parent_id == _id) {
-                    structure.push({
-                        id: _position.id,
-                        bold: false,
-                        name: _position.position_name,
-                        fes: _position.fes_structure,
-                        current_stickholder: _position.current_stickholder,
-                        needed_stickholder: _position.formA
-                    })
+                if(structure.findIndex(_val => _val.id == _position.id) < 0) {
+                    if(_position.parent_id == _id  && _position.type == "Struktural") {
+                        structure.push({
+                            id: _position.id,
+                            bold: false,
+                            name: _position.position_name,
+                            fes: _position.fes_structure,
+                            current_stickholder: _position.current_stickholder,
+                            needed_stickholder: _position.formA
+                        })
+                    }
                 }
             })
         })
