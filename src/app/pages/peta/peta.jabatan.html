@@ -48,6 +48,7 @@
         methods: {
             oc: function(domEl, x) {
                 this.chart = new OrgChart(domEl, {
+                    partnerNodeSeparation: 5,
                     scaleInitial: 0.5,
                     menu: {
                         pdf: { text: "Export PDF" },
@@ -81,6 +82,12 @@
                             subTreeConfig: {
                                 columns: 3
                             }
+                        },
+                        "kepala": {
+                            template: "kepala"
+                        },
+                        "fg": {
+                            template: "fungsionals"
                         },
                         "subLevels0": {
                             subLevels: 0
@@ -125,12 +132,14 @@
         OrgChart.templates.group.nodeMenuButton = '';
         OrgChart.templates.group.min = Object.assign({}, OrgChart.templates.group);
         OrgChart.templates.group.min.description = '<text width="230" text-overflow="multiline" style="font-size: 14px;" fill="#aeaeae" x="125" y="100" text-anchor="middle">{val}</text>';
-        OrgChart.templates.ana.field_0 = '<text class="field_0"  style="font-size: 12px; text-align: center" fill="#ffffff" x="125" y="30" text-anchor="middle">{val}</text>';
-        OrgChart.templates.ana.field_1 = '<text class="field_1"  style="font-size: 9px;" fill="#ffffff" x="125" y="50" text-anchor="middle">{val}</text>';
-        OrgChart.templates.ana.field_2 = '<text class="field_2"  style="font-size: 9px;" fill="#ffffff" x="125" y="70" text-anchor="middle">{val}</text>';
-        OrgChart.templates.ana.field_3 = '<text class="field_3"  style="font-size: 9px;" fill="#ffffff" x="125" y="90" text-anchor="middle">{val}</text>';
         OrgChart.templates.ana.html = '<foreignobject class="node" x="20" y="10" width="200" height="100">{val}</foreignobject>';
-
+        OrgChart.templates.kepala = Object.assign({}, OrgChart.templates.ula);
+        OrgChart.templates.kepala.size = [500, 150];
+        OrgChart.templates.kepala.html = '<foreignobject  class="node" x="20" y="10" width="450" height="150">{val}</foreignobject>';
+        OrgChart.templates.fungsionals = Object.assign({}, OrgChart.templates.rony);
+        OrgChart.templates.fungsionals.size = [500, 600];
+        OrgChart.templates.fungsionals.html = '<foreignobject class="node" x="20" y="10" width="450" height="700">{val}</foreignobject>';
+        OrgChart.templates.fungsionals.node ='<circle cx="100" cy="100" fill="#4D4D4D" stroke-width="1" stroke="#1C1C1C"></circle>';
         $("#opd-selection").select2({
             ajax: {
                 url: process.env.BASE_API+"/opd",
@@ -166,4 +175,5 @@
 </script>
 
 <style scoped>
+
 </style>
