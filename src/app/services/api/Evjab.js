@@ -11,6 +11,10 @@ class Evjab {
         return axios.post(ENV+`/evjab/create`, req)
     }
 
+    static CreateFungsional(req) {
+        return axios.post(ENV+`/evjab/create/fungsional`, req)
+    }
+
 }
 
 export default Evjab

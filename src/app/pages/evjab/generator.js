@@ -67,7 +67,9 @@ class Fes {
                             name: _position.position_name,
                             bold: true,
                             organization: _position.organization,
-                            fes: _position.fes_func
+                            fes: _position.fes_func, 
+                            current_stickholder: _position.current_stickholder,
+                            needed_stickholder: _position.formA
                         })
                         position.map(_child => {
                             if(_child.parent_id == _position.id) {
@@ -80,7 +82,9 @@ class Fes {
                                                 name: _grand_child.position_name,
                                                 bold: false,
                                                 organization: _grand_child.organization,
-                                                fes: _grand_child.fes_func
+                                                fes: _grand_child.fes_func, 
+                                                current_stickholder: _grand_child.current_stickholder,
+                                                needed_stickholder: _grand_child.formA
                                             })
                                             position.map(_last => {
                                                 if(_last.parent_id == _grand_child.id) {
@@ -90,7 +94,9 @@ class Fes {
                                                         name: _grand_child.position_name,
                                                         bold: false,
                                                         organization: _grand_child.organization,
-                                                        fes: _grand_child.fes_func
+                                                        fes: _grand_child.fes_func, 
+                                                        current_stickholder: _grand_child.current_stickholder,
+                                                        needed_stickholder: _grand_child.formA
                                                     })
                                                 }
                                             })
@@ -103,7 +109,9 @@ class Fes {
                                         name: _child.position_name,
                                         bold: false,
                                         organization: _child.organization,
-                                        fes: _child.fes_func
+                                        fes: _child.fes_func, 
+                                        current_stickholder: _child.current_stickholder,
+                                        needed_stickholder: _child.formA
                                     })
                                 }
                             }
@@ -115,7 +123,7 @@ class Fes {
                             name: '',
                             bold: '',
                             organization: '',
-                            fes: ''
+                            fes: null,
                         })
                         structure.push({
                             id: _position.id,
@@ -123,7 +131,9 @@ class Fes {
                             name: _position.position_name,
                             bold: true,
                             organization: _position.organization,
-                            fes: _position.fes_func
+                            fes: _position.fes_func, 
+                            current_stickholder: _position.current_stickholder,
+                            needed_stickholder: _position.formA
                         })
                         position.map(_child => {
                             if(_child.parent_id == _position.id) {
@@ -136,7 +146,9 @@ class Fes {
                                                 name: _grand_child.position_name,
                                                 bold: false,
                                                 organization: _grand_child.organization,
-                                                fes: _grand_child.fes_func
+                                                fes: _grand_child.fes_func, 
+                                                current_stickholder: _grand_child.current_stickholder,
+                                                needed_stickholder: _grand_child.formA
                                             })
                                             position.map(_last => {
                                                 if(_last.parent_id == _grand_child.id) {
@@ -146,7 +158,9 @@ class Fes {
                                                         name: _grand_child.position_name,
                                                         bold: false,
                                                         organization: _grand_child.organization,
-                                                        fes: _grand_child.fes_func
+                                                        fes: _grand_child.fes_func, 
+                                                        current_stickholder: _grand_child.current_stickholder,
+                                                        needed_stickholder: _grand_child.formA
                                                     })
                                                 }
                                             })
@@ -159,7 +173,9 @@ class Fes {
                                         name: _child.position_name,
                                         bold: false,
                                         organization: _child.organization,
-                                        fes: _child.fes_func
+                                        fes: _child.fes_func, 
+                                        current_stickholder: _child.current_stickholder,
+                                        needed_stickholder: _child.formA
                                     })
                                 }
                             }
@@ -168,6 +184,31 @@ class Fes {
                 }
             })
         })
+
+        if(position.findIndex(_pos => _pos.type == "Fungsional") > -1) {
+            structure.push({
+                id: _position.id,
+                bold: true,
+                name: _position.position_name,
+                fes: null,
+                current_stickholder: _position.current_stickholder,
+                needed_stickholder: _position.formA
+            })
+            position.map(_position => {
+                if(_position.type == "Fungsional") {
+                    structure.push({
+                        id: _position.id,
+                        space: false,
+                        name: _position.position_name,
+                        bold: true,
+                        organization: _position.organization,
+                        fes: _position.fes_func, 
+                        current_stickholder: _position.current_stickholder,
+                        needed_stickholder: _position.formA
+                    })
+                }
+            })
+        }
 
         return structure
     }

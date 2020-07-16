@@ -103,7 +103,7 @@
                             </select>
                         </td>
                         <td style="width: 20%; text-align: center;">
-                            {{counterF5(numb_5)}}
+                            {{counterF5(numb_f5)}}
                         </td>
                     </tr>
                     
@@ -180,7 +180,7 @@
                     </tr>
                     <tr>
                         <td colspan="3">
-                            <button class="btn btn-success pull-right" :disabled="numb_f1 == 0 || numb_f2 == 0 || numb_f3 == 0 || numb_f41 == 0 || numb_f42 == 0 || numb_f5 == 0 || numb_f6 == 0 " @click.prevent="simpan()"> Simpan</button>
+                            <button class="btn btn-success pull-right" :disabled="numb_f1 == 0 || numb_f2 == 0 || numb_f3 == 0 || numb_f4 == 0 || numb_f5 == 0 || numb_f6 == 0 " @click.prevent="simpan()"> Simpan</button>
                         </td>
                     </tr>
                     
@@ -259,7 +259,7 @@
                     return 275
                 } else if (number == 4) {
                     return 450
-                } else if (umber == 5) {
+                } else if (number == 5) {
                     return 650
                 } else {
                     return "-"
@@ -460,7 +460,7 @@
             },
             simpan() {
                 this.formFes.position_id = parseInt(this.id)
-                ApiEvjab.Create(this.formFes)
+                ApiEvjab.CreateFungsional(this.formFes)
                 .then(resp => resp)
                 .finally(() => {
                     this.$root.$router.replace({name: 'list.evjab'})
