@@ -18,8 +18,8 @@
                             </select>
                         </div>
                     </div>
-                    <table style="width: 100%; margin-top: 20px; font-size:small;" class="table"> 
-                        <thead style="border: 1pt solid black;">
+                    <table style="width: 100%; margin-top: 20px; font-size:small;" class="table" v-if="tipe == 'Struktural'"> 
+                        <thead style="border: 1pt solid black;" v-if="dataStruktur.length > 0 && tipe == 'Struktural'">
                             <tr style="border: 1pt solid black;">
                                 <th rowspan="2"  style="width: 5%; text-align: center;border: 1pt solid black; vertical-align : middle;">No</th>
                                 <th rowspan="2" style="width: 20%; text-align: center;border: 1pt solid black; vertical-align : middle;" >Nama Jabatan</th>
@@ -67,6 +67,28 @@
                             </tr>
                         </tbody>
                     </table>
+                    <table v-if="tipe == 'Fungsional'" style="width: 100%; margin-top: 20px; font-size:small;" class="table">
+                        <thead >
+                            <tr>
+                                <th>No</th>
+                                <th>Nama Jabatan</th>
+                                <th>Kasi/ Kasubbag/ Kasubbid (Eselon IV)</th>
+                                <th>JC</th>
+                                <th>Job Value</th>
+                                <th>FACTOR 1 Pengetahuan (Level 1~9)</th>
+                                <th>FACTOR 2 Pengawasan (Level 1~5)</th>
+                                <th>FACTOR 3 Pedoman (Level 1~5)</th>
+                                <th>FACTOR 4 Kompleksitas (Level 1~6)</th>
+                                <th>FACTOR 5 R.Lingkup & Pengaruh (Level 1~6)</th>
+                                <th>FACTOR 6  Hub. Pribadi (Level 1~4)</th>
+                                <th>FACTOR 7 Tujuan Hubungan (Level 1~4)</th>
+                                <th>FACTOR 8 Tuntutan Fisik (Level 1~3)</th>
+                                <th>FACTOR 9 Lingk. Kerja (Level 1~3)</th>
+                                <th>B</th>
+                                <th>K</th>
+                            </tr>
+                        </thead>
+                    </table>
                 </div>
             </div>
         </div>
@@ -95,7 +117,9 @@
                 this.dumData.push(temp)
             }
 
-            $("#type-selection").select2()
+            $("#type-selection").select2().on("change", (e) => {
+                this.init()
+            })
             $("#opd-selection").select2({
                 ajax: {
                     url: process.env.BASE_API+"/opd",
@@ -153,6 +177,8 @@
                     console.log('fes', resp)
                     if($("#type-selection").val() == "Struktural") {
                         this.doStructure(resp.data)
+                    } else {
+                        console.log("to Strukture")
                     }
                 })    
             },

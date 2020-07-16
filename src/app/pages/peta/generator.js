@@ -19,7 +19,7 @@ class PetaJabatan {
             position.splice(position.findIndex(_val => _val.id == _id), 1)
         })
         id_number = [];
-        structure.push({ id: "jft", pid: id_head, title: "Jabatan Fungsional", name: "Jabatan Fungsional", tags: ["subLevels2", "jft-group", "group"]})
+        structure.push({ id: "jft", pid: id_head, title: "Jabatan Fungsional", name: "Jabatan Fungsional", tags: ["subLevels0", "jft-group", "group"]})
         structure.push({ id: "upd", pid: id_head, title: "", name: "", tags: ["subLevels4","uptd-group", "group"] })
         let fDiv = `<table style="width: 100%; color: black;" border="1"><tr><th>Nama Jabatan</th><th>B</th><th>K</th><th>+/-</th></tr>`
         await position.map(_position => {
