@@ -187,12 +187,13 @@ class Fes {
 
         if(position.findIndex(_pos => _pos.type == "Fungsional") > -1) {
             structure.push({
-                id: _position.id,
+                id: '_pos.id',
                 bold: true,
-                name: _position.position_name,
+                space: true,
+                name: '',
                 fes: null,
-                current_stickholder: _position.current_stickholder,
-                needed_stickholder: _position.formA
+                current_stickholder: '',
+                needed_stickholder: ''
             })
             position.map(_position => {
                 if(_position.type == "Fungsional") {
