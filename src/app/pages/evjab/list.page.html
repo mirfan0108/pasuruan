@@ -46,8 +46,8 @@
                                 <td colspan="16" v-if="!dt.fes" style="text-align: center;border: 1pt solid black;" align="center">
                                     <button class="btn btn-sm btn-rounded btn-success" style="font-size: small;" @click.prevent="$root.$router.push({name: 'struktural.form.evjab', params: {id: dt.id}})">Masukan Nilai</button>
                                 </td>
-                                <td v-if="dt.fes" style="text-align: center;border: 1pt solid black;"></td>
-                                <td v-if="dt.fes" style="text-align: center;border: 1pt solid black;"></td>
+                                <td v-if="dt.fes" style="text-align: center;border: 1pt solid black;">{{jobClass(jobValue(dt.fes.f1 , dt.fes.f2 , dt.fes.f3 , dt.fes.f4_1 , dt.fes.f4_2 , dt.fes.f5 , dt.fes.f6))}}</td>
+                                <td v-if="dt.fes" style="text-align: center;border: 1pt solid black;">{{jobValue(dt.fes.f1 , dt.fes.f2 , dt.fes.f3 , dt.fes.f4_1 , dt.fes.f4_2 , dt.fes.f5 , dt.fes.f6  )}} </td>
                                 <td style="text-align: center;border: 1pt solid black;" v-if="dt.fes">{{dt.fes.f1}}</td>
                                 <td style="text-align: center;border: 1pt solid black;" v-if="dt.fes">{{counterF1(dt.fes.f1)}}</td>
                                 <td style="text-align: center;border: 1pt solid black;" v-if="dt.fes">{{dt.fes.f2}}</td>
@@ -322,6 +322,77 @@
                     return "-"
                 }
             },
+
+            jobValue(f1, f2, f3, f41, f42, f5, f6){
+                let total = 0
+                total += f1 != 0 ? this.counterF1(f1) : 0
+                total += f2 != 0 ? this.counterF2(f2) : 0
+                total += f3 != 0 ? this.counterF3(f3) : 0
+                total += f41 != 0 ? this.counterF41(f41) : 0
+                total += f42 != 0 ? this.counterF42(f42) : 0
+                total += f5 != 0 ? this.counterF5(f5) : 0
+                total += f6 != 0 ? this.counterF6(f6) : 0
+
+                return total
+            },
+
+            jobClass(number){
+                let kelas = 0
+                if (number >=190 && number<=240) {
+                    kelas = 1
+                    return kelas
+                }else if (number>=245 && number <=300) {
+                    kelas = 2
+                    return kelas
+                }else if (number>=305 && number <= 370) {
+                    kelas = 3
+                    return kelas
+                }else if (number>=375 && number <= 450) {
+                    kelas = 4
+                    return kelas
+                }else if (number>=455 && number <= 650) {
+                    kelas = 5 
+                    return kelas    
+                }else if (number>=655 && number <= 850) {
+                    kelas = 6
+                    return kelas
+                }else if (number>=855 && number <=1100) {
+                    kelas = 7
+                    return kelas
+                }else if (number>=1105 && number <= 1350) {
+                    kelas = 8
+                    return kelas
+                }else if (number>=1355 && number <= 1600) {
+                    kelas = 9
+                    return kelas
+                }else if (number>=1605 && number <= 1850) {
+                    kelas = 10
+                    return kelas
+                }else if (number>=1855 && number <= 2100) {
+                    kelas = 11
+                    return kelas
+                }else if (number>=2105 && number <=2350) {
+                    kelas =12
+                    return kelas
+                }else if (number>=2355 && number<=2750) {
+                    kelas = 13
+                    return kelas
+                }else if (number>=2755 && number <=3150) {
+                    kelas = 14
+                    return kelas
+                }else if (number>=3155 && number <= 3600) {
+                    kelas = 15
+                    return kelas
+                }else if (number>=3605 && number<=4050) {
+                    kelas = 16
+                    return kelas
+                }else if (number>= 4055) {
+                    kelas = 17
+                    return kelas
+                }else 
+                return "Tanpa Kelas"
+
+            }
             
         }
     }

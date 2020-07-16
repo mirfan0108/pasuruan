@@ -136,6 +136,10 @@
                         <th style="text-align: center;">{{formatNumber(jobValue())}}</th>
                     </tr>
                     <tr>
+                        <th colspan="2" style="text-align: end;"> Job Class </th>
+                        <th style="text-align: center;">{{jobClass(jobValue())}}</th>
+                    </tr>
+                    <tr>
                         <td colspan="3">
                             <button class="btn btn-success pull-right" :disabled="numb_f1 == 0 || numb_f2 == 0 || numb_f3 == 0 || numb_f41 == 0 || numb_f42 == 0 || numb_f5 == 0 || numb_f6 == 0 " @click.prevent="simpan()"> Simpan</button>
                         </td>
@@ -304,6 +308,63 @@
                 total += this.numb_f6 != 0 ? this.counterF6(this.numb_f6) : 0
 
                 return total
+            },
+
+            jobClass(number){
+                let kelas = 0
+                if (number >=190 && number<=240) {
+                    kelas = 1
+                    return kelas
+                }else if (number>=245 && number <=300) {
+                    kelas = 2
+                    return kelas
+                }else if (number>=305 && number <= 370) {
+                    kelas = 3
+                    return kelas
+                }else if (number>=375 && number <= 450) {
+                    kelas = 4
+                    return kelas
+                }else if (number>=455 && number <= 650) {
+                    kelas = 5 
+                    return kelas    
+                }else if (number>=655 && number <= 850) {
+                    kelas = 6
+                    return kelas
+                }else if (number>=855 && number <=1100) {
+                    kelas = 7
+                    return kelas
+                }else if (number>=1105 && number <= 1350) {
+                    kelas = 8
+                    return kelas
+                }else if (number>=1355 && number <= 1600) {
+                    kelas = 9
+                    return kelas
+                }else if (number>=1605 && number <= 1850) {
+                    kelas = 10
+                    return kelas
+                }else if (number>=1855 && number <= 2100) {
+                    kelas = 11
+                    return kelas
+                }else if (number>=2105 && number <=2350) {
+                    kelas =12
+                    return kelas
+                }else if (number>=2355 && number<=2750) {
+                    kelas = 13
+                    return kelas
+                }else if (number>=2755 && number <=3150) {
+                    kelas = 14
+                    return kelas
+                }else if (number>=3155 && number <= 3600) {
+                    kelas = 15
+                    return kelas
+                }else if (number>=3605 && number<=4050) {
+                    kelas = 16
+                    return kelas
+                }else if (number>= 4055) {
+                    kelas = 17
+                    return kelas
+                }else 
+                return "Tanpa Kelas"
             },
             formatNumber(angka, prefix = "", Sparators = "."){
                 let string_number = angka.toString()
