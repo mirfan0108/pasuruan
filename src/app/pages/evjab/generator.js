@@ -51,9 +51,7 @@ class Fes {
         let id_kepsub = []
         await position.map(_position => {
             if(_position.parent_id == id_head && _position.type == "Struktural") {
-                if(_position.parent_id == _id  && _position.type == "Struktural") {
-                    id_kepsub.push(_position.id)
-                }
+                id_kepsub.push(_position.id)
             }
         })
         await id_kepsub.map(_id => {
@@ -66,7 +64,7 @@ class Fes {
                         structure.push({
                             id: _position.id,
                             space: false,
-                            name: _position.name,
+                            name: _position.position_name,
                             bold: true,
                             organization: _position.organization,
                             fes: _position.fes_func
@@ -79,7 +77,7 @@ class Fes {
                                             structure.push({
                                                 id: _grand_child.id,
                                                 space: false,
-                                                name: _grand_child.name,
+                                                name: _grand_child.position_name,
                                                 bold: false,
                                                 organization: _grand_child.organization,
                                                 fes: _grand_child.fes_func
@@ -89,7 +87,7 @@ class Fes {
                                                     structure.push({
                                                         id: _grand_child.id,
                                                         space: false,
-                                                        name: _grand_child.name,
+                                                        name: _grand_child.position_name,
                                                         bold: false,
                                                         organization: _grand_child.organization,
                                                         fes: _grand_child.fes_func
@@ -102,7 +100,7 @@ class Fes {
                                     structure.push({
                                         id: _child.id,
                                         space: false,
-                                        name: _child.name,
+                                        name: _child.position_name,
                                         bold: false,
                                         organization: _child.organization,
                                         fes: _child.fes_func
@@ -122,7 +120,7 @@ class Fes {
                         structure.push({
                             id: _position.id,
                             space: false,
-                            name: _position.name,
+                            name: _position.position_name,
                             bold: true,
                             organization: _position.organization,
                             fes: _position.fes_func
@@ -135,7 +133,7 @@ class Fes {
                                             structure.push({
                                                 id: _grand_child.id,
                                                 space: false,
-                                                name: _grand_child.name,
+                                                name: _grand_child.position_name,
                                                 bold: false,
                                                 organization: _grand_child.organization,
                                                 fes: _grand_child.fes_func
@@ -145,7 +143,7 @@ class Fes {
                                                     structure.push({
                                                         id: _grand_child.id,
                                                         space: false,
-                                                        name: _grand_child.name,
+                                                        name: _grand_child.position_name,
                                                         bold: false,
                                                         organization: _grand_child.organization,
                                                         fes: _grand_child.fes_func
@@ -158,7 +156,7 @@ class Fes {
                                     structure.push({
                                         id: _child.id,
                                         space: false,
-                                        name: _child.name,
+                                        name: _child.position_name,
                                         bold: false,
                                         organization: _child.organization,
                                         fes: _child.fes_func

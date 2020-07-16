@@ -18,77 +18,104 @@
                             </select>
                         </div>
                     </div>
-                    <table style="width: 100%; margin-top: 20px; font-size:small;" class="table" v-if="tipe == 'Struktural'"> 
-                        <thead style="border: 1pt solid black;" v-if="dataStruktur.length > 0 && tipe == 'Struktural'">
-                            <tr style="border: 1pt solid black;">
-                                <th rowspan="2"  style="width: 5%; text-align: center;border: 1pt solid black; vertical-align : middle;">No</th>
-                                <th rowspan="2" style="width: 20%; text-align: center;border: 1pt solid black; vertical-align : middle;" >Nama Jabatan</th>
-                                <th rowspan="2" style="width: 5%; text-align: center;border: 1pt solid black; vertical-align : middle;">JC</th>
-                                <th rowspan="2"  style="text-align: center; width: 5%;border: 1pt solid black; vertical-align : middle;">Job Value</th>
-                                <th rowspan="2" colspan="2" style="text-align: center; width: 10%;border: 1pt solid black; vertical-align : middle;">F1 Ruang Lingkup + Dampak L5</th>
-                                <th rowspan="2" colspan="2" style="text-align: center; width: 10%;border: 1pt solid black; vertical-align : middle;">F2 Pengaturan Organisasi L3</th>
-                                <th rowspan="2" colspan="2" style="text-align: center; width: 10%;border: 1pt solid black; vertical-align : middle;">F3 Wewenang Penyeliaan + Manajerial L3</th>
-                                <th colspan="4" style="text-align: center;border: 1pt solid black;">F4 Hub.Personal</th>
-                                <th rowspan="2" colspan="2" style="text-align: center; width: 10%;border: 1pt solid black; vertical-align : middle;">F5 Kesulitan Pengarahan Pekerjaan L8</th>
-                                <th rowspan="2" colspan="2" style="text-align: center; width: 10%;border: 1pt solid black; vertical-align : middle;">F6 Kondisi Lain F6</th>
-                                <th rowspan="2"  style="width: 5%;text-align: center;border: 1pt solid black; vertical-align : middle;">B</th>
-                                <th rowspan="2"  style="width: 5%; text-align: center;border: 1pt solid black; vertical-align : middle;">K</th>
-                            </tr>
-                            <tr style="border: 1pt solid black;">
-                                <th colspan="2" style="border: 1pt solid black;">Sifat.Hub</th>
-                                <th colspan="2" style="border: 1pt solid black;">Tujuan.Hub</th>
-                            </tr>
-                        </thead>
-                        <tbody v-if="dataStruktur.length > 0 && tipe == 'Struktural'">
-                            <tr v-for="(dt, index) in dataStruktur" >
-                                <td style="text-align: center;border: 1pt solid black;">{{index+1}}</td>
-                                <td style="border: 1pt solid black;">{{dt.name}}</td>
-                                <td colspan="16" v-if="!dt.fes" style="text-align: center;border: 1pt solid black;" align="center">
-                                    <button class="btn btn-sm btn-rounded btn-success" style="font-size: small;" @click.prevent="$root.$router.push({name: 'struktural.form.evjab', params: {id: dt.id}})">Masukan Nilai</button>
-                                </td>
-                                <td v-if="dt.fes" style="text-align: center;border: 1pt solid black;">{{jobClass(jobValue(dt.fes.f1 , dt.fes.f2 , dt.fes.f3 , dt.fes.f4_1 , dt.fes.f4_2 , dt.fes.f5 , dt.fes.f6))}}</td>
-                                <td v-if="dt.fes" style="text-align: center;border: 1pt solid black;">{{jobValue(dt.fes.f1 , dt.fes.f2 , dt.fes.f3 , dt.fes.f4_1 , dt.fes.f4_2 , dt.fes.f5 , dt.fes.f6  )}} </td>
-                                <td style="text-align: center;border: 1pt solid black;" v-if="dt.fes">{{dt.fes.f1}}</td>
-                                <td style="text-align: center;border: 1pt solid black;" v-if="dt.fes">{{counterF1(dt.fes.f1)}}</td>
-                                <td style="text-align: center;border: 1pt solid black;" v-if="dt.fes">{{dt.fes.f2}}</td>
-                                <td style="text-align: center;border: 1pt solid black;" v-if="dt.fes">{{counterF2(dt.fes.f2)}}</td>
-                                <td style="text-align: center;border: 1pt solid black;" v-if="dt.fes">{{dt.fes.f3}}</td>
-                                <td style="text-align: center;border: 1pt solid black;" v-if="dt.fes">{{counterF3(dt.fes.f3)}}</td>
-                                <td style="text-align: center;border: 1pt solid black;" v-if="dt.fes">{{dt.fes.f4_1}}</td>
-                                <td style="text-align: center;border: 1pt solid black;" v-if="dt.fes">{{counterF41(dt.fes.f4_1)}}</td>
-                                <td style="text-align: center;border: 1pt solid black;" v-if="dt.fes">{{dt.fes.f4_2}}</td>
-                                <td style="text-align: center;border: 1pt solid black;" v-if="dt.fes">{{counterF42(dt.fes.f4_2)}}</td>
-                                <td style="text-align: center;border: 1pt solid black;" v-if="dt.fes">{{dt.fes.f5}}</td>
-                                <td style="text-align: center;border: 1pt solid black;" v-if="dt.fes">{{counterF5(dt.fes.f5)}}</td>
-                                <td style="text-align: center;border: 1pt solid black;" v-if="dt.fes">{{dt.fes.f6}}</td>
-                                <td style="text-align: center;border: 1pt solid black;" v-if="dt.fes">{{counterF6(dt.fes.f6)}}</td>
-                                <td style="text-align: center;border: 1pt solid black;">{{dt.current_stickholder}}</td>
-                                <td style="text-align: center;border: 1pt solid black;">{{formatNumber(Math.round(createTotal(dt.needed_stickholder)))}}</td>
-                            </tr>
-                        </tbody>
-                    </table>
-                    <table v-if="tipe == 'Fungsional'" style="width: 100%; margin-top: 20px; font-size:small;" class="table">
-                        <thead >
-                            <tr>
-                                <th>No</th>
-                                <th>Nama Jabatan</th>
-                                <th>Kasi/ Kasubbag/ Kasubbid (Eselon IV)</th>
-                                <th>JC</th>
-                                <th>Job Value</th>
-                                <th>FACTOR 1 Pengetahuan (Level 1~9)</th>
-                                <th>FACTOR 2 Pengawasan (Level 1~5)</th>
-                                <th>FACTOR 3 Pedoman (Level 1~5)</th>
-                                <th>FACTOR 4 Kompleksitas (Level 1~6)</th>
-                                <th>FACTOR 5 R.Lingkup & Pengaruh (Level 1~6)</th>
-                                <th>FACTOR 6  Hub. Pribadi (Level 1~4)</th>
-                                <th>FACTOR 7 Tujuan Hubungan (Level 1~4)</th>
-                                <th>FACTOR 8 Tuntutan Fisik (Level 1~3)</th>
-                                <th>FACTOR 9 Lingk. Kerja (Level 1~3)</th>
-                                <th>B</th>
-                                <th>K</th>
-                            </tr>
-                        </thead>
-                    </table>
+                </div>
+                <div class="card-body" v-if="loading">
+                    <div class="overlay"  align="center" >
+                        <img src="/assets/gif/loading.gif" width="100"> <br>
+                        <span>Mohon Tunggu</span>
+                    </div>
+                </div>
+                <div class="card-body" v-if="!loading">
+                    <div class="row">
+                        <div class="col-md-12 col-lg-12">
+                            <table style="width: 100%; margin-top: 20px; font-size: 9pt;" class="table" v-if="tipe == 'Struktural'"> 
+                                <thead style="border: 1pt solid black;" v-if="dataStruktur.length > 0 && tipe == 'Struktural'">
+                                    <tr style="border: 1pt solid black;">
+                                        <th rowspan="2"  style="width: 5%; text-align: center;border: 1pt solid black; vertical-align : middle;">No</th>
+                                        <th rowspan="2" style="width: 20%; text-align: center;border: 1pt solid black; vertical-align : middle;" >Nama Jabatan</th>
+                                        <th rowspan="2" style="width: 5%; text-align: center;border: 1pt solid black; vertical-align : middle;">JC</th>
+                                        <th rowspan="2"  style="text-align: center; width: 5%;border: 1pt solid black; vertical-align : middle;">Job Value</th>
+                                        <th rowspan="2" colspan="2" style="text-align: center; width: 10%;border: 1pt solid black; vertical-align : middle;">F1 Ruang Lingkup + Dampak L5</th>
+                                        <th rowspan="2" colspan="2" style="text-align: center; width: 10%;border: 1pt solid black; vertical-align : middle;">F2 Pengaturan Organisasi L3</th>
+                                        <th rowspan="2" colspan="2" style="text-align: center; width: 10%;border: 1pt solid black; vertical-align : middle;">F3 Wewenang Penyeliaan + Manajerial L3</th>
+                                        <th colspan="4" style="text-align: center;border: 1pt solid black;">F4 Hub.Personal</th>
+                                        <th rowspan="2" colspan="2" style="text-align: center; width: 10%;border: 1pt solid black; vertical-align : middle;">F5 Kesulitan Pengarahan Pekerjaan L8</th>
+                                        <th rowspan="2" colspan="2" style="text-align: center; width: 10%;border: 1pt solid black; vertical-align : middle;">F6 Kondisi Lain F6</th>
+                                        <th rowspan="2"  style="width: 5%;text-align: center;border: 1pt solid black; vertical-align : middle;">B</th>
+                                        <th rowspan="2"  style="width: 5%; text-align: center;border: 1pt solid black; vertical-align : middle;">K</th>
+                                    </tr>
+                                    <tr style="border: 1pt solid black;">
+                                        <th colspan="2" style="border: 1pt solid black;">Sifat.Hub</th>
+                                        <th colspan="2" style="border: 1pt solid black;">Tujuan.Hub</th>
+                                    </tr>
+                                </thead>
+                                <tbody v-if="dataStruktur.length > 0 && tipe == 'Struktural'">
+                                    <tr v-for="(dt, index) in dataStruktur" >
+                                        <td style="text-align: center;border: 1pt solid black;">{{index+1}}</td>
+                                        <td style="border: 1pt solid black;">{{dt.name}}</td>
+                                        <td colspan="16" v-if="!dt.fes" style="text-align: center;border: 1pt solid black;" align="center">
+                                            <button class="btn btn-sm btn-rounded btn-success" style="font-size: small;" @click.prevent="$root.$router.push({name: 'struktural.form.evjab', params: {id: dt.id}})">Masukan Nilai</button>
+                                        </td>
+                                        <td v-if="dt.fes" style="text-align: center;border: 1pt solid black;">{{jobClass(jobValue(dt.fes.f1 , dt.fes.f2 , dt.fes.f3 , dt.fes.f4_1 , dt.fes.f4_2 , dt.fes.f5 , dt.fes.f6))}}</td>
+                                        <td v-if="dt.fes" style="text-align: center;border: 1pt solid black;">{{jobValue(dt.fes.f1 , dt.fes.f2 , dt.fes.f3 , dt.fes.f4_1 , dt.fes.f4_2 , dt.fes.f5 , dt.fes.f6  )}} </td>
+                                        <td style="text-align: center;border: 1pt solid black;" v-if="dt.fes">{{dt.fes.f1}}</td>
+                                        <td style="text-align: center;border: 1pt solid black;" v-if="dt.fes">{{counterF1(dt.fes.f1)}}</td>
+                                        <td style="text-align: center;border: 1pt solid black;" v-if="dt.fes">{{dt.fes.f2}}</td>
+                                        <td style="text-align: center;border: 1pt solid black;" v-if="dt.fes">{{counterF2(dt.fes.f2)}}</td>
+                                        <td style="text-align: center;border: 1pt solid black;" v-if="dt.fes">{{dt.fes.f3}}</td>
+                                        <td style="text-align: center;border: 1pt solid black;" v-if="dt.fes">{{counterF3(dt.fes.f3)}}</td>
+                                        <td style="text-align: center;border: 1pt solid black;" v-if="dt.fes">{{dt.fes.f4_1}}</td>
+                                        <td style="text-align: center;border: 1pt solid black;" v-if="dt.fes">{{counterF41(dt.fes.f4_1)}}</td>
+                                        <td style="text-align: center;border: 1pt solid black;" v-if="dt.fes">{{dt.fes.f4_2}}</td>
+                                        <td style="text-align: center;border: 1pt solid black;" v-if="dt.fes">{{counterF42(dt.fes.f4_2)}}</td>
+                                        <td style="text-align: center;border: 1pt solid black;" v-if="dt.fes">{{dt.fes.f5}}</td>
+                                        <td style="text-align: center;border: 1pt solid black;" v-if="dt.fes">{{counterF5(dt.fes.f5)}}</td>
+                                        <td style="text-align: center;border: 1pt solid black;" v-if="dt.fes">{{dt.fes.f6}}</td>
+                                        <td style="text-align: center;border: 1pt solid black;" v-if="dt.fes">{{counterF6(dt.fes.f6)}}</td>
+                                        <td style="text-align: center;border: 1pt solid black;">{{dt.current_stickholder}}</td>
+                                        <td style="text-align: center;border: 1pt solid black;">{{formatNumber(Math.round(createTotal(dt.needed_stickholder)))}}</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                        <div class="col-md-12 col-lg-12">
+                            <table v-if="tipe == 'Fungsional'" style="width: 100%; margin-top: 20px; font-size: 7pt;" class="table">
+                                <thead >
+                                    <tr>
+                                        <th style="text-align: center;border: 1pt solid black; vertical-align : middle;">No</th>
+                                        <th style="width: 30%; text-align: center;border: 1pt solid black; vertical-align : middle;">Nama Jabatan</th>
+                                        <th style="width: 30%; text-align: center;border: 1pt solid black; vertical-align : middle;">Kasi/ Kasubbag/ Kasubbid (Eselon IV)</th>
+                                        <th style="text-align: center;border: 1pt solid black; vertical-align : middle;">JC</th>
+                                        <th style="text-align: center;border: 1pt solid black; vertical-align : middle;">Job Value</th>
+                                        <th style="text-align: center;border: 1pt solid black; vertical-align : middle;">FACTOR 1 Pengetahuan (Level 1~9)</th>
+                                        <th style="text-align: center;border: 1pt solid black; vertical-align : middle;">FACTOR 2 Pengawasan (Level 1~5)</th>
+                                        <th style="text-align: center;border: 1pt solid black; vertical-align : middle;">FACTOR 3 Pedoman (Level 1~5)</th>
+                                        <th style="text-align: center;border: 1pt solid black; vertical-align : middle;">FACTOR 4 Kompleksitas (Level 1~6)</th>
+                                        <th style="text-align: center;border: 1pt solid black; vertical-align : middle;">FACTOR 5 R.Lingkup & Pengaruh (Level 1~6)</th>
+                                        <th style="text-align: center;border: 1pt solid black; vertical-align : middle;">FACTOR 6  Hub. Pribadi (Level 1~4)</th>
+                                        <th style="text-align: center;border: 1pt solid black; vertical-align : middle;">FACTOR 7 Tujuan Hubungan (Level 1~4)</th>
+                                        <th style="text-align: center;border: 1pt solid black; vertical-align : middle;">FACTOR 8 Tuntutan Fisik (Level 1~3)</th>
+                                        <th style="text-align: center;border: 1pt solid black; vertical-align : middle;">FACTOR 9 Lingk. Kerja (Level 1~3)</th>
+                                        <th style="text-align: center;border: 1pt solid black; vertical-align : middle;">B</th>
+                                        <th style="text-align: center;border: 1pt solid black; vertical-align : middle;">K</th>
+                                    </tr>
+                                </thead>
+                                <tbody  v-if="dataStruktur.length > 0">
+                                    <tr v-for="(dt, index) in dataStruktur">
+                                        <!-- TRUE SPACE -->
+                                        <td colspan="16" v-if="dt.space" style="background-color: aqua;" >&nbsp;</td>
+                                        <!-- FALSE SPACE -->
+                                        <td v-if="!dt.space"></td>
+                                        <td v-if="!dt.space">{{dt.name}}</td>
+                                        <td v-if="!dt.space">{{dt.organization}}</td>
+                                        <td v-if="!dt.space && !dt.fes" colspan="13" style="text-align: center;" align="center">
+                                            <button class="btn btn-sm btn-rounded btn-success" style="font-size: small;" @click.prevent="$root.$router.push({name: 'struktural.form.evjab', params: {id: dt.id}})">Masukan Nilai</button>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
@@ -105,7 +132,8 @@
             return {
                 dumData: [],
                 dataStruktur: [],
-                tipe: 'Struktural'
+                tipe: 'Struktural',
+                loading: true
             }
         },
         computed: mapState(['onLoad', 'Positions', 'totalPositions', 'accessToken']),
@@ -118,6 +146,7 @@
             }
 
             $("#type-selection").select2().on("change", (e) => {
+                this.tipe = $("#type-selection").val()
                 this.init()
             })
             $("#opd-selection").select2({
@@ -172,15 +201,18 @@
         },
         methods: {
             async init() {
+                this.dataStruktur = []
+                this.loading = true
                 ApiEvjab.getAll($("#opd-selection").val())
                 .then(resp => {
                     console.log('fes', resp)
                     if($("#type-selection").val() == "Struktural") {
                         this.doStructure(resp.data)
                     } else {
-                        console.log("to Strukture")
+                        this.doFunsional(resp.data)
                     }
-                })    
+                })
+                    
             },
             
             doStructure(data) {
@@ -188,6 +220,23 @@
                 .then(_resp => {
                     console.log('generated', _resp)
                     this.dataStruktur = _resp
+                })
+                .finally(() => {
+                    setTimeout(() => {
+                        this.loading = false
+                    }, 500)
+                })
+            },
+            doFunsional(data) {
+                generator.generateFungsional(data)
+                .then(_resp => {
+                    console.log('generated', _resp)
+                    this.dataStruktur = _resp
+                })
+                .finally(() => {
+                    setTimeout(() => {
+                        this.loading = false
+                    }, 500)
                 })
             },
             createTotal (data) {
