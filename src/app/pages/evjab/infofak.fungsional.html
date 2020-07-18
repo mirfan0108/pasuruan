@@ -2,7 +2,7 @@
     <div>
         <div class="card">
             <div class="card-body">
-                <h4 class="card-title">Form Info Faktor Evaluasi Jabatan Struktural</h4>
+                <h4 class="card-title">Form Info Faktor Evaluasi Jabatan Fungsional</h4>
                 <h4 class="card-subtitle">Informasi Jabatan</h4>
                 <table class="table" >
                     <tr>
@@ -27,19 +27,24 @@
                     <div class="card-body">
                         <div class="list-group"> 
                             <a @click.prevent="step = 'faktor-satu';" href="javascript:void(0)" 
-                                :class="step == 'faktor-satu' ? 'list-group-item active' : 'list-group-item'">F1 RUANG LINGKUP</a> 
+                                :class="step == 'faktor-satu' ? 'list-group-item active' : 'list-group-item'">FAKTOR 1: PENGETAHUAN</a> 
                             <a href="javascript:void(0)" @click.prevent="step = 'faktor-dua';" 
-                                :class="step == 'faktor-dua' ? 'list-group-item active' : 'list-group-item'">F2 PENGATURAN ORGANISASI</a>
+                                :class="step == 'faktor-dua' ? 'list-group-item active' : 'list-group-item'">FAKTOR 2:	PENGAWASAN PENYELIA</a>
                             <a href="javascript:void(0)" @click.prevent="step = 'faktor-tiga';" 
-                                :class="step == 'faktor-tiga' ? 'list-group-item active' : 'list-group-item'">F3 WEWENANG PENYELIAAN</a>
-                            <a href="javascript:void(0)" @click.prevent="step = 'faktor-empat1';" 
-                                :class="step == 'faktor-empat1' ? 'list-group-item active' : 'list-group-item'">F4 HUBUNGAN PERSONAL (Sifat Hubungan)</a>
-                            <a href="javascript:void(0)" @click.prevent="step = 'faktor-empat2';" 
-                                :class="step == 'faktor-empat2' ? 'list-group-item active' : 'list-group-item'">F4 HUBUNGAN PERSONAL (Tujuan Hubungan)</a>
+                                :class="step == 'faktor-tiga' ? 'list-group-item active' : 'list-group-item'">FAKTOR 3: PEDOMAN</a>
+                            <a href="javascript:void(0)" @click.prevent="step = 'faktor-empat';" 
+                                :class="step == 'faktor-empat' ? 'list-group-item active' : 'list-group-item'">FAKTOR 4: KOMPLEKSITAS </a>
                             <a href="javascript:void(0)" @click.prevent="step = 'faktor-lima';" 
-                                :class="step == 'faktor-lima' ? 'list-group-item active' : 'list-group-item'">F5 KESULITAN PENGARAHAN PEKERJAAN </a>
+                                :class="step == 'faktor-lima' ? 'list-group-item active' : 'list-group-item'">FAKTOR 5:	RUANG LINGKUP DAN DAMPAK</a>
                             <a href="javascript:void(0)" @click.prevent="step = 'faktor-enam';" 
-                                :class="step == 'faktor-enam' ? 'list-group-item active' : 'list-group-item'">F6 KONDISI LAIN </a>
+                                :class="step == 'faktor-enam' ? 'list-group-item active' : 'list-group-item'">FAKTOR 6:	HUBUNGAN PERSONAL</a>
+                            <a href="javascript:void(0)" @click.prevent="step = 'faktor-tujuh';" 
+                                :class="step == 'faktor-tujuh' ? 'list-group-item active' : 'list-group-item'">FAKTOR 7: TUJUAN HUBUNGAN</a>
+                            <a href="javascript:void(0)" @click.prevent="step = 'faktor-delapan';" 
+                                :class="step == 'faktor-delapan' ? 'list-group-item active' : 'list-group-item'">FAKTOR 8: PERSYARATAN FISIK</a>
+                            <a href="javascript:void(0)" @click.prevent="step = 'faktor-sembilan';" 
+                                :class="step == 'faktor-sembilan' ? 'list-group-item active' : 'list-group-item'">FAKTOR 9: LINGKUNGAN PEKERJAAN</a>
+                            
                             <a href="javascript:void(0)" @click.prevent="step = 'syarat';" 
                                 :class="step == 'syarat' ? 'list-group-item active' : 'list-group-item'">PERSYARATAN JABATAN </a>
 
@@ -57,7 +62,7 @@
                     <div class="col-md-12">
                         <div class="card">
                             <div class="card-body">
-                                <h6 class="card-title">F1 Ruang Lingkup + Dampak L5</h6>
+                                <h6 class="card-title">FAKTOR 1 : PENGETAHUAN YANG DIBUTUHKAN JABATAN</h6>
                                 <div class="form-group">
                                     <div class="input-group">
                                         <textarea  class="form-control" placeholder="Ketik disini ..."  rows="3" v-model="formFaktorSatu"></textarea>
@@ -105,7 +110,7 @@
                     <div class="col-md-12">
                         <div class="card">
                             <div class="card-body">
-                                <h6 class="card-title">F2 PENGATURAN ORGANISASI</h6>
+                                <h6 class="card-title">FAKTOR 2 : PENGAWASAN PENYELIA </h6>
                                 <div class="form-group">
                                     <div class="input-group">
                                         <textarea  class="form-control" placeholder="Ketik disini ..."  rows="3" v-model="formFaktorDua"></textarea>
@@ -153,7 +158,7 @@
                     <div class="col-md-12">
                         <div class="card">
                             <div class="card-body">
-                                <h6 class="card-title">F3 WEWENANG PENYELIAAN + MANAJERIAL L3</h6>
+                                <h6 class="card-title">FAKTOR 3 : PEDOMAN</h6>
                                 <div class="form-group">
                                     <div class="input-group">
                                         <textarea  class="form-control" placeholder="Ketik disini ..."  rows="3" v-model="formFaktorTiga"></textarea>
@@ -196,29 +201,29 @@
             </div>
 
             <!-- FAKTOR 4 1 -->
-            <div v-if = "step == 'faktor-empat1'">
+            <div v-if = "step == 'faktor-empat'">
                 <div class="row">
                     <div class="col-md-12">
                         <div class="card">
                             <div class="card-body">
-                                <h6 class="card-title">F4 HUBUNGAN PERSONAL (Sifat Hubungan)</h6>
+                                <h6 class="card-title">FAKTOR 4 : KOMPLEKSITAS</h6>
                                 <div class="form-group">
                                     <div class="input-group">
-                                        <textarea  class="form-control" placeholder="Ketik disini ..."  rows="3" v-model="formFaktorEmpat1"></textarea>
+                                        <textarea  class="form-control" placeholder="Ketik disini ..."  rows="3" v-model="formFaktorEmpat"></textarea>
                                     </div>
-                                    <button type="button" class="btn btn-success btn-sm btn-rounded pull-right" @click.prevent="addToList('faktor-empat1')">
+                                    <button type="button" class="btn btn-success btn-sm btn-rounded pull-right" @click.prevent="addToList('faktor-empat')">
                                         <i class="fa fa-plus-square"></i> Tambahkan
                                     </button>
                                 </div>
                                     <hr>
-                                <div style="margin-top: 5px;" v-if="listFaktorEmpat1.length > 0">
+                                <div style="margin-top: 5px;" v-if="listFaktorEmpat.length > 0">
                                     <table class="table">
-                                        <tr v-for="faktor_empat1_list in listFaktorEmpat1" >
+                                        <tr v-for="faktor_empat_list in listFaktorEmpat" >
                                             <td>
-                                                {{faktor_empat1_list.faktor_empat1_detail}}
+                                                {{faktor_empat_list.faktor_empat_detail}}
                                             </td>
                                             <td>
-                                                <button class="btn btn-danger pull-right" @click.prevent="spliceList(faktor_empat1_list, 'faktor-empat1')">
+                                                <button class="btn btn-danger pull-right" @click.prevent="spliceList(faktor_empat_list, 'faktor-empat')">
                                                     <i class="fa fa-minus-square"></i>
                                                 </button>
                                             </td>
@@ -228,60 +233,12 @@
                                 <table class="table">
                                     <tr>
                                         <td style="width: 35px;">
-                                            <input v-model="standard_jabatan_empat1" type="checkbox" id="py_checkbox_" class="filled-in" checked="">
+                                            <input v-model="standard_jabatan_empat" type="checkbox" id="py_checkbox_" class="filled-in" checked="">
                                             <label for="py_checkbox_" style="margin-left: 5px;"> </label>
                                         </td>
                                         <td >Standard Jabatan</td>
-                                        <td v-if="standard_jabatan_empat1">
-                                            <input v-model="standard_jabatan_empat1_form" type="text" class="form-control" placeholder="ketik disini...">
-                                        </td>
-                                    </tr>
-                                </table>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- FAKTOR 4 2 -->
-            <div v-if = "step == 'faktor-empat2'">
-                <div class="row">
-                    <div class="col-md-12">
-                        <div class="card">
-                            <div class="card-body">
-                                <h6 class="card-title">F4 HUBUNGAN PERSONAL (Tujuan Hubungan)</h6>
-                                <div class="form-group">
-                                    <div class="input-group">
-                                        <textarea  class="form-control" placeholder="Ketik disini ..."  rows="3" v-model="formFaktorEmpat2"></textarea>
-                                    </div>
-                                    <button type="button" class="btn btn-success btn-sm btn-rounded pull-right" @click.prevent="addToList('faktor-empat2')">
-                                        <i class="fa fa-plus-square"></i> Tambahkan
-                                    </button>
-                                </div>
-                                    <hr>
-                                <div style="margin-top: 5px;" v-if="listFaktorEmpat2.length > 0">
-                                    <table class="table">
-                                        <tr v-for="faktor_empat2_list in listFaktorEmpat2" >
-                                            <td>
-                                                {{faktor_empat2_list.faktor_empat2_detail}}
-                                            </td>
-                                            <td>
-                                                <button class="btn btn-danger pull-right" @click.prevent="spliceList(faktor_empat2_list, 'faktor-empat2')">
-                                                    <i class="fa fa-minus-square"></i>
-                                                </button>
-                                            </td>
-                                        </tr>
-                                    </table>
-                                </div>
-                                <table class="table">
-                                    <tr>
-                                        <td style="width: 35px;">
-                                            <input v-model="standard_jabatan_empat2" type="checkbox" id="py_checkbox_" class="filled-in" checked="">
-                                            <label for="py_checkbox_" style="margin-left: 5px;"> </label>
-                                        </td>
-                                        <td >Standard Jabatan</td>
-                                        <td v-if="standard_jabatan_empat2">
-                                            <input v-model="standard_jabatan_empat2_form" type="text" class="form-control" placeholder="ketik disini...">
+                                        <td v-if="standard_jabatan_empat">
+                                            <input v-model="standard_jabatan_empat_form" type="text" class="form-control" placeholder="ketik disini...">
                                         </td>
                                     </tr>
                                 </table>
@@ -387,6 +344,152 @@
                 </div>
             </div>
 
+            <!-- FAKTOR 7 -->
+            <div v-if = "step == 'faktor-tujuh'">
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="card">
+                            <div class="card-body">
+                                <h6 class="card-title">FAKTOR 7 : TUJUAN HUBUNGAN </h6>
+                                <div class="form-group">
+                                    <div class="input-group">
+                                        <textarea  class="form-control" placeholder="Ketik disini ..."  rows="3" v-model="formFaktorTujuh"></textarea>
+                                    </div>
+                                    <button type="button" class="btn btn-success btn-sm btn-rounded pull-right" @click.prevent="addToList('faktor-tujuh')">
+                                        <i class="fa fa-plus-square"></i> Tambahkan
+                                    </button>
+                                </div>
+                                    <hr>
+                                <div style="margin-top: 5px;" v-if="listFaktorTujuh.length > 0">
+                                    <table class="table">
+                                        <tr v-for="faktor_tujuh_list in listFaktorTujuh" >
+                                            <td>
+                                                {{faktor_tujuh_list.faktor_tujuh_detail}}
+                                            </td>
+                                            <td>
+                                                <button class="btn btn-danger pull-right" @click.prevent="spliceList(faktor_tujuh_list, 'faktor-tujuh')">
+                                                    <i class="fa fa-minus-square"></i>
+                                                </button>
+                                            </td>
+                                        </tr>
+                                    </table>
+                                </div>
+                                <table class="table">
+                                    <tr>
+                                        <td style="width: 35px;">
+                                            <input v-model="standard_jabatan_tujuh" type="checkbox" id="py_checkbox_" class="filled-in" checked="">
+                                            <label for="py_checkbox_" style="margin-left: 5px;"> </label>
+                                        </td>
+                                        <td >Standard Jabatan</td>
+                                        <td v-if="standard_jabatan_tujuh">
+                                            <input v-model="standard_jabatan_tujuh_form" type="text" class="form-control" placeholder="ketik disini...">
+                                        </td>
+                                    </tr>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- FAKTOR 8 -->
+            <div v-if = "step == 'faktor-delapan'">
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="card">
+                            <div class="card-body">
+                                <h6 class="card-title">FAKTOR 8 : PERSYARATAN FISIK </h6>
+                                <div class="form-group">
+                                    <div class="input-group">
+                                        <textarea  class="form-control" placeholder="Ketik disini ..."  rows="3" v-model="formFaktorDelapan"></textarea>
+                                    </div>
+                                    <button type="button" class="btn btn-success btn-sm btn-rounded pull-right" @click.prevent="addToList('faktor-delapan')">
+                                        <i class="fa fa-plus-square"></i> Tambahkan
+                                    </button>
+                                </div>
+                                    <hr>
+                                <div style="margin-top: 5px;" v-if="listFaktorDelapan.length > 0">
+                                    <table class="table">
+                                        <tr v-for="faktor_delapan_list in listFaktorDelapan" >
+                                            <td>
+                                                {{faktor_delapan_list.faktor_delapan_detail}}
+                                            </td>
+                                            <td>
+                                                <button class="btn btn-danger pull-right" @click.prevent="spliceList(faktor_delapan_list, 'faktor-delapan')">
+                                                    <i class="fa fa-minus-square"></i>
+                                                </button>
+                                            </td>
+                                        </tr>
+                                    </table>
+                                </div>
+                                <table class="table">
+                                    <tr>
+                                        <td style="width: 35px;">
+                                            <input v-model="standard_jabatan_delapan" type="checkbox" id="py_checkbox_" class="filled-in" checked="">
+                                            <label for="py_checkbox_" style="margin-left: 5px;"> </label>
+                                        </td>
+                                        <td >Standard Jabatan</td>
+                                        <td v-if="standard_jabatan_delapan">
+                                            <input v-model="standard_jabatan_delapan_form" type="text" class="form-control" placeholder="ketik disini...">
+                                        </td>
+                                    </tr>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- FAKTOR 8 -->
+            <div v-if = "step == 'faktor-sembilan'">
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="card">
+                            <div class="card-body">
+                                <h6 class="card-title">FAKTOR 9 : LINGKUNGAN PEKERJAAN </h6>
+                                <div class="form-group">
+                                    <div class="input-group">
+                                        <textarea  class="form-control" placeholder="Ketik disini ..."  rows="3" v-model="formFaktorSembilan"></textarea>
+                                    </div>
+                                    <button type="button" class="btn btn-success btn-sm btn-rounded pull-right" @click.prevent="addToList('faktor-sembilan')">
+                                        <i class="fa fa-plus-square"></i> Tambahkan
+                                    </button>
+                                </div>
+                                    <hr>
+                                <div style="margin-top: 5px;" v-if="listFaktorSembilan.length > 0">
+                                    <table class="table">
+                                        <tr v-for="faktor_sembilan_list in listFaktorSembilan" >
+                                            <td>
+                                                {{faktor_sembilan_list.faktor_sembilan_detail}}
+                                            </td>
+                                            <td>
+                                                <button class="btn btn-danger pull-right" @click.prevent="spliceList(faktor_sembilan_list, 'faktor-sembilan')">
+                                                    <i class="fa fa-minus-square"></i>
+                                                </button>
+                                            </td>
+                                        </tr>
+                                    </table>
+                                </div>
+                                <table class="table">
+                                    <tr>
+                                        <td style="width: 35px;">
+                                            <input v-model="standard_jabatan_sembilan" type="checkbox" id="py_checkbox_" class="filled-in" checked="">
+                                            <label for="py_checkbox_" style="margin-left: 5px;"> </label>
+                                        </td>
+                                        <td >Standard Jabatan</td>
+                                        <td v-if="standard_jabatan_sembilan">
+                                            <input v-model="standard_jabatan_sembilan_form" type="text" class="form-control" placeholder="ketik disini...">
+                                        </td>
+                                    </tr>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            
+
             <!-- PERSYARATAN JABATAN TERTENTU-->
             <div v-if = "step == 'syarat'">
                 <div class="row">
@@ -434,20 +537,25 @@
                 numb_f1: 0,
                 numb_f2: 0,
                 numb_f3: 0,
-                numb_f41: 0,
-                numb_f42:0,
+                numb_f4: 0,
                 numb_f5: 0,
                 numb_f6: 0,
+                numb_f7: 0,
+                numb_f8: 0,
+                numb_f9: 0,
                 formFes: {
                     position_id: 0,
                     f1: 0,
                     f2: 0,
                     f3: 0,
-                    f4_1: 0,
-                    f4_2: 0,
+                    f4: 0,
                     f5: 0,
-                    f6: 0
+                    f6: 0,
+                    f7: 0,
+                    f8: 0,
+                    f9: 0
                 },
+
                 totalValue: 0,
                 step: 'eselon',
 
@@ -472,19 +580,13 @@
                 standard_jabatan_tiga: false,
                 standard_jabatan_tiga_form: '',
 
-                //FAKTOR EMPAT 1
-                formFaktorEmpat1: '',
-                listFaktorEmpat1: [],
+                //FAKTOR EMPAT
+                formFaktorEmpat: '',
+                listFaktorEmpat: [],
 
-                standard_jabatan_empat1: false,
-                standard_jabatan_empat1_form: '',
+                standard_jabatan_empat: false,
+                standard_jabatan_empat_form: '',
 
-                //FAKTOR EMPAT 2
-                formFaktorEmpat2: '',
-                listFaktorEmpat2: [],
-
-                standard_jabatan_empat2: false,
-                standard_jabatan_empat2_form: '',
 
                 //FAKTOR LIMA
                 formFaktorLima: '',
@@ -499,6 +601,27 @@
 
                 standard_jabatan_enam: false,
                 standard_jabatan_enam_form: '',
+
+                //FAKTOR TUJUH   
+                formFaktorTujuh: '',
+                listFaktorTujuh: [],
+
+                standard_jabatan_tujuh: false,
+                standard_jabatan_tujuh_form: '',
+
+                //FAKTOR DELAPAN   
+                formFaktorDelapan: '',
+                listFaktorDelapan: [],
+
+                standard_jabatan_delapan: false,
+                standard_jabatan_delapan_form: '',
+
+                //FAKTOR DELAPAN   
+                formFaktorSembilan: '',
+                listFaktorSembilan: [],
+
+                standard_jabatan_sembilan: false,
+                standard_jabatan_sembilan_form: '',
 
                 //SYARAT JABATAN
                 syaratJabatan:'',
@@ -516,15 +639,19 @@
             counterF1(number) {
                 this.formFes.f1 = parseInt(number)
                 if(number == 1) {
-                    return 175
+                    return 50
                 } else if (number == 2) {
-                    return 350
+                    return 200
                 } else if (number == 3) {
-                    return 550
+                    return 350
                 } else if (number == 4) {
-                    return 775
+                    return 550
                 } else if (number == 5) {
-                    return 900
+                    return 750
+                } else if (number == 6) {
+                    return 950
+                } else if (number == 7) {
+                    return 1250
                 } else {
                     return "-"
                 }
@@ -532,11 +659,15 @@
             counterF2(number) {
                 this.formFes.f2 = parseInt(number)
                 if(number == 1) {
-                    return 100
+                    return 25
                 } else if (number == 2) {
-                    return 250
+                    return 125
                 } else if (number == 3) {
-                    return 350
+                    return 275
+                } else if (number == 4) {
+                    return 450
+                } else if (number == 5) {
+                    return 650
                 } else {
                     return "-"
                 }
@@ -544,61 +675,52 @@
             counterF3(number) {
                 this.formFes.f3 = parseInt(number)
                 if(number == 1) {
-                    return 450
+                    return 25
                 } else if (number == 2) {
-                    return 775
+                    return 125
                 } else if (number == 3) {
-                    return 900
+                    return 275
+                } else if (number == 4) {
+                    return 450
+                } else if (number == 5) {
+                    return 650
                 } else {
                     return "-"
                 }
             },
-            counterF41(number) {
-                this.formFes.f4_1 = parseInt(number)
+            counterF4(number) {
+                this.formFes.f4 = parseInt(number)
                 if(number == 1) {
                     return 25
                 } else if (number == 2) {
-                    return 50
-                } else if (number == 3) {
                     return 75
+                } else if (number == 3) {
+                    return 150
                 } else if (number == 4) {
-                    return 100
+                    return 225
+                } else if (number == 5) {
+                    return 325
+                } else if (number == 6) {
+                    return 450
                 } else {
                     return "-"
                 }
             },
-            counterF42(number) {
-                this.formFes.f4_2 = parseInt(number)
-                if(number == 1) {
-                    return 30
-                } else if (number == 2) {
-                    return 75
-                } else if (number == 3) {
-                    return 100
-                } else if (number == 4) {
-                    return 125
-                } else {
-                    return "-"
-                }
-            },
+            
             counterF5(number) {
                 this.formFes.f5 = parseInt(number)
                 if(number == 1) {
-                    return 75
+                    return 25
                 } else if (number == 2) {
-                    return 205
+                    return 75
                 } else if (number == 3) {
-                    return 340
+                    return 150
                 } else if (number == 4) {
-                    return 505
+                    return 225
                 } else if (number == 5) {
-                    return 650
+                    return 325
                 } else if (number == 6) {
-                    return 800
-                } else if (number == 7) {
-                    return 930
-                } else if (number == 8) {
-                    return 1030
+                    return 450
                 } else {
                     return "-"
                 }
@@ -606,22 +728,57 @@
             counterF6(number) {
                 this.formFes.f6 = parseInt(number)
                 if(number == 1) {
-                    return 310
+                    return 10
                 } else if (number == 2) {
-                    return 575
+                    return 25
                 } else if (number == 3) {
-                    return 975
+                    return 60
                 } else if (number == 4) {
-                    return 1120
-                } else if (number == 5) {
-                    return 1225
-                } else if (number == 6) {
-                    return 1325
+                    return 110
+                } else {
+                    return "-"
+                }
+            },
+            counterF7(number) {
+                this.formFes.f7 = parseInt(number)
+                if(number == 1) {
+                    return 20
+                } else if (number == 2) {
+                    return 50
+                } else if (number == 3) {
+                    return 120
+                } else if (number == 4) {
+                    return 220
+                } else {
+                    return "-"
+                }
+            },
+            counterF8(number) {
+                this.formFes.f8 = parseInt(number)
+                if(number == 1) {
+                    return 5
+                } else if (number == 2) {
+                    return 20
+                } else if (number == 3) {
+                    return 50
+                } else {
+                    return "-"
+                }
+            },
+            counterF9(number) {
+                this.formFes.f9 = parseInt(number)
+                if(number == 1) {
+                    return 5
+                } else if (number == 2) {
+                    return 20
+                } else if (number == 3) {
+                    return 50
                 } else {
                     return "-"
                 }
             },
 
+            
             jobClass(number){
                 let kelas = 0
                 if (number >=190 && number<=240) {
@@ -678,7 +835,7 @@
                 }else 
                 return "Tanpa Kelas"
             },
-           
+            
             simpan() {
                 this.formFes.position_id = parseInt(this.id)
                 ApiEvjab.Create(this.formFes)
@@ -717,21 +874,12 @@
                         }
                         break
                     
-                    case 'faktor-empat1':
-                        if (this.formFaktorEmpat1 != '') {
-                            this.listFaktorEmpat1.push({
-                                faktor_empat1_detail: this.formFaktorEmpat1
+                    case 'faktor-empat':
+                        if (this.formFaktorEmpat != '') {
+                            this.listFaktorEmpat.push({
+                                faktor_empat_detail: this.formFaktorEmpat
                             })
-                            this.formFaktorEmpat1 = ''
-                        }
-                        break
-
-                    case 'faktor-empat2':
-                        if (this.formFaktorEmpat2 != '') {
-                            this.listFaktorEmpat2.push({
-                                faktor_empat2_detail: this.formFaktorEmpat2
-                            })
-                            this.formFaktorEmpat2 = ''
+                            this.formFaktorEmpat = ''
                         }
                         break
 
@@ -750,6 +898,33 @@
                                 faktor_enam_detail: this.formFaktorEnam
                             })
                             this.formFaktorEnam = ''
+                        }
+                        break
+
+                    case 'faktor-tujuh':
+                        if (this.formFaktorTujuh != '') {
+                            this.listFaktorTujuh.push({
+                                faktor_tujuh_detail: this.formFaktorTujuh
+                            })
+                            this.formFaktorTujuh = ''
+                        }
+                        break
+
+                    case 'faktor-delapan':
+                        if (this.formFaktorDelapan != '') {
+                            this.listFaktorDelapan.push({
+                                faktor_delapan_detail: this.formFaktorDelapan
+                            })
+                            this.formFaktorDelapan = ''
+                        }
+                        break
+
+                    case 'faktor-sembilan':
+                        if (this.formFaktorSembilan != '') {
+                            this.listFaktorSembilan.push({
+                                faktor_sembilan_detail: this.formFaktorSembilan
+                            })
+                            this.formFaktorSembilan = ''
                         }
                         break
 
@@ -773,15 +948,11 @@
                             .findIndex(_item => _item === keyList), 1);
                         break;
 
-                    case 'faktor-empat1':
-                        this.listFaktorEmpat1.splice(this.listFaktorEmpat1
+                    case 'faktor-empat':
+                        this.listFaktorEmpat.splice(this.listFaktorEmpat
                             .findIndex(_item => _item === keyList), 1);
                         break;
 
-                    case 'faktor-empat2':
-                        this.listFaktorEmpat2.splice(this.listFaktorEmpat2
-                            .findIndex(_item => _item === keyList), 1);
-                        break;
 
                     case 'faktor-lima':
                         this.listFaktorLima.splice(this.listFaktorLima
@@ -790,6 +961,21 @@
 
                     case 'faktor-enam':
                         this.listFaktorEnam.splice(this.listFaktorEnam
+                            .findIndex(_item => _item === keyList), 1);
+                        break;
+                    
+                    case 'faktor-tujuh':
+                        this.listFaktorTujuh.splice(this.listFaktorTujuh
+                            .findIndex(_item => _item === keyList), 1);
+                        break;
+                    
+                    case 'faktor-delapan':
+                        this.listFaktorDelapan.splice(this.listFaktorDelapan
+                            .findIndex(_item => _item === keyList), 1);
+                        break;
+
+                    case 'faktor-sembilan':
+                        this.listFaktorSembilan.splice(this.listFaktorSembilan
                             .findIndex(_item => _item === keyList), 1);
                         break;
                 }

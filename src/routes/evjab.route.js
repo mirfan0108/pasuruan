@@ -3,6 +3,7 @@ import ListEvjab from "@/app/pages/evjab/list.page.html"
 import FormStrukturalPage from "@/app/pages/evjab/form.structural.html"
 import FormFungsionalPage from "@/app/pages/evjab/form.fungsional.html"
 import FormInfofakStruktural from "@/app/pages/evjab/infofak.structural.html"
+import FormInfofakFungsional from "@/app/pages/evjab/infofak.fungsional.html"
 
 export default [
     {
@@ -31,5 +32,11 @@ export default [
         path: 'infofak/input-struktural',
         name: 'list.infofak',
         component: FormInfofakStruktural
-    }
+    },
+
+    {
+        path: 'infofak/input-fungsional',
+        name: 'list.infofak_fungsional',
+        component: FormInfofakFungsional
+    },
 ]
