@@ -38,6 +38,8 @@
                                 :class="step == 'faktor-empat2' ? 'list-group-item active' : 'list-group-item'">F4 HUBUNGAN PERSONAL (Tujuan Hubungan)</a>
                             <a href="javascript:void(0)" @click.prevent="step = 'faktor-lima';" 
                                 :class="step == 'faktor-lima' ? 'list-group-item active' : 'list-group-item'">F5 KESULITAN PENGARAHAN PEKERJAAN </a>
+                            <a href="javascript:void(0)" @click.prevent="step = 'faktor-enam';" 
+                                :class="step == 'faktor-enam' ? 'list-group-item active' : 'list-group-item'">F6 KONDISI LAIN </a>
 
                         </div>
                     </div>
@@ -233,7 +235,7 @@
                     <div class="col-md-12">
                         <div class="card">
                             <div class="card-body">
-                                <h6 class="card-title">F5 KESULITAN PENGARAHAN PEKERJAAN L8</h6>
+                                <h6 class="card-title">F5 KESULITAN PENGARAHAN PEKERJAAN</h6>
                                 <div class="form-group">
                                     <div class="input-group">
                                         <textarea  class="form-control" placeholder="Ketik disini ..."  rows="3" v-model="formFaktorLima"></textarea>
@@ -243,7 +245,7 @@
                                     </button>
                                 </div>
                                     <hr>
-                                <div style="margin-top: 5px;" v-if="listFaktorEmpat2.length > 0">
+                                <div style="margin-top: 5px;" v-if="listFaktorLima.length > 0">
                                     <table class="table">
                                         <tr v-for="faktor_lima_list in listFaktorLima" >
                                             <td>
@@ -251,6 +253,42 @@
                                             </td>
                                             <td>
                                                 <button class="btn btn-danger pull-right" @click.prevent="spliceList(faktor_lima_list, 'faktor-lima')">
+                                                    <i class="fa fa-minus-square"></i>
+                                                </button>
+                                            </td>
+                                        </tr>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- FAKTOR 6 -->
+            <div v-if = "step == 'faktor-enam'">
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="card">
+                            <div class="card-body">
+                                <h6 class="card-title">F6 KONDISI LAIN</h6>
+                                <div class="form-group">
+                                    <div class="input-group">
+                                        <textarea  class="form-control" placeholder="Ketik disini ..."  rows="3" v-model="formFaktorEnam"></textarea>
+                                    </div>
+                                    <button type="button" class="btn btn-success btn-sm btn-rounded pull-right" @click.prevent="addToList('faktor-enam')">
+                                        <i class="fa fa-plus-square"></i> Tambahkan
+                                    </button>
+                                </div>
+                                    <hr>
+                                <div style="margin-top: 5px;" v-if="listFaktorEnam.length > 0">
+                                    <table class="table">
+                                        <tr v-for="faktor_enam_list in listFaktorEnam" >
+                                            <td>
+                                                {{faktor_enam_list.faktor_enam_detail}}
+                                            </td>
+                                            <td>
+                                                <button class="btn btn-danger pull-right" @click.prevent="spliceList(faktor_enam_list, 'faktor-enam')">
                                                     <i class="fa fa-minus-square"></i>
                                                 </button>
                                             </td>
@@ -322,6 +360,10 @@
                 //FAKTOR LIMA
                 formFaktorLima: '',
                 listFaktorLima: [],
+
+                //FAKTOR ENAM   
+                formFaktorEnam: '',
+                listFaktorEnam: [],
             }
         },
         mounted() {
@@ -581,7 +623,7 @@
                         }
                         break
 
-                        case 'faktor-lima':
+                    case 'faktor-lima':
                         if (this.formFaktorLima != '') {
                             this.listFaktorLima.push({
                                 faktor_lima_detail: this.formFaktorLima
@@ -589,6 +631,16 @@
                             this.formFaktorLima = ''
                         }
                         break
+                    
+                    case 'faktor-enam':
+                        if (this.formFaktorEnam != '') {
+                            this.listFaktorEnam.push({
+                                faktor_enam_detail: this.formFaktorEnam
+                            })
+                            this.formFaktorEnam = ''
+                        }
+                        break
+
                 }
             },
 
@@ -616,6 +668,16 @@
 
                     case 'faktor-empat2':
                         this.listFaktorEmpat2.splice(this.listFaktorEmpat2
+                            .findIndex(_item => _item === keyList), 1);
+                        break;
+
+                    case 'faktor-lima':
+                        this.listFaktorLima.splice(this.listFaktorLima
+                            .findIndex(_item => _item === keyList), 1);
+                        break;
+
+                    case 'faktor-enam':
+                        this.listFaktorEnam.splice(this.listFaktorEnam
                             .findIndex(_item => _item === keyList), 1);
                         break;
                 }
