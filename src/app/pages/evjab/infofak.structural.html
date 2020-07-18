@@ -40,6 +40,8 @@
                                 :class="step == 'faktor-lima' ? 'list-group-item active' : 'list-group-item'">F5 KESULITAN PENGARAHAN PEKERJAAN </a>
                             <a href="javascript:void(0)" @click.prevent="step = 'faktor-enam';" 
                                 :class="step == 'faktor-enam' ? 'list-group-item active' : 'list-group-item'">F6 KONDISI LAIN </a>
+                            <a href="javascript:void(0)" @click.prevent="step = 'syarat';" 
+                                :class="step == 'syarat' ? 'list-group-item active' : 'list-group-item'">PERSYARATAN JABATAN </a>
 
                         </div>
                     </div>
@@ -79,6 +81,18 @@
                                         </tr>
                                     </table>
                                 </div>
+                                <table class="table">
+                                    <tr>
+                                        <td style="width: 35px;">
+                                            <input v-model="standard_jabatan_satu" type="checkbox" id="py_checkbox_" class="filled-in" checked="">
+                                            <label for="py_checkbox_" style="margin-left: 5px;"> </label>
+                                        </td>
+                                        <td >Standard Jabatan</td>
+                                        <td v-if="standard_jabatan_satu">
+                                            <input v-model="standard_jabatan_satu_form" type="text" class="form-control" placeholder="ketik disini...">
+                                        </td>
+                                    </tr>
+                                </table>
                             </div>
                         </div>
                     </div>
@@ -115,11 +129,23 @@
                                         </tr>
                                     </table>
                                  </div>
-                                </div>
+                                 <table class="table">
+                                    <tr>
+                                        <td style="width: 35px;">
+                                            <input v-model="standard_jabatan_dua" type="checkbox" id="py_checkbox_" class="filled-in" checked="">
+                                            <label for="py_checkbox_" style="margin-left: 5px;"> </label>
+                                        </td>
+                                        <td >Standard Jabatan</td>
+                                        <td v-if="standard_jabatan_dua">
+                                            <input v-model="standard_jabatan_dua_form" type="text" class="form-control" placeholder="ketik disini...">
+                                        </td>
+                                    </tr>
+                                </table>
                             </div>
                         </div>
                     </div>
                 </div>
+            </div>
 
                 <!-- FAKTOR 3 -->
             <div v-if = "step == 'faktor-tiga'">
@@ -151,6 +177,18 @@
                                         </tr>
                                     </table>
                                 </div>
+                                <table class="table">
+                                    <tr>
+                                        <td style="width: 35px;">
+                                            <input v-model="standard_jabatan_tiga" type="checkbox" id="py_checkbox_" class="filled-in" checked="">
+                                            <label for="py_checkbox_" style="margin-left: 5px;"> </label>
+                                        </td>
+                                        <td >Standard Jabatan</td>
+                                        <td v-if="standard_jabatan_tiga">
+                                            <input v-model="standard_jabatan_tiga_form" type="text" class="form-control" placeholder="ketik disini...">
+                                        </td>
+                                    </tr>
+                                </table>
                             </div>
                         </div>
                     </div>
@@ -187,6 +225,18 @@
                                         </tr>
                                     </table>
                                 </div>
+                                <table class="table">
+                                    <tr>
+                                        <td style="width: 35px;">
+                                            <input v-model="standard_jabatan_empat1" type="checkbox" id="py_checkbox_" class="filled-in" checked="">
+                                            <label for="py_checkbox_" style="margin-left: 5px;"> </label>
+                                        </td>
+                                        <td >Standard Jabatan</td>
+                                        <td v-if="standard_jabatan_empat1">
+                                            <input v-model="standard_jabatan_empat1_form" type="text" class="form-control" placeholder="ketik disini...">
+                                        </td>
+                                    </tr>
+                                </table>
                             </div>
                         </div>
                     </div>
@@ -223,6 +273,18 @@
                                         </tr>
                                     </table>
                                 </div>
+                                <table class="table">
+                                    <tr>
+                                        <td style="width: 35px;">
+                                            <input v-model="standard_jabatan_empat2" type="checkbox" id="py_checkbox_" class="filled-in" checked="">
+                                            <label for="py_checkbox_" style="margin-left: 5px;"> </label>
+                                        </td>
+                                        <td >Standard Jabatan</td>
+                                        <td v-if="standard_jabatan_empat2">
+                                            <input v-model="standard_jabatan_empat2_form" type="text" class="form-control" placeholder="ketik disini...">
+                                        </td>
+                                    </tr>
+                                </table>
                             </div>
                         </div>
                     </div>
@@ -259,6 +321,18 @@
                                         </tr>
                                     </table>
                                 </div>
+                                <table class="table">
+                                    <tr>
+                                        <td style="width: 35px;">
+                                            <input v-model="standard_jabatan_lima" type="checkbox" id="py_checkbox_" class="filled-in" checked="">
+                                            <label for="py_checkbox_" style="margin-left: 5px;"> </label>
+                                        </td>
+                                        <td >Standard Jabatan</td>
+                                        <td v-if="standard_jabatan_lima">
+                                            <input v-model="standard_jabatan_lima_form" type="text" class="form-control" placeholder="ketik disini...">
+                                        </td>
+                                    </tr>
+                                </table>
                             </div>
                         </div>
                     </div>
@@ -295,10 +369,50 @@
                                         </tr>
                                     </table>
                                 </div>
+                                <table class="table">
+                                    <tr>
+                                        <td style="width: 35px;">
+                                            <input v-model="standard_jabatan_enam" type="checkbox" id="py_checkbox_" class="filled-in" checked="">
+                                            <label for="py_checkbox_" style="margin-left: 5px;"> </label>
+                                        </td>
+                                        <td >Standard Jabatan</td>
+                                        <td v-if="standard_jabatan_enam">
+                                            <input v-model="standard_jabatan_enam_form" type="text" class="form-control" placeholder="ketik disini...">
+                                        </td>
+                                    </tr>
+                                </table>
                             </div>
                         </div>
                     </div>
                 </div>
+            </div>
+
+            <!-- PERSYARATAN JABATAN TERTENTU-->
+            <div v-if = "step == 'syarat'">
+                <div class="row">
+                    <div class="com-md-12">
+                        <div class="card">
+                            <div class="card-body">
+                                <h6 class="card-title">PERSYARATAN JABATAN TERTENTU (Wajib di isi)</h6>
+                                <table class="table" style="font-size: 9;">
+                                    <tr>
+                                        
+                                        <td colspan="2">
+                                            <input v-model="syaratJabatan" value="Tidak ada batasan"  name="syarat" type="radio" id="radio_5">
+                                            <label for="radio_5">Tidak ada persyaratan</label><br>
+                                            <input v-model="syaratJabatan" value="batasan"  name="syarat" type="radio" id="radio_6">
+                                            <label for="radio_6">Memiliki persyaratan</label>
+                                        </td>
+                                        <td>
+                                            <input type="text" v-model="formSyaratJabatan" class="form-control" :disabled="syaratJabatan != 'batasan' ? true:false" placeholder="ketik batasan disini">
+                                        </td>
+                                    </tr>    
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
             </div>
 
                 </div>
@@ -341,29 +455,55 @@
                 formFaktorSatu: '',
                 listFaktorSatu: [],
 
+                standard_jabatan_satu: false,
+                standard_jabatan_satu_form: '',
+
                 //FAKTOR DUA
                 formFaktorDua: '',
                 listFaktorDua: [],
+
+                standard_jabatan_dua: false,
+                standard_jabatan_dua_form: '',
 
                 //FAKTOR TIGA
                 formFaktorTiga: '',
                 listFaktorTiga: [],
 
+                standard_jabatan_tiga: false,
+                standard_jabatan_tiga_form: '',
+
                 //FAKTOR EMPAT 1
                 formFaktorEmpat1: '',
                 listFaktorEmpat1: [],
+
+                standard_jabatan_empat1: false,
+                standard_jabatan_empat1_form: '',
 
                 //FAKTOR EMPAT 2
                 formFaktorEmpat2: '',
                 listFaktorEmpat2: [],
 
+                standard_jabatan_empat2: false,
+                standard_jabatan_empat2_form: '',
+
                 //FAKTOR LIMA
                 formFaktorLima: '',
                 listFaktorLima: [],
 
+                standard_jabatan_lima: false,
+                standard_jabatan_lima_form: '',
+
                 //FAKTOR ENAM   
                 formFaktorEnam: '',
                 listFaktorEnam: [],
+
+                standard_jabatan_enam: false,
+                standard_jabatan_enam_form: '',
+
+                //SYARAT JABATAN
+                syaratJabatan:'',
+                formSyaratJabatan:''
+
             }
         },
         mounted() {
