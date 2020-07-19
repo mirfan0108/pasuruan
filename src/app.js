@@ -53,6 +53,7 @@ var app = new Vue({
             base_url: path => ROOT_PATH + "/" + (path || ""),
             asset: path => ROOT_PATH + "assets/" + path,
             page: page,
+            activePage: '',
         };
     },
     

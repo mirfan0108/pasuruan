@@ -7,10 +7,10 @@
                 <!-- User profile image -->
                 <div class="profile-img"> <img :src="$root.$store.state.avatar" alt="user" /> </div>
                 <!-- User profile text-->
-                <div class="profile-text" v-if="$root.$store.state && $root.$store.state.username"> <a href="#" class="dropdown-toggle u-dropdown" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="true">{{$root.$store.state.username}}</a>
-                    <div class="dropdown-menu animated flipInY"> 
+                <div class="profile-text" v-if="$root.$store.state && $root.$store.state.username"> <a href="#"  role="button" aria-haspopup="true" aria-expanded="true">{{$root.$store.state.username}}</a>
+                    <!-- <div class="dropdown-menu animated flipInY"> 
                         <a @click.prevent="doLogout()" href="javascript:void(0)" class="dropdown-item"><i class="fa fa-power-off"></i> Logout</a> 
-                    </div>
+                    </div> -->
                 </div>
             </div>
             <!-- End User profile text-->
@@ -19,12 +19,12 @@
                 <ul id="sidebarnav">
                     <li class="nav-small-cap">MAIN NAVIGATION</li>
                     
-                    <li id="li-dashboard" @click.prevent="activedClass('dashboard')"> 
+                    <li :class="$root.$router.history.current.name == 'dashboard.page' ? 'active' : ''"> 
                         <router-link :to="{name: 'dashboard.page'}" class=" waves-effect waves-dark" >
                             <i class="mdi mdi-gauge"></i><span class="hide-menu">Dashboard</span>
                         </router-link>
                     </li>
-                    <li id="li-anjab">
+                    <li @click.prevent="$root.activePage = 'list.penjabat'">
                         <router-link :to="{name: 'list.penjabat'}" class=" waves-effect waves-dark" >
                             <i class="mdi mdi-gauge"></i><span class="hide-menu">Penjabat</span>
                         </router-link>
@@ -153,8 +153,16 @@
     export default {
         data(){
             return {
-                flag: 0
+                flag: 0,
             }
+        },
+        watch: {
+            "$root.activePage": function(newVal, oldVal) {
+                console.log("new ", newVal)
+            }
+        },
+        mounted() {
+            this.$root.activePage = this.$root.$router.history.current.name
         },
         methods: {
             inActiveClass() {
