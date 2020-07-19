@@ -6,6 +6,8 @@ import FormInfofakStruktural from "@/app/pages/evjab/infofak.structural.html"
 import FormInfofakFungsional from "@/app/pages/evjab/infofak.fungsional.html"
 import ListPermenDua from "@/app/pages/evjab/list.permen.dua.html"
 
+import LampiranPage from "@/app/pages/evjab/lampiran.html"
+
 export default [
     {
         path: 'penjabat',
@@ -45,6 +47,11 @@ export default [
         path: 'evaluasi-jabatan/lampiran-permen-dua',
         name: 'list.permen.dua',
         component: ListPermenDua
+    },
+    {
+        path: 'evaluasi-jabatan/lampiran',
+        name: 'lampiran.page',
+        component: LampiranPage
     }
 
 ]

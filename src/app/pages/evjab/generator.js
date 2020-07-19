@@ -125,16 +125,16 @@ class Fes {
                             organization: '',
                             fes: null,
                         })
-                        structure.push({
-                            id: _position.id,
-                            space: false,
-                            name: _position.position_name,
-                            bold: true,
-                            organization: _position.organization,
-                            fes: _position.fes_func, 
-                            current_stickholder: _position.current_stickholder,
-                            needed_stickholder: _position.formA
-                        })
+                        // structure.push({
+                        //     id: _position.id,
+                        //     space: false,
+                        //     name: _position.position_name,
+                        //     bold: true,
+                        //     organization: _position.organization,
+                        //     fes: _position.fes_func, 
+                        //     current_stickholder: _position.current_stickholder,
+                        //     needed_stickholder: _position.formA
+                        // })
                         position.map(_child => {
                             if(_child.parent_id == _position.id) {
                                 if(position.findIndex(_p => _p.parent_id == _child.id) > -1 ) {

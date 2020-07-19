@@ -174,10 +174,6 @@
         beforeCreate() {},
         watch: {},
         mounted() {
-            if(localStorage.getItem('FES')) {
-                let temp = JSON.parse(localStorage.getItem('FES'))
-                this.dumData.push(temp)
-            }
 
             $("#type-selection").select2().on("change", (e) => {
                 this.tipe = $("#type-selection").val()

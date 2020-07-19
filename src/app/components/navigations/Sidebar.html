@@ -19,68 +19,64 @@
                 <ul id="sidebarnav">
                     <li class="nav-small-cap">MAIN NAVIGATION</li>
                     
-                    <li :class="$root.$router.history.current.name == 'dashboard.page' ? 'active' : ''"> 
+                    <li :class="activeClass == 'dashboard.page' ? 'active' : ''" @click.prevent="activeClass = 'dashboard.page'"> 
                         <router-link :to="{name: 'dashboard.page'}" class=" waves-effect waves-dark" >
                             <i class="mdi mdi-gauge"></i><span class="hide-menu">Dashboard</span>
                         </router-link>
                     </li>
-                    <li @click.prevent="$root.activePage = 'list.penjabat'">
+                    <li :class="activeClass == 'list.penjabat' ? 'active' : ''" @click.prevent="activeClass = 'list.penjabat'">
                         <router-link :to="{name: 'list.penjabat'}" class=" waves-effect waves-dark" >
                             <i class="mdi mdi-gauge"></i><span class="hide-menu">Penjabat</span>
                         </router-link>
                     </li>
-                    <li id="li-anjab">
+                    <li :class="activeClass == 'anjab.page' ? 'active' : ''" @click.prevent="activeClass = 'anjab.page'" >
                         <router-link :to="{name: 'anjab.page'}" class=" waves-effect waves-dark" >
                             <i class="mdi mdi-gauge"></i><span class="hide-menu">Analisa Jabatan</span>
                         </router-link>
                     </li>
                     
-                    <li id="li-report"  >
-                        <a id="a-report" @click.prevent="report()" class=" waves-effect waves-dark" href="#" aria-expanded="false">
+                    <li :class="activeClass == 'form.a.page' || activeClass == 'form.b.page' || activeClass == 'form.c.page' || activeClass == 'form.d.page' || activeClass == 'form.e.page' ? 'active' : ''"  >
+                        <a  class=" waves-effect waves-dark" href="#" aria-expanded="false">
                             <i class="mdi mdi-border-color"></i><span class="hide-menu">Analisa Beban Kerja</span>
                         </a>
                         <ul aria-expanded="false" class="collapse">
                             <!-- <li id="li-report-linkedin" @click.prevent="reportNavigate('report-linkedin')">
                                 <router-link id="a-report-linkedin" :to="{name: 'report.linkedin.page'}">Linked In</router-link>
                             </li> -->
-                            <li>
+                            <li :class="activeClass == 'form.a.page' ? 'active' : ''" @click.prevent="activeClass = 'form.a.page'">
                                 <router-link :to="{name: 'form.a.page'}">Form A</router-link>
                             </li>
-                            <li>
+                            <li :class="activeClass == 'form.b.page' ? 'active' : ''" @click.prevent="activeClass = 'form.b.page'">
                                 <router-link :to="{name: 'form.b.page'}">Form B</router-link>
                             </li>
-                            <li>
+                            <li  :class="activeClass == 'form.c.page' ? 'active' : ''" @click.prevent="activeClass = 'form.c.page'">
                                 <router-link :to="{name: 'form.c.page'}">Form C</router-link>
                             </li>
-                            <li>
+                            <li :class="activeClass == 'form.d.page' ? 'active' : ''" @click.prevent="activeClass = 'form.d.page'">
                                 <router-link :to="{name: 'form.d.page'}">Form D</router-link>
                             </li>
-                            <li>
+                            <li :class="activeClass == 'form.e.page' ? 'active' : ''" @click.prevent="activeClass = 'form.e.page'">
                                 <router-link :to="{name: 'form.e.page'}">Form E</router-link>
                             </li>
                         </ul>
                     </li>
-                    <li id="li-anjab">
-                        <router-link :to="{name: 'list.evjab'}" class=" waves-effect waves-dark" >
-                            <i class="mdi mdi-gauge"></i><span class="hide-menu">Evaluasi Jabatan</span>
-                        </router-link>
+                    <li :class="activeClass == 'list.evjab' ? 'active' : ''">
+                        <a  class=" waves-effect waves-dark" href="#" aria-expanded="false">
+                            <i class="mdi mdi-border-color"></i><span class="hide-menu">Evaluasi Jabatan</span>
+                        </a>
+                        <ul aria-expanded="false" class="collapse">
+                            <li :class="activeClass == 'list.evjab' ? 'active' : ''" @click.prevent="activeClass = 'list.evjab'">
+                                <router-link :to="{name: 'list.evjab'}">Pemeringkatan (FES)</router-link>
+                            </li>
+                            <li :class="activeClass == 'list.infofak' ? 'active' : ''" @click.prevent="activeClass = 'list.infofak'">
+                                <router-link :to="{name: 'list.infofak'}" class=" waves-effect waves-dark" >Informasi Faktor</router-link>
+                            </li>
+                            <li :class="activeClass == 'lampiran.page' ? 'active' : ''" @click.prevent="activeClass = 'list.permen.dua'">
+                                <router-link :to="{name: 'lampiran.page'}" class=" waves-effect waves-dark" >Lampiran</router-link>
+                            </li>
+                        </ul>
                     </li>
-                    <li id="li-anjab">
-                        <router-link :to="{name: 'list.infofak'}" class=" waves-effect waves-dark" >
-                            <i class="mdi mdi-gauge"></i><span class="hide-menu">Info Faktor Jabatan</span>
-                        </router-link>
-                    </li>
-                    <li id="li-anjab">
-                        <router-link :to="{name: 'list.infofak_fungsional'}" class=" waves-effect waves-dark" >
-                            <i class="mdi mdi-gauge"></i><span class="hide-menu">Info Faktor Fungsional</span>
-                        </router-link>
-                    </li>
-                    <li id="li-anjab">
-                        <router-link :to="{name: 'list.permen.dua'}" class=" waves-effect waves-dark" >
-                            <i class="mdi mdi-gauge"></i><span class="hide-menu">Permen II & III</span>
-                        </router-link>
-                    </li>
-                    <li id="li-anjab">
+                    <li :class="activeClass == 'peta.jabatan.page' ? 'active' : ''" @click.prevent="activeClass = 'peta.jabatan.page'">
                         <router-link :to="{name: 'peta.jabatan.page'}" class=" waves-effect waves-dark" >
                             <i class="mdi mdi-gauge"></i><span class="hide-menu">Peta Jabatan</span>
                         </router-link>
@@ -90,7 +86,7 @@
 
                     <li class="nav-devider" ></li>
                     <li class="nav-small-cap" >MASTER FILES</li>
-                    <li id="li-report"  >
+                    <li :class="activeClass == 'masterfile.equipments.page' ? 'active' : ''"  >
                         <a id="a-report" @click.prevent="report()" class=" waves-effect waves-dark" href="#" aria-expanded="false">
                             <i class="mdi mdi-border-color"></i><span class="hide-menu">Informasi</span>
                         </a>
@@ -124,8 +120,8 @@
                             </li>
                         </ul>
                     </li>
-                    <li id="li-administrator" @click.prevent="activedClass('administrator')"> 
-                        <a id="a-report" @click.prevent="report()" class=" waves-effect waves-dark" href="#" aria-expanded="false">
+                    <li :class="activeClass == 'masterfile.opd.page' ? 'active' : ''"> 
+                        <a id="a-report" class=" waves-effect waves-dark" href="javascript:void(0)" aria-expanded="false">
                             <i class="mdi mdi-border-color"></i><span class="hide-menu">Manajemen</span>
                         </a>
                         <ul aria-expanded="false" class="collapse">
@@ -143,8 +139,8 @@
                             </li>
                         </ul>
                     </li>
-                    <li id="li-mks" @click.prevent="activedClass('mks')"> 
-                        <router-link :to="{name: 'sales.page'}"  >
+                    <li :class="activeClass == 'masterfile.opd.page' ? 'active' : ''" > 
+                        <router-link :to="{name: 'masterfile.opd.page'}"  >
                             <i class="mdi mdi-account-circle"></i><span class="hide-menu">Pengguna</span>
                         </router-link>
                     </li>
@@ -169,43 +165,19 @@
         data(){
             return {
                 flag: 0,
+                activeClass: ''
             }
         },
         watch: {
-            "$root.activePage": function(newVal, oldVal) {
+            "activeClass": function(newVal, oldVal) {
                 console.log("new ", newVal)
             }
         },
         mounted() {
-            this.$root.activePage = this.$root.$router.history.current.name
+            this.activeClass = this.$root.$router.history.current.name
         },
         methods: {
-            inActiveClass() {
-                $("#sidebarnav>#li-dashboard>a.active").removeAttr("class")
-                $("#li-dashboard").removeAttr("class")
-
-                if($('#li-report').hasClass('active')) {
-                    $('#li-report>#a-report').click()
-                }
-                
-            },
-            activedClass(page) {
-                this.inActiveClass()
-                $(`#li-${page}`).addClass("active")
-                
-            },
-            report(){
-                $("#sidebarnav>#li-dashboard>a.active").removeAttr("class")
-                $("#li-dashboard").removeAttr("class")
-            },
-            reportNavigate(page) {
-                let name = page.split('-')
-                // $(`#li-${name[0]}`).addClass("active")
-                $(`#a-${page}`).addClass("active")
-            },
-            doLogout() {
-                
-            }
+            
         }
     }
 </script>

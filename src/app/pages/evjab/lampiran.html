@@ -1,0 +1,329 @@
+<template>
+    <div>
+        <div class="card">
+            <div class="card-body">
+                <!-- <button class="pull-right btn btn-sm btn-rounded btn-success" @click.prevent="createPosition()" >Tambah Jabatan</button> -->
+                <h4 class="card-title">Pilih OPD</h4>
+                <div class="row">
+                    <div class="col-md-12">
+                        <select class="select2 form-control" id="opd-selection" style="width: 100%;">
+                            <option value="0" disabled selected>Pilih Opd</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card-body p-b-0">
+                <h4 class="card-title">Lampiran Permen & KepIns</h4>
+                <!-- Nav tabs -->
+                <ul class="nav nav-tabs customtab" role="tablist">
+                    <li class="nav-item"> 
+                        <a class="nav-link active show" data-toggle="tab" href="#pemen1" role="tab" aria-selected="false">
+                            <span class="hidden-sm-up"><i class="ti-home"></i></span> <span class="hidden-xs-down">Permen I</span>
+                        </a> 
+                    </li>
+                    <li class="nav-item"> 
+                        <a class="nav-link" data-toggle="tab" href="#pemen2" role="tab" aria-selected="false">
+                            <span class="hidden-sm-up"><i class="ti-user"></i></span> <span class="hidden-xs-down">Permen II</span>
+                        </a> 
+                    </li>
+                    <li class="nav-item"> 
+                        <a class="nav-link " data-toggle="tab" href="#pemen3" role="tab" aria-selected="true">
+                            <span class="hidden-sm-up"><i class="ti-email"></i></span> <span class="hidden-xs-down">Permen III</span>
+                        </a> 
+                    </li>
+                    <li class="nav-item"> 
+                        <a class="nav-link" data-toggle="tab" href="#pemen4" role="tab" aria-selected="true">
+                            <span class="hidden-sm-up"><i class="ti-email"></i></span> <span class="hidden-xs-down">Permen IV</span>
+                        </a> 
+                    </li>
+                    <li class="nav-item"> 
+                        <a class="nav-link" data-toggle="tab" href="#pemen5" role="tab" aria-selected="true">
+                            <span class="hidden-sm-up"><i class="ti-email"></i></span> <span class="hidden-xs-down">Permen V</span>
+                        </a> 
+                    </li>
+                    <li class="nav-item"> 
+                        <a class="nav-link" data-toggle="tab" href="#pemen6" role="tab" aria-selected="true">
+                            <span class="hidden-sm-up"><i class="ti-email"></i></span> <span class="hidden-xs-down">KepIns</span>
+                        </a> 
+                    </li>
+                </ul>
+                <!-- Tab panes -->
+                <div class="tab-content">
+                    <div class="tab-pane active show" id="pemen1" role="tabpanel">
+                        <div class="p-20" align="center">
+                            <h3>REKAPITULASI <br> KELAS JABATAN DAN PERSEDIAAN PEGAWAI <br> DI LINGKUNGAN DINAS TES KABUPATEN PASURUAN</h3>
+                        </div>
+                        <div class="table-responsive">
+                            <table class="table table-bordered table-striped">
+                                <thead>
+                                    <tr style="background-color: #1e88e5ad !important">
+                                        <th style="text-align: center; width: 5%;">No.</th>
+                                        <th style="text-align: center; width: 45%;">Kelas Jabatan</th>
+                                        <th style="text-align: center; ">Persediaan Pegawai</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td style="text-align: center;">1</td>
+                                        <td style="text-align: center;">
+                                            Tanpa Kelas
+                                        </td>
+                                        <td style="text-align: center;"></td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+
+                    <div class="tab-pane p-20" id="pemen2" role="tabpanel">
+                        <div class="p-20" align="center">
+                            <h3>DAFTAR NAMA JABATAN STRUKTURAL, KELAS JABATAN, DAN PERSEDIAAN PEGAWAI <br> DI LINGKUNGAN DINAS TES KABUPATEN PASURUAN</h3>
+                        </div>
+                        <div class="table-responsive">
+                            <table class="table table-bordered table-striped">
+                                <thead>
+                                    <tr style="background-color: #1e88e5ad !important">
+                                        <th style="text-align: center;vertical-align: middle; width: 5%;">No.</th>
+                                        <th style="text-align: center; vertical-align: middle;">Nama Jabatan Struktural</th>
+                                        <th style="text-align: center; width: 10%;">Kelas Jabatan</th>
+                                        <th style="text-align: center; width: 10%;">Persediaan Pegawai</th>
+                                        <th style="text-align: center; vertical-align: middle; width: 20%;">Keterangan</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td style="text-align: center;">1</td>
+                                        <td style="text-align: center;">
+                                            Tanpa Kelas
+                                        </td>
+                                        <td style="text-align: center;"></td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+
+                    <div class="tab-pane p-20 " id="pemen3" role="tabpanel">
+                        <div class="p-20" align="center">
+                            <h3>DAFTAR NAMA JABATAN FUNGSIONAL DAN JABATAN LAINNYA, KELAS JABATAN, DAN PERSEDIAAN PEGAWAI <br> DI LINGKUNGAN DINAS TES KABUPATEN PASURUAN</h3>
+                        </div>
+                        <div class="table-responsive">
+                            <table class="table table-bordered table-striped">
+                                <thead>
+                                    <tr style="background-color: #1e88e5ad !important">
+                                        <th style="text-align: center; width: 5%;">No.</th>
+                                        <th style="text-align: center; vertical-align: middle; ">Nama Jabatan Fungsional</th>
+                                        <th style="text-align: center; vertical-align: middle; width: 25%;">Unit Organisasi</th>
+                                        <th style="text-align: center; width: 10%;">Kelas Jabatan</th>
+                                        <th style="text-align: center; width: 10%;">Persediaan Pegawai</th>
+                                        <th style="text-align: center; vertical-align: middle; width: 20%;">Keterangan</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td style="text-align: center;">1</td>
+                                        <td style="text-align: center;">
+                                            Tanpa Kelas
+                                        </td>
+                                        <td style="text-align: center;"></td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+
+                    <div class="tab-pane p-20 " id="pemen4" role="tabpanel">
+                        <div class="p-20" align="center">
+                            <h3>
+                                TABLE HASIL EVALUASI JABATAN STRUKTURAL <br> DI LINGKUNGAN DINAS TES KABUPATEN PASURUAN
+                            </h3>
+                        </div>
+                        <div class="table-responsive">
+                            <table class="table display table-bordered table-striped dataTable" style="width: 1500px;">
+                                <thead>
+                                    <tr style="background-color: #1e88e5ad !important">
+                                        <th rowspan="2" style="text-align: center; vertical-align: middle;  border: 1px solid black;">No.</th>
+                                        <th rowspan="2" style="text-align: center; width: 30%; vertical-align: middle; border: 1px solid black;">Nama Jabatan</th>
+                                        <th rowspan="2" style="text-align: center; vertical-align: middle; border: 1px solid black;">Kelas Jabatan</th>
+                                        <th rowspan="2" style="text-align: center; vertical-align: middle; width: 5%;border: 1px solid black;">Job Value</th>
+                                        <th rowspan="2" colspan="2" style="text-align: center; vertical-align: middle;border: 1px solid black;">F1 Ruang Lingkup + Dampak (1-5)</th>
+                                        <th rowspan="2" colspan="2" style="text-align: center; vertical-align: middle;border: 1px solid black;">F2 Pengaturan Organisasi (1-3)</th>
+                                        <th rowspan="2" colspan="2" style="text-align: center; vertical-align: middle;border: 1px solid black;">F3 Wewenang Penyeliaan + Manajerial (1-3)</th>
+                                        <th colspan="4"  style="text-align: center; vertical-align: middle;border: 1px solid black;">F4 Hub.Personal</th>
+                                        <th rowspan="2" colspan="2" style="text-align: center; vertical-align: middle;border: 1px solid black;">F5 Kesulitan Pengarahan Pekerjaan (1-8)</th>
+                                        <th rowspan="2" colspan="2" style="text-align: center; vertical-align: middle;border: 1px solid black;">F6 Kondisi Lain (1-6)</th>
+                                    </tr>
+                                    <tr style="background-color: #1e88e5ad !important">
+                                        <th colspan="2" style="border: 1px solid black; vertical-align: middle; text-align: center;">Sifat.Hub</th>
+                                        <th colspan="2" style="border: 1px solid black;vertical-align: middle; text-align: center;">Tujuan.Hub</th>
+                                    </tr>
+                                    <tr style="background-color: #cccccc !important">
+                                        <td style="vertical-align: middle;border: 1px solid black;vertical-align: middle; text-align: center;">1</td>
+                                        <td style="vertical-align: middle;border: 1px solid black;vertical-align: middle; text-align: center;">2</td>
+                                        <td style="vertical-align: middle;border: 1px solid black;vertical-align: middle; text-align: center;">3</td>
+                                        <td style="vertical-align: middle;border: 1px solid black;vertical-align: middle; text-align: center;" >4</td>
+                                        <td style="vertical-align: middle;border: 1px solid black;vertical-align: middle; text-align: center;" colspan="2">5</td>
+                                        <td style="vertical-align: middle;border: 1px solid black;vertical-align: middle; text-align: center;" colspan="2">6</td>
+                                        <td style="vertical-align: middle;border: 1px solid black;vertical-align: middle; text-align: center;" colspan="2">7</td>
+                                        <td style="vertical-align: middle;border: 1px solid black;vertical-align: middle; text-align: center;" colspan="2">8</td>
+                                        <td style="vertical-align: middle;border: 1px solid black;vertical-align: middle; text-align: center;" colspan="2">9</td>
+                                        <td style="vertical-align: middle;border: 1px solid black;vertical-align: middle; text-align: center;" colspan="2">10</td>
+                                        <td style="vertical-align: middle;border: 1px solid black;vertical-align: middle; text-align: center;" colspan="2">11</td>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td style="text-align: center;">1</td>
+                                        <td style="text-align: center;">
+                                            Tanpa Kelas
+                                        </td>
+                                        <td style="text-align: center;"></td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+
+                    <div class="tab-pane p-20 " id="pemen5" role="tabpanel">
+                        <div align="center">
+                            <h3>
+                                TABLE HASIL EVALUASI JABATAN FUNGSIONAL DAN JABATAN LAINNYA<br> DI LINGKUNGAN DINAS TES KABUPATEN PASURUAN
+                            </h3>
+                        </div>
+                        <div class="table-responsive m-t-40">
+                            <div id="example_wrapper" class="dataTables_wrapper">
+                                <div class="dataTables_length" id="example_length">
+                                    <table id="example" class="table display table-bordered table-striped dataTable" role="grid" aria-describedby="example_info" style="width: 1500px;">
+                                        <thead>
+                                            <tr style="background-color: #1e88e5ad !important">
+                                                <th style="text-align: center; vertical-align: middle;  border: 1px solid black;">No.</th>
+                                                <th style="text-align: center; width: 20%; vertical-align: middle; border: 1px solid black;">Nama Jabatan</th>
+                                                <th style="text-align: center; width: 20%; vertical-align: middle; border: 1px solid black;">Unit Organisasi</th>
+                                                <th style="text-align: center; vertical-align: middle; border: 1px solid black;">Kelas Jabatan</th>
+                                                <th style="text-align: center; vertical-align: middle; width: 5%;border: 1px solid black;">Job Value</th>
+                                                <th colspan="2" style="text-align: center; vertical-align: middle;border: 1px solid black;">FAKTOR 1 Pengetahuan (Level 1~9)</th>
+                                                <th colspan="2" style="text-align: center; vertical-align: middle;border: 1px solid black;">FACTOR 2 Pengawasan (Level 1~5)</th>
+                                                <th colspan="2" style="text-align: center; vertical-align: middle;border: 1px solid black;">FACTOR 3 Pedoman (Level 1~5)</th>
+                                                <th colspan="2"  style="text-align: center; vertical-align: middle;border: 1px solid black;">FACTOR 4 Kompleksitas (Level 1~6)</th>
+                                                <th colspan="2" style="text-align: center; vertical-align: middle;border: 1px solid black;">FACTOR 5 R.Lingkup & Pengaruh (Level 1~6)</th>
+                                                <th colspan="2" style="text-align: center; vertical-align: middle;border: 1px solid black;">FACTOR 6  Hub. Pribadi (Level 1~4)</th>
+                                                <th colspan="2" style="text-align: center; vertical-align: middle;border: 1px solid black;">FACTOR 7 Tujuan Hubungan (Level 1~4)</th>
+                                                <th colspan="2" style="text-align: center; vertical-align: middle;border: 1px solid black;">FACTOR 8 Tuntutan Fisik (Level 1~3)</th>
+                                                <th colspan="2" style="text-align: center; vertical-align: middle;border: 1px solid black;">FACTOR 9 Lingk. Kerja (Level 1~3)</th>
+                                            </tr>
+                                            <tr style="background-color: #cccccc !important">
+                                                <td style="vertical-align: middle;border: 1px solid black;vertical-align: middle; text-align: center;">1</td>
+                                                <td style="vertical-align: middle;border: 1px solid black;vertical-align: middle; text-align: center;">2</td>
+                                                <td style="vertical-align: middle;border: 1px solid black;vertical-align: middle; text-align: center;">3</td>
+                                                <td style="vertical-align: middle;border: 1px solid black;vertical-align: middle; text-align: center;" >4</td>
+                                                <td style="vertical-align: middle;border: 1px solid black;vertical-align: middle; text-align: center;" colspan="2">5</td>
+                                                <td style="vertical-align: middle;border: 1px solid black;vertical-align: middle; text-align: center;" colspan="2">6</td>
+                                                <td style="vertical-align: middle;border: 1px solid black;vertical-align: middle; text-align: center;" colspan="2">7</td>
+                                                <td style="vertical-align: middle;border: 1px solid black;vertical-align: middle; text-align: center;" colspan="2">8</td>
+                                                <td style="vertical-align: middle;border: 1px solid black;vertical-align: middle; text-align: center;" colspan="2">9</td>
+                                                <td style="vertical-align: middle;border: 1px solid black;vertical-align: middle; text-align: center;" colspan="2">10</td>
+                                                <td style="vertical-align: middle;border: 1px solid black;vertical-align: middle; text-align: center;" colspan="2">11</td>
+                                                <td style="vertical-align: middle;border: 1px solid black;vertical-align: middle; text-align: center;" colspan="2">12</td>
+                                                <td style="vertical-align: middle;border: 1px solid black;vertical-align: middle; text-align: center;" colspan="2">13</td>
+                                                <td style="vertical-align: middle;border: 1px solid black;vertical-align: middle; text-align: center;" colspan="2">14</td>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr class="group"><td colspan="5">Edinburgh</td></tr><tr role="row" class="odd">
+                                                <td>Cedric Kelly</td>
+                                                <td>Senior Javascript Developer</td>
+                                                
+                                                <td>22</td>
+                                                <td>2012/03/29</td>
+                                                <td>$433,060</td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="tab-pane p-20 " id="pemen6" role="tabpanel">
+                        <div class="p-20" align="center">
+                            <h3>DAFTAR NAMA JABATAN, KELAS JABATAN, DAN PEMANGKU JABATAN <br> DI LINGKUNGAN DINAS TES KABUPATEN PASURUAN</h3>
+                        </div>
+                        <div class="table-responsive">
+                            <table class="table table-bordered table-striped">
+                                <thead>
+                                    <tr style="background-color: #1e88e5ad !important">
+                                        <th style="text-align: center;vertical-align: middle; width: 5%;">No.</th>
+                                        <th style="text-align: center; vertical-align: middle;">Nama Jabatan Struktural</th>
+                                        <th style="text-align: center; width: 10%;">Kelas Jabatan</th>
+                                        <th style="text-align: center; width: 10%;">Persediaan Pegawai</th>
+                                        <th style="text-align: center; vertical-align: middle; width: 20%;">Keterangan</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td style="text-align: center;">1</td>
+                                        <td style="text-align: center;">
+                                            Tanpa Kelas
+                                        </td>
+                                        <td style="text-align: center;"></td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>                        
+</template>
+
+<script>
+    import ApiEvjab from '../../services/api/Evjab.js';
+    import generator from "./generator.js"
+    import { mapState } from 'vuex';
+    import Swal from 'sweetalert2'
+    export default {
+        data() {
+            return {
+                dataOpd: {}
+            }
+        },
+        computed: mapState(['onLoad', 'Positions', 'totalPositions', 'accessToken']),
+        mounted() {
+            $("#opd-selection").select2({
+                ajax: {
+                    url: process.env.BASE_API+"/opd",
+                    headers: {
+                        "Authorization": `Bearer ${this.accessToken.access_token}`,
+                    },
+                    delay: 1000,
+                    data: function (params) {
+                        var query = {
+                            search: params.term,
+                            limit: 10,
+                            page: params.page || 1
+                        }
+                        return query;
+                    },
+                    processResults: function (data, params) {
+                        
+                        params.page = params.page || 1;
+                        data.content.forEach( _val => {
+                            _val.text = _val.name
+                        })
+                        return {
+                            results: data.content,
+                            pagination: {
+                                more: (params.page * 10) < data.total
+                            }
+                        };
+                    }
+                }
+            }).on('change', e => {
+                console.log($("#opd-selection").val())
+            })
+        }
+    }
+</script>
