@@ -112,8 +112,8 @@
                                             <button class="btn btn-sm btn-rounded btn-success" style="font-size: small;" @click.prevent="$root.$router.push({name: 'fungsional.form.evjab', params: {id: dt.id}})">Masukan Nilai</button>
                                         </td>
 
-                                        <td v-if="!dt.space && dt.fes"></td>
-                                        <td v-if="!dt.space && dt.fes"></td>
+                                        <td v-if="!dt.space && dt.fes">{{jobClass(jobValueF(dt.fes.f1 , dt.fes.f2 , dt.fes.f3 , dt.fes.f4, dt.fes.f5 , dt.fes.f6, dt.fes.f7, dt.fes.f8, dt.fes.f9  ))}}</td>
+                                        <td v-if="!dt.space && dt.fes">{{jobValueF(dt.fes.f1 , dt.fes.f2 , dt.fes.f3 , dt.fes.f4, dt.fes.f5 , dt.fes.f6, dt.fes.f7, dt.fes.f8, dt.fes.f9  )}}</td>
                                         <td v-if="!dt.space && dt.fes">{{dt.fes.f1}}</td>
                                         <td v-if="!dt.space && dt.fes">{{fcounterF1(dt.fes.f1)}}</td>
                                         
@@ -415,6 +415,21 @@
                 total += f42 != 0 ? this.counterF42(f42) : 0
                 total += f5 != 0 ? this.counterF5(f5) : 0
                 total += f6 != 0 ? this.counterF6(f6) : 0
+
+                return total
+            },
+
+            jobValueF(f1, f2, f3, f4, f5, f6, f7, f8, f9){
+                let total = 0
+                total += f1 != 0 ? this.fcounterF1(f1) : 0
+                total += f2 != 0 ? this.fcounterF2(f2) : 0
+                total += f3 != 0 ? this.fcounterF3(f3) : 0
+                total += f4 != 0 ? this.fcounterF4(f4) : 0
+                total += f5 != 0 ? this.fcounterF5(f5) : 0
+                total += f6 != 0 ? this.fcounterF6(f6) : 0
+                total += f7 != 0 ? this.fcounterF7(f7) : 0
+                total += f8 != 0 ? this.fcounterF8(f8) : 0
+                total += f9 != 0 ? this.fcounterF9(f9) : 0
 
                 return total
             },
