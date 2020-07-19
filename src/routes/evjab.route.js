@@ -4,6 +4,7 @@ import FormStrukturalPage from "@/app/pages/evjab/form.structural.html"
 import FormFungsionalPage from "@/app/pages/evjab/form.fungsional.html"
 import FormInfofakStruktural from "@/app/pages/evjab/infofak.structural.html"
 import FormInfofakFungsional from "@/app/pages/evjab/infofak.fungsional.html"
+import ListPermenDua from "@/app/pages/evjab/list.permen.dua.html"
 
 export default [
     {
@@ -39,4 +40,11 @@ export default [
         name: 'list.infofak_fungsional',
         component: FormInfofakFungsional
     },
+
+    {
+        path: 'evaluasi-jabatan/lampiran-permen-dua',
+        name: 'list.permen.dua',
+        component: ListPermenDua
+    }
+
 ]

@@ -1,0 +1,553 @@
+<template>
+    <div class="row">
+        <div class="col-md-12 col-lg-12">
+            <div class="card">
+                <div class="card-body">
+                    <!-- <button class="pull-right btn btn-sm btn-rounded btn-success" @click.prevent="createPosition()" >Tambah Jabatan</button> -->
+                    <h4 class="card-title">Jabatan</h4>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <select class="select2 form-control" id="opd-selection" style="width: 100%;">
+                                <option value="0" disabled selected>Pilih Opd</option>
+                            </select>
+                        </div>
+                        <div class="col-md-6">
+                            <select class="select2 form-control" id="type-selection" style="width: 100%;" v-model="tipe">
+                                <option value="Struktural" selected>Struktural</option>
+                                <option value="Fungsional">Fungsional</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+                <div class="card-body" v-if="loading">
+                    <div class="overlay"  align="center" >
+                        <img src="/assets/gif/loading.gif" width="100"> <br>
+                        <span>Mohon Tunggu</span>
+                    </div>
+                </div>
+                <div class="card-body" v-if="!loading">
+                    <div class="row">
+                        <div class="col-md-12 col-lg-12">
+                            <table style="width: 100%; margin-top: 20px; font-size: 9pt;" class="table" v-if="tipe == 'Struktural'"> 
+                                <thead style="border: 1pt solid black;" v-if="dataStruktur.length > 0 && tipe == 'Struktural'">
+                                    <tr style="border: 1pt solid black;">
+                                        <th rowspan="2"  style="width: 5%; text-align: center;border: 1pt solid black; vertical-align : middle;">No</th>
+                                        <th rowspan="2" style="width: 25%; text-align: center;border: 1pt solid black; vertical-align : middle;" >Nama Jabatan Struktural</th>
+                                        <th rowspan="2" style="width: 10%; text-align: center;border: 1pt solid black; vertical-align : middle;">Kelas Jabatan</th>
+                                        <th rowspan="2"  style="width: 5%;text-align: center;border: 1pt solid black; vertical-align : middle;">Persediaan Pegawai</th>
+                                        <th rowspan="2"  style="width: 10%; text-align: center;border: 1pt solid black; vertical-align : middle;">Keterangan</th>
+                                    </tr>
+                                    
+                                </thead>
+                                <tbody v-if="dataStruktur.length > 0 && tipe == 'Struktural'">
+                                    <tr v-for="(dt, index) in dataStruktur" >
+                                        <td style="text-align: center;border: 1pt solid black;">{{index+1}}</td>
+                                        <td style="border: 1pt solid black;">{{dt.name}}</td>
+                                        <td v-if="!dt.fes" style="text-align: center;border: 1pt solid black;" align="center">
+                                            <button class="btn btn-sm btn-rounded btn-success" style="font-size: small;" @click.prevent="$root.$router.push({name: 'struktural.form.evjab', params: {id: dt.id}})">Masukan Nilai</button>
+                                        </td>
+                                        <td v-if="dt.fes" style="text-align: center;border: 1pt solid black;">{{jobClass(jobValue(dt.fes.f1 , dt.fes.f2 , dt.fes.f3 , dt.fes.f4_1 , dt.fes.f4_2 , dt.fes.f5 , dt.fes.f6))}}</td>
+                                        
+                                        <td style="text-align: center;border: 1pt solid black;">{{dt.current_stickholder}}</td>
+                                        <td style="text-align: center;border: 1pt solid black;">{{formatNumber(Math.round(createTotal(dt.needed_stickholder)))}}</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                        <div class="col-md-12 col-lg-12">
+                            <table v-if="tipe == 'Fungsional'" style="width: 100%; margin-top: 20px; font-size: 7pt;" class="table">
+                                <thead >
+                                    <tr>
+                                        <th style="text-align: center;border: 1pt solid black; vertical-align : middle;">No</th>
+                                        <th style="width: 30%; text-align: center;border: 1pt solid black; vertical-align : middle;">Nama Jabatan Fungsional</th>
+                                        <th style="width: 30%; text-align: center;border: 1pt solid black; vertical-align : middle;">Unit Organisasi</th>
+                                        <th style="text-align: center;border: 1pt solid black; vertical-align : middle;">Kelas Jabatan</th>
+                                        <th style="text-align: center;border: 1pt solid black; vertical-align : middle;">Persediaan Pegawai</th>
+                                        <th style="text-align: center;border: 1pt solid black; vertical-align : middle;">Keterangan</th>
+                                    </tr>
+                                </thead>
+                                <tbody  v-if="dataStruktur.length > 0">
+                                    <tr v-for="(dt, index) in dataStruktur">
+                                        <!-- TRUE SPACE -->
+                                        <td v-if="dt.space" style="background-color: aqua;" >&nbsp;</td>
+                                        <!-- FALSE SPACE -->
+                                        <td v-if="!dt.space"></td>
+                                        <td v-if="!dt.space">{{dt.name}}</td>
+                                        <td v-if="!dt.space">{{dt.organization}}</td>
+                                        <td v-if="!dt.space && !dt.fes" colspan="20" style="text-align: center;" align="center">
+                                            <button class="btn btn-sm btn-rounded btn-success" style="font-size: small;" @click.prevent="$root.$router.push({name: 'fungsional.form.evjab', params: {id: dt.id}})">Masukan Nilai</button>
+                                        </td>
+
+                                        <td v-if="!dt.space && dt.fes"></td>
+                                        <td v-if="!dt.space" style="text-align: center;border: 1pt solid black;">{{dt.current_stickholder}}</td>
+                                        <td v-if="!dt.space" style="text-align: center;border: 1pt solid black;">{{formatNumber(Math.round(createTotal(dt.needed_stickholder)))}}</td>
+                                        
+
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</template>
+
+<script>
+    import ApiEvjab from '../../services/api/Evjab.js';
+    import generator from "./generator.js"
+    import { mapState } from 'vuex';
+    import Swal from 'sweetalert2'
+    export default {
+        data() {
+            return {
+                dumData: [],
+                dataStruktur: [],
+                tipe: 'Struktural',
+                loading: true
+            }
+        },
+        computed: mapState(['onLoad', 'Positions', 'totalPositions', 'accessToken']),
+        beforeCreate() {},
+        watch: {},
+        mounted() {
+            if(localStorage.getItem('FES')) {
+                let temp = JSON.parse(localStorage.getItem('FES'))
+                this.dumData.push(temp)
+            }
+
+            $("#type-selection").select2().on("change", (e) => {
+                this.tipe = $("#type-selection").val()
+                this.init()
+            })
+            $("#opd-selection").select2({
+                ajax: {
+                    url: process.env.BASE_API+"/opd",
+                    headers: {
+                        "Authorization": `Bearer ${this.accessToken.access_token}`,
+                    },
+                    delay: 1000,
+                    data: function (params) {
+                        var query = {
+                            search: params.term,
+                            limit: 10,
+                            page: params.page || 1
+                        }
+                        return query;
+                    },
+                    processResults: function (data, params) {
+                        
+                        params.page = params.page || 1;
+                        data.content.forEach( _val => {
+                            _val.text = _val.name
+                        })
+                        return {
+                            results: data.content,
+                            pagination: {
+                                more: (params.page * 10) < data.total
+                            }
+                        };
+                    }
+                }
+            })
+
+            $('#opd-selection').on('select2:select', async (e) => {
+                this.init()
+            })
+            
+            if(localStorage.getItem('__opd')) {
+                this.$root.$store.dispatch('getOne_Opd', localStorage.getItem('__opd'))
+                .then(_res => {
+                    this.$root.$store.dispatch('setOpd_Data', {id: _res.opd.id, name: _res.opd.name})
+                    $("#opd-selection").append(`
+                        <option selected value="${_res.opd.id}">${_res.opd.name}</option>
+                    `)
+                    this.init()
+                    // $("#opd-selection").trigger('change');
+                })
+            } else {
+                this.init()
+            }
+            
+        },
+        methods: {
+            async init() {
+                this.dataStruktur = []
+                this.loading = true
+                ApiEvjab.getAll($("#opd-selection").val())
+                .then(resp => {
+                    console.log('fes', resp)
+                    if($("#type-selection").val() == "Struktural") {
+                        this.doStructure(resp.data)
+                    } else {
+                        this.doFunsional(resp.data)
+                    }
+                })
+                    
+            },
+            
+            doStructure(data) {
+                generator.generateStructure(data)
+                .then(_resp => {
+                    console.log('generated', _resp)
+                    this.dataStruktur = _resp
+                })
+                .finally(() => {
+                    setTimeout(() => {
+                        this.loading = false
+                    }, 500)
+                })
+            },
+            doFunsional(data) {
+                generator.generateFungsional(data)
+                .then(_resp => {
+                    console.log('generated', _resp)
+                    this.dataStruktur = _resp
+                })
+                .finally(() => {
+                    setTimeout(() => {
+                        this.loading = false
+                    }, 500)
+                })
+            },
+            createTotal (data) {
+                let total = 0
+                
+                data.map(_val => {
+                    total += parseFloat(_val.ket)
+                })
+                
+                return total/1250
+            },
+            generateTotalValue(fes) {
+                
+            },
+            generateClass() {
+
+            },
+
+            formatNumber(angka, prefix = "", Sparators = "."){
+                let string_number = angka.toString()
+                var number_string = string_number.replace(/[^,\d]/g, '').toString(),
+                split   		= number_string.split(','),
+                sisa     		= split[0].length % 3,
+                rupiah     		= split[0].substr(0, sisa),
+                ribuan     		= split[0].substr(sisa).match(/\d{3}/gi);
+                if(ribuan){
+                    let separator = sisa ? Sparators : '';
+                    rupiah += separator + ribuan.join('.');
+                }
+                rupiah = split[1] != undefined ? rupiah + ',' + split[1] : rupiah;
+                return prefix == undefined ? rupiah : (rupiah ? '' + rupiah : '');
+
+            },
+            counterF1(number) {
+                if(number == 1) {
+                    return 175
+                } else if (number == 2) {
+                    return 350
+                } else if (number == 3) {
+                    return 550
+                } else if (number == 4) {
+                    return 775
+                } else if (number == 5) {
+                    return 900
+                } else {
+                    return "-"
+                }
+            },
+            counterF2(number) {
+                if(number == 1) {
+                    return 100
+                } else if (number == 2) {
+                    return 250
+                } else if (number == 3) {
+                    return 350
+                } else {
+                    return "-"
+                }
+            },
+            counterF3(number) {
+                if(number == 1) {
+                    return 450
+                } else if (number == 2) {
+                    return 775
+                } else if (number == 3) {
+                    return 900
+                } else {
+                    return "-"
+                }
+            },
+            counterF41(number) {
+                if(number == 1) {
+                    return 25
+                } else if (number == 2) {
+                    return 50
+                } else if (number == 3) {
+                    return 75
+                } else if (number == 4) {
+                    return 100
+                } else {
+                    return "-"
+                }
+            },
+            counterF42(number) {
+                if(number == 1) {
+                    return 30
+                } else if (number == 2) {
+                    return 75
+                } else if (number == 3) {
+                    return 100
+                } else if (number == 4) {
+                    return 125
+                } else {
+                    return "-"
+                }
+            },
+            counterF5(number) {
+                if(number == 1) {
+                    return 75
+                } else if (number == 2) {
+                    return 205
+                } else if (number == 3) {
+                    return 340
+                } else if (number == 4) {
+                    return 505
+                } else if (number == 5) {
+                    return 650
+                } else if (number == 6) {
+                    return 800
+                } else if (number == 7) {
+                    return 930
+                } else if (number == 8) {
+                    return 1030
+                } else {
+                    return "-"
+                }
+            },
+            counterF6(number) {
+                if(number == 1) {
+                    return 310
+                } else if (number == 2) {
+                    return 575
+                } else if (number == 3) {
+                    return 975
+                } else if (number == 4) {
+                    return 1120
+                } else if (number == 5) {
+                    return 1225
+                } else if (number == 6) {
+                    return 1325
+                } else {
+                    return "-"
+                }
+            },
+
+            jobValue(f1, f2, f3, f41, f42, f5, f6){
+                let total = 0
+                total += f1 != 0 ? this.counterF1(f1) : 0
+                total += f2 != 0 ? this.counterF2(f2) : 0
+                total += f3 != 0 ? this.counterF3(f3) : 0
+                total += f41 != 0 ? this.counterF41(f41) : 0
+                total += f42 != 0 ? this.counterF42(f42) : 0
+                total += f5 != 0 ? this.counterF5(f5) : 0
+                total += f6 != 0 ? this.counterF6(f6) : 0
+
+                return total
+            },
+
+            jobClass(number){
+                let kelas = 0
+                if (number >=190 && number<=240) {
+                    kelas = 1
+                    return kelas
+                }else if (number>=245 && number <=300) {
+                    kelas = 2
+                    return kelas
+                }else if (number>=305 && number <= 370) {
+                    kelas = 3
+                    return kelas
+                }else if (number>=375 && number <= 450) {
+                    kelas = 4
+                    return kelas
+                }else if (number>=455 && number <= 650) {
+                    kelas = 5 
+                    return kelas    
+                }else if (number>=655 && number <= 850) {
+                    kelas = 6
+                    return kelas
+                }else if (number>=855 && number <=1100) {
+                    kelas = 7
+                    return kelas
+                }else if (number>=1105 && number <= 1350) {
+                    kelas = 8
+                    return kelas
+                }else if (number>=1355 && number <= 1600) {
+                    kelas = 9
+                    return kelas
+                }else if (number>=1605 && number <= 1850) {
+                    kelas = 10
+                    return kelas
+                }else if (number>=1855 && number <= 2100) {
+                    kelas = 11
+                    return kelas
+                }else if (number>=2105 && number <=2350) {
+                    kelas =12
+                    return kelas
+                }else if (number>=2355 && number<=2750) {
+                    kelas = 13
+                    return kelas
+                }else if (number>=2755 && number <=3150) {
+                    kelas = 14
+                    return kelas
+                }else if (number>=3155 && number <= 3600) {
+                    kelas = 15
+                    return kelas
+                }else if (number>=3605 && number<=4050) {
+                    kelas = 16
+                    return kelas
+                }else if (number>= 4055) {
+                    kelas = 17
+                    return kelas
+                }else 
+                return "Tanpa Kelas"
+
+            },
+
+            fcounterF1(number) {
+                if(number == 1) {
+                    return 50
+                } else if (number == 2) {
+                    return 200
+                } else if (number == 3) {
+                    return 350
+                } else if (number == 4) {
+                    return 550
+                } else if (number == 5) {
+                    return 750
+                } else if (number == 6) {
+                    return 950
+                } else if (number == 7) {
+                    return 1250
+                } else {
+                    return "-"
+                }
+            },
+            fcounterF2(number) {
+                if(number == 1) {
+                    return 25
+                } else if (number == 2) {
+                    return 125
+                } else if (number == 3) {
+                    return 275
+                } else if (number == 4) {
+                    return 450
+                } else if (number == 5) {
+                    return 650
+                } else {
+                    return "-"
+                }
+            },
+            fcounterF3(number) {
+                if(number == 1) {
+                    return 25
+                } else if (number == 2) {
+                    return 125
+                } else if (number == 3) {
+                    return 275
+                } else if (number == 4) {
+                    return 450
+                } else if (number == 5) {
+                    return 650
+                } else {
+                    return "-"
+                }
+            },
+            fcounterF4(number) {
+                if(number == 1) {
+                    return 25
+                } else if (number == 2) {
+                    return 75
+                } else if (number == 3) {
+                    return 150
+                } else if (number == 4) {
+                    return 225
+                } else if (number == 5) {
+                    return 325
+                } else if (number == 6) {
+                    return 450
+                } else {
+                    return "-"
+                }
+            },
+            
+            fcounterF5(number) {
+                if(number == 1) {
+                    return 25
+                } else if (number == 2) {
+                    return 75
+                } else if (number == 3) {
+                    return 150
+                } else if (number == 4) {
+                    return 225
+                } else if (number == 5) {
+                    return 325
+                } else if (number == 6) {
+                    return 450
+                } else {
+                    return "-"
+                }
+            },
+            fcounterF6(number) {
+                if(number == 1) {
+                    return 10
+                } else if (number == 2) {
+                    return 25
+                } else if (number == 3) {
+                    return 60
+                } else if (number == 4) {
+                    return 110
+                } else {
+                    return "-"
+                }
+            },
+            fcounterF7(number) {
+                if(number == 1) {
+                    return 20
+                } else if (number == 2) {
+                    return 50
+                } else if (number == 3) {
+                    return 120
+                } else if (number == 4) {
+                    return 220
+                } else {
+                    return "-"
+                }
+            },
+            fcounterF8(number) {
+                if(number == 1) {
+                    return 5
+                } else if (number == 2) {
+                    return 20
+                } else if (number == 3) {
+                    return 50
+                } else {
+                    return "-"
+                }
+            },
+            fcounterF9(number) {
+                if(number == 1) {
+                    return 5
+                } else if (number == 2) {
+                    return 20
+                } else if (number == 3) {
+                    return 50
+                } else {
+                    return "-"
+                }
+            },
+            
+        }
+    }
+</script>
