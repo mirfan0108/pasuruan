@@ -28,7 +28,7 @@
                 <div class="card-body" v-if="!loading">
                     <div class="row">
                         <div class="col-md-12 col-lg-12">
-                            <table style="width: 100%; margin-top: 20px; font-size: 9pt;" class="table" v-if="tipe == 'Struktural'"> 
+                            <table style="width: 100%; margin-top: 20px; font-size: 9pt;" class="table" > 
                                 <thead style="border: 1pt solid black;" v-if="dataStruktur.length > 0 && tipe == 'Struktural'">
                                     <tr style="border: 1pt solid black;">
                                         <th style="width: 5%; text-align: center;border: 1pt solid black; vertical-align : middle;">No</th>
@@ -36,7 +36,7 @@
                                         <th style="width: 5%; text-align: center;border: 1pt solid black; vertical-align : middle;">Aksi</th>
                                     </tr>
                                 </thead>
-                                <tbody v-if="dataStruktur.length > 0 && tipe == 'Struktural'">
+                                <tbody v-if="dataStruktur.length > 0 ">
                                     <tr v-for="(dt, index) in dataStruktur" >
                                         <td style="text-align: center;border: 1pt solid black;">{{index+1}}</td>
                                         <td style="border: 1pt solid black;">{{dt.name}}</td>
@@ -58,6 +58,8 @@
                         </div>
                     </div>
                 </div>
+
+                
             </div>
         </div>
     </div>
@@ -165,7 +167,7 @@
                 })
             },
             doFunsional(data) {
-                generator.generateFungsional(data)
+                generator.generateInfoFungsional(data)
                 .then(_resp => {
                     console.log('generated', _resp)
                     this.dataStruktur = _resp

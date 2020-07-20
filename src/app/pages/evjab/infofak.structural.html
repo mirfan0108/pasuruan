@@ -540,7 +540,7 @@
                         </div>
                         
                     </div>
-
+                    <button class="btn btn-rounded btn-block btn-info" @click.prevent="$root.$router.replace({name: 'list.infofak'})">Simpan</button>
                 </div>
             </div>
         </div>
@@ -558,7 +558,7 @@
             return {
                 infoJabatan: {},
                 totalValue: 0,
-                step: 'eselon',
+                step: 'faktor-satu',
 
                 //FAKTOR SATU
                 formInfoFak: {
@@ -648,11 +648,8 @@
             saveInput() {
                 ApiEvjab.CreateInput_infoFak(this.formInfoFak)
                 .then(_resp => {
-                    this.formInfoFak =  {
-                        info: '',
-                        standar: '',
-                        parent_id: 0
-                    }
+                    this.formInfoFak.info = ''
+                    this.formInfoFak.standar = ''
                 })
                 .finally(() => {
                     this.getInput()
@@ -665,10 +662,8 @@
                 this.formChild.type = this.formInfoFak.type
                 ApiEvjab.CreateInput_infoFak(this.formChild)
                 .then(_resp => {
-                    this.formChild = {
-                        info: '',
-                        standar: ''
-                    }
+                    this.formChild.info = ''
+                    this.formChild.standar = ''
                 })
                 .finally(() => {
                     this.getInput()
