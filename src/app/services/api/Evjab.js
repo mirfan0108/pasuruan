@@ -15,6 +15,10 @@ class Evjab {
         return axios.post(ENV+`/evjab/create/fungsional`, req)
     }
 
+    static GetLampiran(id) {
+        return axios.get(`${ENV}/evjab/lampiran/opd/${id}`)
+    }
+
 }
 
 export default Evjab
