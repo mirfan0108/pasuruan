@@ -257,8 +257,8 @@ class Fes {
                             organization: _val.organization,
                             penjabat: _val.penjabat,
                             jc: _val.type == "Struktural" ? 
-                            _val.fes_struktur ? this.jobClass(this.jobValue(_val.fes_struktur.f1, _val.fes_struktur.f2, _val.fes_struktur.f3, _val.fes_struktur.f4_1, _val.fes_struktur.f4_2, _val.fes_struktur.f5, _val.fes_struktur.f6,)) : 0 : 
-                            _val.fes_func ? this.jobClass(this.jobValueF(_val.fes_func.f1, _val.fes_func.f2, _val.fes_func.f3,_val.fes_func.f4,_val.fes_func.f5,_val.fes_func.f6,_val.fes_func.f7,_val.fes_func.f8,_val.fes_func.f9 )) : 0,
+                            _val.fes_struktur ? this.jobClass(this.jobValue(_val.fes_struktur.f1, _val.fes_struktur.f2, _val.fes_struktur.f3, _val.fes_struktur.f4_1, _val.fes_struktur.f4_2, _val.fes_struktur.f5, _val.fes_struktur.f6,)) : 0 
+                            : _val.fes_func ? this.jobClass(this.jobValueF(_val.fes_func.f1, _val.fes_func.f2, _val.fes_func.f3,_val.fes_func.f4,_val.fes_func.f5,_val.fes_func.f6,_val.fes_func.f7,_val.fes_func.f8,_val.fes_func.f9 )) : 0,
                             child: []
                         })
                     } 

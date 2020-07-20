@@ -48,7 +48,7 @@
                         </a> 
                     </li>
                     <li class="nav-item"> 
-                        <a class="nav-link" data-toggle="tab" href="#pemen6" role="tab" aria-selected="true">
+                        <a @click.prevent="getLampiran6()" class="nav-link" data-toggle="tab" href="#pemen6" role="tab" aria-selected="true">
                             <span class="hidden-sm-up"><i class="ti-email"></i></span> <span class="hidden-xs-down">KepIns</span>
                         </a> 
                     </li>
@@ -257,7 +257,15 @@
                         <div class="p-20" align="center">
                             <h3>DAFTAR NAMA JABATAN, KELAS JABATAN, DAN PEMANGKU JABATAN <br> DI LINGKUNGAN {{opd.name.toUpperCase()}} KABUPATEN PASURUAN</h3>
                         </div>
-                        <div class="table-responsive">
+
+                        <div style="width: 100%;" v-if="onLoadLampiran6">
+                            <div class="overlay"  align="center" >
+                                <img src="/assets/gif/loading.gif" width="100"> <br>
+                                <span>Mohon Tunggu</span>
+                            </div>
+                        </div>
+
+                        <div class="table-responsive" v-if="!onLoadLampiran6 && KepIns.length > 0">
                             <table class="table display table-bordered table-striped dataTable" role="grid" aria-describedby="example_info" style="width: 1500px;">
                                 <thead>
                                     <tr style="background-color: #1e88e5ad !important">
@@ -279,40 +287,38 @@
                                         <td style="text-align: center;">{{index + 1}}</td>
 
                                         <th style="text-align: center;" v-if="dt.bold">{{dt.name}}</th>
-                                        <td style="text-align: center;" v-if="dt.bold">{{dt.name}}</td>
+                                        <td style="text-align: center;" v-if="!dt.bold">{{dt.name}}</td>
 
                                         <th style="text-align: center;" v-if="dt.bold">{{dt.organization}}</th>
-                                        <td style="text-align: center;" v-if="dt.bold">{{dt.organization}}</td>
+                                        <td style="text-align: center;" v-if="!dt.bold">{{dt.organization}}</td>
 
-                                        <td style="text-align: center;"> {{td.jc ? td.jc : 'Tanpa Kelas'}}</td>
-                                        <td >
+                                        <td style="text-align: center;"> {{dt.jc}}</td>
+                                        <td v-if="dt.penjabat">
                                             <table style="width: 100%;" v-if="dt.penjabat.length > 0" border="1">
                                                 <tr v-for="pj in dt.penjabat">
-                                                    <td style="vertical-align: middle; border: 1px solid black;">{{pj.name}}</td>
+                                                    <td style="text-align: center; vertical-align: middle; border: 1px solid black;">{{pj.name}}</td>
                                                 </tr>
                                             </table>
                                             <label v-if="dt.penjabat.length == 0">-</label>
                                         </td>
-                                        <td >
+                                        <td v-if="dt.penjabat">
                                             <table style="width: 100%;" v-if="dt.penjabat.length > 0" border="1">
                                                 <tr v-for="pj in dt.penjabat">
-                                                    <td style="vertical-align: middle; border: 1px solid black;">{{pj.nip}}</td>
+                                                    <td style="text-align: center;vertical-align: middle; border: 1px solid black;">{{pj.nip}}</td>
                                                 </tr>
                                             </table>
                                             <label v-if="dt.penjabat.length == 0">-</label>
                                         </td>
-                                        <td >
+                                        <td v-if="dt.penjabat">
                                             <table style="width: 100%;" v-if="dt.penjabat.length > 0" border="1">
                                                 <tr v-for="pj in dt.penjabat">
-                                                    <td style="vertical-align: middle; border: 1px solid black;">{{pj.golongan}}</td>
+                                                    <td style="text-align: center;vertical-align: middle; border: 1px solid black;">{{pj.golongan}}</td>
                                                 </tr>
                                             </table>
                                             <label v-if="dt.penjabat.length == 0">-</label>
                                         </td>
 
-                                        <td style="text-align: center;">
-                                            <a href="javascript:void(0)">Tulis Keterangan</a>
-                                        </td>
+                                        <td style="text-align: center;"></td>
                                     </tr>
                                 </tbody>
                             </table>
@@ -335,7 +341,9 @@
             return {
                 opd: {},
                 onLoad: true,
-                KepIns: []
+                KepIns: [],
+                position: [],
+                onLoadLampiran6: true
             }
         },
         computed: mapState([ 'Positions', 'totalPositions', 'accessToken']),
@@ -369,6 +377,7 @@
                     }
                 }
             }).on('change', e => {
+                this.onLoadLampiran6 = true
                 this.getLampiran()
             })
         },
@@ -379,17 +388,25 @@
                 .then(resp => {
                     if(resp.data && resp.data.opd) {
                         this.opd = resp.data.opd
-                        generator.GenerateLampiranKepInd(resp.data.position)
-                        .then(_kepins => {
-                            console.log('kepins => ', _kepins)
-                            // this.KepIns = _kepins
-                        })
+                        this.position = resp.data.position
                     }
                 })
                 .finally(() => {
                     setTimeout(() => {
                         this.onLoad = false
                     }, 500)
+                })
+            },
+
+            getLampiran6() {
+                generator.GenerateLampiranKepInd(this.position)
+                .then(_kepins => {
+                    this.KepIns = _kepins
+                })
+                .finally(() => {
+                    setTimeout(() => {
+                        this.onLoadLampiran6 = false
+                    })
                 })
             }
         }
