@@ -19,6 +19,14 @@ class Evjab {
         return axios.get(`${ENV}/evjab/lampiran/opd/${id}`)
     }
 
+    static GetInput_infoFak(id) {
+        return axios.get(`${ENV}/evjab/info-faktur/input/position/${id}`)
+    }
+
+    static CreateInput_infoFak(req) {
+        return axios.post(`${ENV}/evjab/info-faktur`, req)
+    }
+
 }
 
 export default Evjab

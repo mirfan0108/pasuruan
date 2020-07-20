@@ -1,0 +1,189 @@
+<template>
+    <div class="row">
+        <div class="col-md-12 col-lg-12">
+            <div class="card">
+                <div class="card-body">
+                    <!-- <button class="pull-right btn btn-sm btn-rounded btn-success" @click.prevent="createPosition()" >Tambah Jabatan</button> -->
+                    <h4 class="card-title">Jabatan</h4>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <select class="select2 form-control" id="opd-selection" style="width: 100%;">
+                                <option value="0" disabled selected>Pilih Opd</option>
+                            </select>
+                        </div>
+                        <div class="col-md-6">
+                            <select class="select2 form-control" id="type-selection" style="width: 100%;" v-model="tipe">
+                                <option value="Struktural" selected>Struktural</option>
+                                <option value="Fungsional">Fungsional</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+                <div class="card-body" v-if="loading">
+                    <div class="overlay"  align="center" >
+                        <img src="/assets/gif/loading.gif" width="100"> <br>
+                        <span>Mohon Tunggu</span>
+                    </div>
+                </div>
+                <div class="card-body" v-if="!loading">
+                    <div class="row">
+                        <div class="col-md-12 col-lg-12">
+                            <table style="width: 100%; margin-top: 20px; font-size: 9pt;" class="table" v-if="tipe == 'Struktural'"> 
+                                <thead style="border: 1pt solid black;" v-if="dataStruktur.length > 0 && tipe == 'Struktural'">
+                                    <tr style="border: 1pt solid black;">
+                                        <th style="width: 5%; text-align: center;border: 1pt solid black; vertical-align : middle;">No</th>
+                                        <th style="width: 20%; text-align: center;border: 1pt solid black; vertical-align : middle;" >Nama Jabatan</th>
+                                        <th style="width: 5%; text-align: center;border: 1pt solid black; vertical-align : middle;">Aksi</th>
+                                    </tr>
+                                </thead>
+                                <tbody v-if="dataStruktur.length > 0 && tipe == 'Struktural'">
+                                    <tr v-for="(dt, index) in dataStruktur" >
+                                        <td style="text-align: center;border: 1pt solid black;">{{index+1}}</td>
+                                        <td style="border: 1pt solid black;">{{dt.name}}</td>
+                                        
+                                        <td colspan="16" v-if="dt.info_faktor.length > 0" style="text-align: center;border: 1pt solid black;" align="center">
+                                            <button class="btn btn-sm btn-rounded btn-success" 
+                                            style="font-size: small;" 
+                                            @click.prevent="$root.$router.push({name: 'struktural.form.evjab', params: {id: dt.id}})">
+                                            Detail</button>
+                                        </td>
+                                        <td colspan="16" v-if="dt.info_faktor.length == 0" style="text-align: center;border: 1pt solid black;" align="center">
+                                            <button class="btn btn-sm btn-rounded btn-secondary" 
+                                                style="font-size: small;" 
+                                                @click.prevent="createNew(dt.id)">Buat Informasi Faktor</button>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</template>
+
+<script>
+    import ApiEvjab from '../../services/api/Evjab.js';
+    import generator from "./generator.js"
+    import { mapState } from 'vuex';
+    import Swal from 'sweetalert2'
+    export default {
+        data() {
+            return {
+                dumData: [],
+                dataStruktur: [],
+                tipe: 'Struktural',
+                loading: true
+            }
+        },
+        computed: mapState(['onLoad', 'Positions', 'totalPositions', 'accessToken']),
+        beforeCreate() {},
+        watch: {},
+        mounted() {
+
+            $("#type-selection").select2().on("change", (e) => {
+                this.tipe = $("#type-selection").val()
+                this.init()
+            })
+            $("#opd-selection").select2({
+                ajax: {
+                    url: process.env.BASE_API+"/opd",
+                    headers: {
+                        "Authorization": `Bearer ${this.accessToken.access_token}`,
+                    },
+                    delay: 1000,
+                    data: function (params) {
+                        var query = {
+                            search: params.term,
+                            limit: 10,
+                            page: params.page || 1
+                        }
+                        return query;
+                    },
+                    processResults: function (data, params) {
+                        
+                        params.page = params.page || 1;
+                        data.content.forEach( _val => {
+                            _val.text = _val.name
+                        })
+                        return {
+                            results: data.content,
+                            pagination: {
+                                more: (params.page * 10) < data.total
+                            }
+                        };
+                    }
+                }
+            })
+
+            $('#opd-selection').on('select2:select', async (e) => {
+                this.init()
+            })
+            
+            if(localStorage.getItem('__opd')) {
+                this.$root.$store.dispatch('getOne_Opd', localStorage.getItem('__opd'))
+                .then(_res => {
+                    this.$root.$store.dispatch('setOpd_Data', {id: _res.opd.id, name: _res.opd.name})
+                    $("#opd-selection").append(`
+                        <option selected value="${_res.opd.id}">${_res.opd.name}</option>
+                    `)
+                    this.init()
+                    // $("#opd-selection").trigger('change');
+                })
+            } else {
+                this.init()
+            }
+            
+        },
+        methods: {
+            async init() {
+                this.dataStruktur = []
+                this.loading = true
+                ApiEvjab.getAll($("#opd-selection").val())
+                .then(resp => {
+                    console.log('fes', resp)
+                    if($("#type-selection").val() == "Struktural") {
+                        this.doStructure(resp.data)
+                    } else {
+                        this.doFunsional(resp.data)
+                    }
+                })
+                    
+            },
+            
+            doStructure(data) {
+                generator.generateInfoStructure(data)
+                .then(_resp => {
+                    console.log('generated', _resp)
+                    this.dataStruktur = _resp
+                })
+                .finally(() => {
+                    setTimeout(() => {
+                        this.loading = false
+                    }, 500)
+                })
+            },
+            doFunsional(data) {
+                generator.generateFungsional(data)
+                .then(_resp => {
+                    console.log('generated', _resp)
+                    this.dataStruktur = _resp
+                })
+                .finally(() => {
+                    setTimeout(() => {
+                        this.loading = false
+                    }, 500)
+                })
+            },
+
+            createNew(id) {
+                if($("#type-selection").val() == "Struktural") {
+                    this.$root.$router.push({name: 'input.infofak.struktur', params: {id: id}})
+                } else {
+                    this.$root.$router.push({name: 'input.infofak.fungsional', params: {id: id}})
+                }
+            }
+        }
+    }
+</script>

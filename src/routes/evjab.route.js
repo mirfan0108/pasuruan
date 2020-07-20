@@ -5,6 +5,7 @@ import FormFungsionalPage from "@/app/pages/evjab/form.fungsional.html"
 import FormInfofakStruktural from "@/app/pages/evjab/infofak.structural.html"
 import FormInfofakFungsional from "@/app/pages/evjab/infofak.fungsional.html"
 import ListPermenDua from "@/app/pages/evjab/list.permen.dua.html"
+import InfoFaktorPage from "@/app/pages/evjab/infofak.html"
 
 import LampiranPage from "@/app/pages/evjab/lampiran.html"
 
@@ -32,14 +33,21 @@ export default [
         component: FormFungsionalPage
     },
     {
-        path: 'infofak/input-struktural',
+        path: 'evaluasi-jabatan/info-faktur',
         name: 'list.infofak',
+        component: InfoFaktorPage
+    },
+    {
+        path: 'evaluasi-jabatan/info-faktur/input-struktural/:id',
+        name: 'input.infofak.struktur',
+        props: true,
         component: FormInfofakStruktural
     },
 
     {
-        path: 'infofak/input-fungsional',
-        name: 'list.infofak_fungsional',
+        path: 'evaluasi-jabatan/info-faktur/input-fungsional/:id',
+        name: 'input.infofak.fungsional',
+        props: true,
         component: FormInfofakFungsional
     },
 
