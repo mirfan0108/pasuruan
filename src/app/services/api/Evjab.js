@@ -27,6 +27,10 @@ class Evjab {
         return axios.post(`${ENV}/evjab/info-faktur`, req)
     }
 
+    static GetInfoFaktor(id) {
+        return axios.get(`${ENV}/evjab/info-faktur/detail/position/${id}`)
+    }
+
 }
 
 export default Evjab

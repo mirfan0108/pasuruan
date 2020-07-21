@@ -1,50 +1,115 @@
 class Fes {
+
     static async generateStructure(position) {
-        let structure = []
-        let id_head = await position[position.findIndex(_item => _item.parent_id == 0)].id
-        let id_number = []
-        await position.map(_position => {
-            if(_position.parent_id == 0) {
-                structure.push({
-                    id: _position.id,
-                    bold: true,
-                    name: _position.position_name,
-                    fes: _position.fes_structure,
-                    current_stickholder: _position.current_stickholder,
-                    needed_stickholder: _position.formA
-                })
-                id_number.push(_position.id)
-            } else if (_position.parent_id == id_head && _position.type == "Struktural") {
-                structure.push({
-                    id: _position.id,
-                    bold: true,
-                    name: _position.position_name,
-                    fes: _position.fes_structure,
-                    current_stickholder: _position.current_stickholder,
-                    needed_stickholder: _position.formA
-                })
-                id_number.push(_position.id)
-            }
-        })
-        id_number.map(_id => {
-            position.map(_position => {
-                if(structure.findIndex(_val => _val.id == _position.id) < 0) {
-                    if(_position.parent_id == _id  && _position.type == "Struktural") {
-                        structure.push({
-                            id: _position.id,
-                            bold: false,
-                            name: _position.position_name,
-                            fes: _position.fes_structure,
-                            current_stickholder: _position.current_stickholder,
-                            needed_stickholder: _position.formA
+        let Lampiran = []
+            let id_head = await position[position.findIndex(_item => _item.parent_id == 0)].id
+            let counter = 0
+            let id_number = []
+            let id_number_ = []
+            let total = 0
+            let resultLampiran = []
+            await position.map(_val => {
+                if(_val.type == "Struktural") {
+                    if(_val.parent_id == 0 ) {
+                        if(_val.oj != null ) {
+                            total+= Number(_val.oj) 
+                        }
+                        counter += 1
+                        Lampiran.push({
+                            id: _val.id,
+                            bold: true,
+                            name: _val.position_name,
+                            fes: _val.fes_structure,
+                            current_stickholder: _val.current_stickholder,
+                            needed_stickholder: _val.formA,
+                            child: []
                         })
-                    }
+                    } else if (_val.parent_id == id_head) {
+                        console.log('sekr')
+                        id_number.push(_val.id)
+                        
+                        if(_val.oj != null ) {
+                            total+= Number(_val.oj) 
+                        }
+                        counter += 1
+                        Lampiran.push({
+                            id: _val.id,
+                            bold: true,
+                            name: _val.position_name,
+                            fes: _val.fes_structure,
+                            current_stickholder: _val.current_stickholder,
+                            needed_stickholder: _val.formA,
+                            child: []
+                        })
+                    } 
                 }
             })
-        })
-        return structure
+            
+
+            await position.map(_val => {
+                if(_val.parent_id == id_number[id_number.findIndex(_number => _number == _val.parent_id)] && _val.type == "Struktural") {
+                    id_number_.push(_val.id)
+                    Lampiran[Lampiran.findIndex(__item => __item.id == _val.parent_id)].child.push({
+                        id: _val.id,
+                        bold: true,
+                        name: _val.position_name,
+                        fes: _val.fes_structure,
+                        current_stickholder: _val.current_stickholder,
+                        needed_stickholder: _val.formA,
+                        child: []
+                    })
+                }
+            })
+
+            await position.map(_val => {
+                if(_val.parent_id == id_number_[id_number_.findIndex(_number => _number == _val.parent_id)] && _val.type == "Struktural") {
+                    if(_val.oj != null ) {
+                        total+= parseInt(_val.oj) 
+                    }
+                    
+                    Lampiran.map(_item => {
+                        if(_item.child.length > 0) {
+                            _item.child.map(_ch => {
+                                if(_ch.id == _val.parent_id) {
+                                    _ch.child.push({
+                                        id: _val.id,
+                                        bold: false,
+                                        name: _val.position_name,
+                                        fes: _val.fes_structure,
+                                        current_stickholder: _val.current_stickholder,
+                                        needed_stickholder: _val.formA,
+                                        child: []
+                                    })
+                                }
+                            })
+                        }
+                    })
+                }
+            })
+
+
+            Lampiran.map(_root => {
+                if(_root.child.length == 0) {
+                    console.log('root push')
+                    resultLampiran.push(_root)
+                } else {
+                    resultLampiran.push(_root)
+                    console.log('child push')
+                    _root.child.map(_child => {
+                        resultLampiran.push(_child)
+                        if(_child.child.length > 0) {
+                            console.log('sub child push')
+                            _child.child.map(_sub_child => {
+                                resultLampiran.push(_sub_child)
+                            })
+                        }
+                    })
+                }
+            }) 
+        return resultLampiran
     }
 
+<<<<<<< HEAD
     static async generateStructure2(position) {
         let structure = []
         let id_head = await position[position.findIndex(_item => _item.parent_id == 0)].id
@@ -90,174 +155,129 @@ class Fes {
         })
         return structure
     }
+=======
+>>>>>>> master
 
     static async generateFungsional(position) {
-        let structure = []
-        let id_head = await position[position.findIndex(_item => _item.parent_id == 0)].id
-        let id_kepsub = []
-        await position.map(_position => {
-            if(_position.parent_id == id_head && _position.type == "Struktural") {
-                id_kepsub.push(_position.id)
-            }
-        })
-        await id_kepsub.map(_id => {
-            position.splice(position.findIndex(_val => _val.id == _id), 1)
-        })
-        id_kepsub.map(_id => {
-            position.map(_position => {
-                if(_position.parent_id == _id) {
-                    if(structure.findIndex(_pos => _pos.id == _id) > -1) {
-                        structure.push({
-                            id: _position.id,
+        let Lampiran = []
+            let id_head = await position[position.findIndex(_item => _item.parent_id == 0)].id
+            let counter = 0
+            let id_number = []
+            let id_number_ = []
+            let total = 0
+            let resultLampiran = []
+            await position.map(_val => {
+                if(_val.type != "Struktural") {
+                    if(_val.parent_id == 0 ) {
+                        if(_val.oj != null ) {
+                            total+= Number(_val.oj) 
+                        }
+                        counter += 1
+                        Lampiran.push({
+                            id: _val.id,
                             space: false,
-                            name: _position.position_name,
+                            name: _val.position_name,
                             bold: true,
-                            organization: _position.organization,
-                            fes: _position.fes_func, 
-                            current_stickholder: _position.current_stickholder,
-                            needed_stickholder: _position.formA
+                            organization: _val.organization,
+                            fes: _val.fes_func, 
+                            current_stickholder: _val.current_stickholder,
+                            needed_stickholder: _val.formA,
+                            child: []
                         })
-                        position.map(_child => {
-                            if(_child.parent_id == _position.id) {
-                                if(position.findIndex(_p => _p.parent_id == _child.id) > -1 ) {
-                                    position.map(_grand_child => {
-                                        if(_grand_child.parent_id == _child.id) {
-                                            structure.push({
-                                                id: _grand_child.id,
-                                                space: false,
-                                                name: _grand_child.position_name,
-                                                bold: false,
-                                                organization: _grand_child.organization,
-                                                fes: _grand_child.fes_func, 
-                                                current_stickholder: _grand_child.current_stickholder,
-                                                needed_stickholder: _grand_child.formA
-                                            })
-                                            position.map(_last => {
-                                                if(_last.parent_id == _grand_child.id) {
-                                                    structure.push({
-                                                        id: _grand_child.id,
-                                                        space: false,
-                                                        name: _grand_child.position_name,
-                                                        bold: false,
-                                                        organization: _grand_child.organization,
-                                                        fes: _grand_child.fes_func, 
-                                                        current_stickholder: _grand_child.current_stickholder,
-                                                        needed_stickholder: _grand_child.formA
-                                                    })
-                                                }
-                                            })
-                                        }
-                                    })
-                                } else {
-                                    structure.push({
-                                        id: _child.id,
-                                        space: false,
-                                        name: _child.position_name,
-                                        bold: false,
-                                        organization: _child.organization,
-                                        fes: _child.fes_func, 
-                                        current_stickholder: _child.current_stickholder,
-                                        needed_stickholder: _child.formA
-                                    })
-                                }
-                            }
+                    } else if (_val.parent_id == id_head) {
+                        console.log('sekr')
+                        id_number.push(_val.id)
+                        
+                        if(_val.oj != null ) {
+                            total+= Number(_val.oj) 
+                        }
+                        counter += 1
+                        Lampiran.push({
+                            id: _val.id,
+                            space: false,
+                            name: _val.position_name,
+                            bold: true,
+                            organization: _val.organization,
+                            fes: _val.fes_func, 
+                            current_stickholder: _val.current_stickholder,
+                            needed_stickholder: _val.formA,
+                            child: []
                         })
-                    } else {
-                        structure.push({
-                            id: _id,
-                            space: true,
-                            name: '',
-                            bold: '',
-                            organization: '',
-                            fes: null,
-                        })
-                        // structure.push({
-                        //     id: _position.id,
-                        //     space: false,
-                        //     name: _position.position_name,
-                        //     bold: true,
-                        //     organization: _position.organization,
-                        //     fes: _position.fes_func, 
-                        //     current_stickholder: _position.current_stickholder,
-                        //     needed_stickholder: _position.formA
-                        // })
-                        position.map(_child => {
-                            if(_child.parent_id == _position.id) {
-                                if(position.findIndex(_p => _p.parent_id == _child.id) > -1 ) {
-                                    position.map(_grand_child => {
-                                        if(_grand_child.parent_id == _child.id) {
-                                            structure.push({
-                                                id: _grand_child.id,
-                                                space: false,
-                                                name: _grand_child.position_name,
-                                                bold: false,
-                                                organization: _grand_child.organization,
-                                                fes: _grand_child.fes_func, 
-                                                current_stickholder: _grand_child.current_stickholder,
-                                                needed_stickholder: _grand_child.formA
-                                            })
-                                            position.map(_last => {
-                                                if(_last.parent_id == _grand_child.id) {
-                                                    structure.push({
-                                                        id: _grand_child.id,
-                                                        space: false,
-                                                        name: _grand_child.position_name,
-                                                        bold: false,
-                                                        organization: _grand_child.organization,
-                                                        fes: _grand_child.fes_func, 
-                                                        current_stickholder: _grand_child.current_stickholder,
-                                                        needed_stickholder: _grand_child.formA
-                                                    })
-                                                }
-                                            })
-                                        }
-                                    })
-                                } else {
-                                    structure.push({
-                                        id: _child.id,
-                                        space: false,
-                                        name: _child.position_name,
-                                        bold: false,
-                                        organization: _child.organization,
-                                        fes: _child.fes_func, 
-                                        current_stickholder: _child.current_stickholder,
-                                        needed_stickholder: _child.formA
-                                    })
-                                }
-                            }
-                        })
-                    }
+                    } 
                 }
             })
-        })
+            
 
-        if(position.findIndex(_pos => _pos.type == "Fungsional") > -1) {
-            structure.push({
-                id: '_pos.id',
-                bold: true,
-                space: true,
-                name: '',
-                fes: null,
-                current_stickholder: '',
-                needed_stickholder: ''
-            })
-            position.map(_position => {
-                if(_position.type == "Fungsional") {
-                    structure.push({
-                        id: _position.id,
+            await position.map(_val => {
+                if(_val.parent_id == id_number[id_number.findIndex(_number => _number == _val.parent_id)] && _val.type != "Struktural") {
+                    id_number_.push(_val.id)
+                    Lampiran[Lampiran.findIndex(__item => __item.id == _val.parent_id)].child.push({
+                        id: _val.id,
                         space: false,
-                        name: _position.position_name,
+                        name: _val.position_name,
                         bold: true,
-                        organization: _position.organization,
-                        fes: _position.fes_func, 
-                        current_stickholder: _position.current_stickholder,
-                        needed_stickholder: _position.formA
+                        organization: _val.organization,
+                        fes: _val.fes_func, 
+                        current_stickholder: _val.current_stickholder,
+                        needed_stickholder: _val.formA,
+                        child: []
                     })
                 }
             })
-        }
 
-        return structure
+            await position.map(_val => {
+                if(_val.parent_id == id_number_[id_number_.findIndex(_number => _number == _val.parent_id)] && _val.type != "Struktural") {
+                    if(_val.oj != null ) {
+                        total+= parseInt(_val.oj) 
+                    }
+                    
+                    Lampiran.map(_item => {
+                        if(_item.child.length > 0) {
+                            _item.child.map(_ch => {
+                                if(_ch.id == _val.parent_id) {
+                                    _ch.child.push({
+                                        id: _val.id,
+                                        space: false,
+                                        name: _val.position_name,
+                                        bold: true,
+                                        organization: _val.organization,
+                                        fes: _val.fes_func, 
+                                        current_stickholder: _val.current_stickholder,
+                                        needed_stickholder: _val.formA,
+                                        child: []
+                                    })
+                                }
+                            })
+                        }
+                    })
+                }
+            })
+
+
+            Lampiran.map(_root => {
+                resultLampiran.push({
+                    id: _id,
+                    space: true,
+                    name: '',
+                    bold: '',
+                    organization: '',
+                    fes: null,
+                })
+                if(_root.child.length == 0) {
+                    resultLampiran.push(_root)
+                } else {
+                    resultLampiran.push(_root)
+                    _root.child.map(_child => {
+                        resultLampiran.push(_child)
+                        if(_child.child.length > 0) {
+                            _child.child.map(_sub_child => {
+                                resultLampiran.push(_sub_child)
+                            })
+                        }
+                    })
+                }
+            })
+            return resultLampiran
     }
 
     static async generateInfoStructure(position) {
@@ -359,7 +379,6 @@ class Fes {
                     })
                 }
             })
-            console.log('[total] => ', total)
             return resultLampiran
         } else {
             return []

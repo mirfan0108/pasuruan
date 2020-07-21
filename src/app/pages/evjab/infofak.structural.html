@@ -493,7 +493,7 @@
                                         <h6 class="card-title">PERSYARATAN JABATAN TERTENTU (Wajib di isi)</h6>
                                         <div class="form-group">
                                             <div class="input-group">
-                                                <textarea  class="form-control" placeholder="Ketik disini ..."  rows="3" v-model="formInfoFak.info"></textarea>
+                                                <textarea  class="form-control" placeholder="Ketik disini ..."  rows="6" v-model="formInfoFak.info"></textarea>
                                             </div><br>
                                             <button type="button" class="btn btn-success btn-sm btn-rounded pull-right" @click.prevent="saveInput()">
                                                 <i class="fa fa-plus-square"></i> Tambahkan
@@ -585,7 +585,6 @@
             this.formInfoFak.id_position = this.id
             ApiPosition.getOneById(this.id)
             .then(_resp => {
-                console.log(_resp)
                 this.infoJabatan = _resp.data.position
                 this.getInput()
             })
