@@ -1,0 +1,1066 @@
+<template>
+    <div>
+        <div class="card">
+            <div class="card-body" v-if="onLoad">
+                <div class="overlay"  align="center" >
+                    <img src="/assets/gif/loading.gif" width="100"><br>
+                    <span>Mohon Tunggu....</span>
+                </div>
+            </div>
+
+            <div class="card-body" v-if="!onLoad">
+                <h5 style="text-align: center;">INFORMASI FAKTOR JABATAN {{infoJabatan.type == 'Struktural' ? 'STRUKTURAL' : 'FUNGSIONAL'}}</h5>
+                <div class="row">
+                    <div class="col-md-12">
+                        <table class="table">
+                            <tr>
+                                <td style="width: 15%;">Nama Jabatan</td>
+                                <td>{{infoJabatan.name}}</td>
+                            </tr>
+                            <tr>
+                                <td>Organisasi</td>
+                                <td>{{infoJabatan.TB_ORGANIZATION.name}}</td>
+                            </tr>
+                            <tr>
+                                <td>Nama Instansi</td>
+                                <td>{{infoJabatan.TB_UNIT.name}}</td>
+                            </tr>
+                        </table>
+                    </div>
+                </div>
+
+                <div>
+                    <ul class="list-unstyled">
+                        <li class="media">
+                            <div class="media-body">
+                                <strong style="color: black">I. PERAN JABATAN</strong>
+                                <div class="media mt-3" >
+                                    <div class="media-body pr-3">
+                                        {{infoJabatan.TB_ANALYTIC_POSITION.task_summary}}
+                                    </div>
+                                </div>
+                            </div>
+                        </li>
+                        <li class="media">
+                            <div class="media-body">
+                                <strong style="color: black">II. TUGAS DAN TANGGUNG JAWAB UTAMA</strong>
+                                <div class="media mt-3" >
+                                    <div class="media-body pr-3">
+                                        <strong style="color: black">A. URAIAN TUGAS UTAMA</strong>
+                                        <div class="media mt-3">
+                                            <div class="media-body pr-3">
+                                                <ol>
+                                                    <li v-for="tl in taskList">{{tl.task_detail}}</li>
+                                                </ol>
+                                            </div>
+                                        </div>
+
+                                    </div>
+                                    <div class="media-body pr-3">
+                                        <strong style="color: black">B. TANGGUNG JAWAB</strong>
+                                        <div class="media mt-3">
+                                            <div class="media-body pr-3">
+                                                <ol>
+                                                    <li v-for="respon in listResponsible">{{respon.responsible}}</li>
+                                                </ol>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </li>
+
+                        <li class="media">
+                            <div class="media-body">
+                                <strong style="color: black">III. HASIL KERJA JABATAN</strong>
+                                <div class="media mt-3" >
+                                    <div class="media-body pr-3">
+                                        <ol>
+                                            <li v-for="wl in workList">{{wl.work_result}}</li>
+                                        </ol>
+                                    </div>
+                                </div>
+                            </div>
+                        </li>
+                        
+                        <li class="media" v-if="infoJabatan.type == 'Struktural'">
+                            <div class="media-body">
+                                <strong style="color: black">IV. TINGKAT FAKTOR</strong>
+                                <div class="media mt-3" >
+                                    <div class="media-body pr-3">
+                                        <strong style="color: black">FAKTOR 1 : RUANG LINGKUP DAN DAMPAK PROGRAM (Tingkat Faktor  1-{{infoJabatan.TB_FES_STRUCTURE.f1}} ={{counterF1(infoJabatan.TB_FES_STRUCTURE.f1)}})</strong>
+                                        <p style="margin-left: 60px;" v-if="f1.length == 1">
+                                            {{f1[0].info}}
+                                            <ol  v-if="f1[0].child.length > 0">
+                                                <li v-for="dt in f1[0].child">{{dt.info}}</li>
+                                            </ol>
+                                        </p>
+                                        <ol style="margin-left: 20px;" v-if="f1.length > 1">
+                                            <li v-for="dt in f1">
+                                                {{dt.info}}
+                                                <ol  v-if="dt.child.length > 0">
+                                                    <li v-for="cdt in dt.child">
+                                                        {{cdt.info}}
+                                                    </li>
+                                                </ol>
+                                            </li>
+                                        </ol>
+                                    </div>
+                                </div>
+                                <div class="media mt-3" >
+                                    <div class="media-body pr-3">
+                                        <strong style="color: black">FAKTOR 2 : PENGATURAN ORGANISASI (Tingkat Faktor 2-{{infoJabatan.TB_FES_STRUCTURE.f2}} ={{counterF2(infoJabatan.TB_FES_STRUCTURE.f2)}})</strong>
+                                        <p style="margin-left: 60px;" v-if="f2.length == 1">
+                                            {{f2[0].info}}
+                                            <ol  v-if="f2[0].child.length > 0">
+                                                <li v-for="dt in f2[0].child">{{dt.info}}</li>
+                                            </ol>
+                                        </p>
+                                        <ol style="margin-left: 20px;" v-if="f2.length > 1">
+                                            <li v-for="dt in f2">
+                                                {{dt.info}}
+                                                <ol  v-if="dt.child.length > 0">
+                                                    <li v-for="cdt in dt.child">
+                                                        {{cdt.info}}
+                                                    </li>
+                                                </ol>
+                                            </li>
+                                        </ol>
+                                    </div>
+                                </div>
+
+                                <div class="media mt-3" >
+                                    <div class="media-body pr-3">
+                                        <strong style="color: black">FAKTOR 3 : WEWENANG PENYELIAAN DAN MANAJERIAL (Tingkat Faktor  3-{{infoJabatan.TB_FES_STRUCTURE.f3}} ={{counterF3(infoJabatan.TB_FES_STRUCTURE.f3)}})</strong>
+                                        <p style="margin-left: 60px;" v-if="f3.length == 1">
+                                            {{f3[0].info}}
+                                            <ol  v-if="f3[0].child.length > 0">
+                                                <li v-for="dt in f3[0].child">{{dt.info}}</li>
+                                            </ol>
+                                        </p>
+                                        <ol style="margin-left: 20px;" v-if="f3.length > 1">
+                                            <li v-for="dt in f3">
+                                                {{dt.info}}
+                                                <ol  v-if="dt.child.length > 0">
+                                                    <li v-for="cdt in dt.child">
+                                                        {{cdt.info}}
+                                                    </li>
+                                                </ol>
+                                            </li>
+                                        </ol>
+                                    </div>
+                                </div>
+
+                                <div class="media mt-3" >
+                                    <div class="media-body pr-3">
+                                        <strong style="color: black">FAKTOR 4 : HUBUNGAN PERSONAL</strong>
+                                        <div class="media mt-3">
+                                            <div class="media-body pr-3">
+                                                <strong style="color: black">A. Sifat Hubungan (Tingkat Faktor 4-A.{{infoJabatan.TB_FES_STRUCTURE.f4_1}} ={{counterF41(infoJabatan.TB_FES_STRUCTURE.f4_1)}})</strong>
+                                                <p style="margin-left: 60px;" v-if="f41.length == 1">
+                                                    {{f41[0].info}}
+                                                    <ol  v-if="f41[0].child.length > 0">
+                                                        <li v-for="dt in f41[0].child">{{dt.info}}</li>
+                                                    </ol>
+                                                </p>
+                                                <ol style="margin-left: 20px;" v-if="f41.length > 1">
+                                                    <li v-for="dt in f41">
+                                                        {{dt.info}}
+                                                        <ol  v-if="dt.child.length > 0">
+                                                            <li v-for="cdt in dt.child">
+                                                                {{cdt.info}}
+                                                            </li>
+                                                        </ol>
+                                                    </li>
+                                                </ol>
+
+                                            </div>
+                                        </div>
+                                        <div class="media mt-3">
+                                            <div class="media-body pr-3">
+                                                <strong style="color: black">B. Tujuan Hubungan  (Tingkat Faktor 4-B.{{infoJabatan.TB_FES_STRUCTURE.f4_2}} ={{counterF41(infoJabatan.TB_FES_STRUCTURE.f4_2)}})</strong>
+                                                <p style="margin-left: 60px;" v-if="f42.length == 1">
+                                                    {{f42[0].info}}
+                                                    <ol  v-if="f42[0].child.length > 0">
+                                                        <li v-for="dt in f42[0].child">{{dt.info}}</li>
+                                                    </ol>
+                                                </p>
+                                                <ol style="margin-left: 20px;" v-if="f42.length > 1">
+                                                    <li v-for="dt in f42">
+                                                        {{dt.info}}
+                                                        <ol  v-if="dt.child.length > 0">
+                                                            <li v-for="cdt in dt.child">
+                                                                {{cdt.info}}
+                                                            </li>
+                                                        </ol>
+                                                    </li>
+                                                </ol>
+
+                                            </div>
+                                        </div>
+
+
+
+                                        
+                                    </div>
+                                </div>
+
+                                <div class="media mt-3" >
+                                    <div class="media-body pr-3">
+                                        <strong style="color: black">FAKTOR 5 : KESULITAN DALAM PENGARAHAN PEKERJAAN (Tingkat Faktor 5-{{infoJabatan.TB_FES_STRUCTURE.f5}} ={{counterF5(infoJabatan.TB_FES_STRUCTURE.f5)}})</strong>
+                                        <p style="margin-left: 60px;" v-if="f5.length == 1">
+                                            {{f5[0].info}}
+                                            <ol  v-if="f5[0].child.length > 0">
+                                                <li v-for="dt in f2[0].child">{{dt.info}}</li>
+                                            </ol>
+                                        </p>
+                                        <ol style="margin-left: 20px;" v-if="f5.length > 1">
+                                            <li v-for="dt in f5">
+                                                {{dt.info}}
+                                                <ol  v-if="dt.child.length > 0">
+                                                    <li v-for="cdt in dt.child">
+                                                        {{cdt.info}}
+                                                    </li>
+                                                </ol>
+                                            </li>
+                                        </ol>
+                                    </div>
+                                </div>
+
+                                <div class="media mt-3" >
+                                    <div class="media-body pr-3">
+                                        <strong style="color: black">FAKTOR 6 : KONDISI LAIN (Tingkat Faktor 6-{{infoJabatan.TB_FES_STRUCTURE.f6}} ={{counterF6(infoJabatan.TB_FES_STRUCTURE.f6)}})</strong>
+                                        <p style="margin-left: 60px;" v-if="f6.length == 1">
+                                            {{f6[0].info}}
+                                            <ol  v-if="f6[0].child.length > 0">
+                                                <li v-for="dt in f6[0].child">{{dt.info}}</li>
+                                            </ol>
+                                        </p>
+                                        <ol style="margin-left: 20px;" v-if="f6.length > 1">
+                                            <li v-for="dt in f6">
+                                                {{dt.info}}
+                                                <ol  v-if="dt.child.length > 0">
+                                                    <li v-for="cdt in dt.child">
+                                                        {{cdt.info}}
+                                                    </li>
+                                                </ol>
+                                            </li>
+                                        </ol>
+                                    </div>
+                                </div>
+
+                            </div>
+                        </li>
+
+                        <li class="media" v-if="infoJabatan.type == 'Fungsional'">
+                            <div class="media-body">
+                                <strong style="color: black">IV. TINGKAT FAKTOR</strong>
+                                
+                                <div class="media mt-3" >
+                                    <div class="media-body pr-3">
+                                        <strong style="color: black">FAKTOR 1 : PENGETAHUAN YANG DIBUTUHKAN JABATAN (Tingkat Faktor 1-{{infoJabatan.TB_FES_FUCTIONAL.f1}} ={{fcounterF1(infoJabatan.TB_FES_FUCTIONAL.f1)}})</strong>
+                                        <p style="margin-left: 60px;" v-if="f1.length == 1">
+                                            {{f1[0].info}}
+                                            <ol  v-if="f1[0].child.length > 0">
+                                                <li v-for="dt in f1[0].child">{{dt.info}}</li>
+                                            </ol>
+                                        </p>
+                                        <ol style="margin-left: 20px;" v-if="f1.length > 1">
+                                            <li v-for="dt in f1">
+                                                {{dt.info}}
+                                                <ol  v-if="dt.child.length > 0">
+                                                    <li v-for="cdt in dt.child">
+                                                        {{cdt.info}}
+                                                    </li>
+                                                </ol>
+                                            </li>
+                                        </ol>
+                                    </div>
+                                </div>
+
+                                <div class="media mt-3" >
+                                    <div class="media-body pr-3">
+                                        <strong style="color: black">FAKTOR 2 : PENGAWASAN PENYELIA (Tingkat Faktor 2-{{infoJabatan.TB_FES_FUCTIONAL.f2}} ={{fcounterF2(infoJabatan.TB_FES_FUCTIONAL.f2)}})</strong>
+                                        <p style="margin-left: 60px;" v-if="f2.length == 1">
+                                            {{f2[0].info}}
+                                            <ol  v-if="f2[0].child.length > 0">
+                                                <li v-for="dt in f2[0].child">{{dt.info}}</li>
+                                            </ol>
+                                        </p>
+                                        <ol style="margin-left: 20px;" v-if="f2.length > 1">
+                                            <li v-for="dt in f2">
+                                                {{dt.info}}
+                                                <ol  v-if="dt.child.length > 0">
+                                                    <li v-for="cdt in dt.child">
+                                                        {{cdt.info}}
+                                                    </li>
+                                                </ol>
+                                            </li>
+                                        </ol>
+                                    </div>
+                                </div>
+
+                                <div class="media mt-3" >
+                                    <div class="media-body pr-3">
+                                        <strong style="color: black">FAKTOR 3 : PEDOMAN (Tingkat Faktor 3-{{infoJabatan.TB_FES_FUCTIONAL.f3}} ={{fcounterF3(infoJabatan.TB_FES_FUCTIONAL.f3)}})</strong>
+                                        <p style="margin-left: 60px;" v-if="f3.length == 1">
+                                            {{f3[0].info}}
+                                            <ol  v-if="f3[0].child.length > 0">
+                                                <li v-for="dt in f3[0].child">{{dt.info}}</li>
+                                            </ol>
+                                        </p>
+                                        <ol style="margin-left: 20px;" v-if="f3.length > 1">
+                                            <li v-for="dt in f3">
+                                                {{dt.info}}
+                                                <ol  v-if="dt.child.length > 0">
+                                                    <li v-for="cdt in dt.child">
+                                                        {{cdt.info}}
+                                                    </li>
+                                                </ol>
+                                            </li>
+                                        </ol>
+                                    </div>
+                                </div>
+
+                                <div class="media mt-3" >
+                                    <div class="media-body pr-3">
+                                        <strong style="color: black">FAKTOR 4 : KOMPLEKSITAS (Tingkat Faktor 4-{{infoJabatan.TB_FES_FUCTIONAL.f4}} ={{fcounterF4(infoJabatan.TB_FES_FUCTIONAL.f4)}})</strong>
+                                        <p style="margin-left: 60px;" v-if="f4.length == 1">
+                                            {{f4[0].info}}
+                                            <ol  v-if="f4[0].child.length > 0">
+                                                <li v-for="dt in f4[0].child">{{dt.info}}</li>
+                                            </ol>
+                                        </p>
+                                        <ol style="margin-left: 20px;" v-if="f4.length > 1">
+                                            <li v-for="dt in f4">
+                                                {{dt.info}}
+                                                <ol  v-if="dt.child.length > 0">
+                                                    <li v-for="cdt in dt.child">
+                                                        {{cdt.info}}
+                                                    </li>
+                                                </ol>
+                                            </li>
+                                        </ol>
+                                    </div>
+                                </div>
+
+                                <div class="media mt-3" >
+                                    <div class="media-body pr-3">
+                                        <strong style="color: black">FAKTOR 5 : RUANG LINGKUP DAN DAMPAK (Tingkat Faktor 5-{{infoJabatan.TB_FES_FUCTIONAL.f5}} ={{fcounterF5(infoJabatan.TB_FES_FUCTIONAL.f5)}})</strong>
+                                        <p style="margin-left: 60px;" v-if="f5.length == 1">
+                                            {{f5[0].info}}
+                                            <ol  v-if="f5[0].child.length > 0">
+                                                <li v-for="dt in f2[0].child">{{dt.info}}</li>
+                                            </ol>
+                                        </p>
+                                        <ol style="margin-left: 20px;" v-if="f5.length > 1">
+                                            <li v-for="dt in f5">
+                                                {{dt.info}}
+                                                <ol  v-if="dt.child.length > 0">
+                                                    <li v-for="cdt in dt.child">
+                                                        {{cdt.info}}
+                                                    </li>
+                                                </ol>
+                                            </li>
+                                        </ol>
+                                    </div>
+                                </div>
+
+                                <div class="media mt-3" >
+                                    <div class="media-body pr-3">
+                                        <strong style="color: black">FAKTOR 6 : HUBUNGAN PERSONAL (Tingkat Faktor 6-{{infoJabatan.TB_FES_FUCTIONAL.f6}} ={{fcounterF6(infoJabatan.TB_FES_FUCTIONAL.f6)}})</strong>
+                                        <p style="margin-left: 60px;" v-if="f6.length == 1">
+                                            {{f6[0].info}}
+                                            <ol  v-if="f6[0].child.length > 0">
+                                                <li v-for="dt in f6[0].child">{{dt.info}}</li>
+                                            </ol>
+                                        </p>
+                                        <ol style="margin-left: 20px;" v-if="f6.length > 1">
+                                            <li v-for="dt in f6">
+                                                {{dt.info}}
+                                                <ol  v-if="dt.child.length > 0">
+                                                    <li v-for="cdt in dt.child">
+                                                        {{cdt.info}}
+                                                    </li>
+                                                </ol>
+                                            </li>
+                                        </ol>
+                                    </div>
+                                </div>
+
+                                <div class="media mt-3" >
+                                    <div class="media-body pr-3">
+                                        <strong style="color: black">FAKTOR 7 : TUJUAN HUBUNGAN (Tingkat Faktor 7-{{infoJabatan.TB_FES_FUCTIONAL.f7}} ={{fcounterF7(infoJabatan.TB_FES_FUCTIONAL.f7)}})</strong>
+                                        <p style="margin-left: 60px;" v-if="f7.length == 1">
+                                            {{f7[0].info}}
+                                            <ol  v-if="f7[0].child.length > 0">
+                                                <li v-for="dt in f7[0].child">{{dt.info}}</li>
+                                            </ol>
+                                        </p>
+                                        <ol style="margin-left: 20px;" v-if="f7.length > 1">
+                                            <li v-for="dt in f7">
+                                                {{dt.info}}
+                                                <ol  v-if="dt.child.length > 0">
+                                                    <li v-for="cdt in dt.child">
+                                                        {{cdt.info}}
+                                                    </li>
+                                                </ol>
+                                            </li>
+                                        </ol>
+                                    </div>
+                                </div>
+
+                                <div class="media mt-3" >
+                                    <div class="media-body pr-3">
+                                        <strong style="color: black">FAKTOR 8 : PERSYARATAN FISIK (Tingkat Faktor 8-{{infoJabatan.TB_FES_FUCTIONAL.f8}} ={{fcounterF8(infoJabatan.TB_FES_FUCTIONAL.f8)}})</strong>
+                                        <p style="margin-left: 60px;" v-if="f8.length == 1">
+                                            {{f8[0].info}}
+                                            <ol  v-if="f8[0].child.length > 0">
+                                                <li v-for="dt in f8[0].child">{{dt.info}}</li>
+                                            </ol>
+                                        </p>
+                                        <ol style="margin-left: 20px;" v-if="f8.length > 1">
+                                            <li v-for="dt in f8">
+                                                {{dt.info}}
+                                                <ol  v-if="dt.child.length > 0">
+                                                    <li v-for="cdt in dt.child">
+                                                        {{cdt.info}}
+                                                    </li>
+                                                </ol>
+                                            </li>
+                                        </ol>
+                                    </div>
+                                </div>
+
+                                <div class="media mt-3" >
+                                    <div class="media-body pr-3">
+                                        <strong style="color: black">FAKTOR 9 : LINGKUNGAN PEKERJAAN (Tingkat Faktor 9-{{infoJabatan.TB_FES_FUCTIONAL.f9}} ={{fcounterF9(infoJabatan.TB_FES_FUCTIONAL.f9)}})</strong>
+                                        <p style="margin-left: 60px;" v-if="f9.length == 1">
+                                            {{f9[0].info}}
+                                            <ol  v-if="f9[0].child.length > 0">
+                                                <li v-for="dt in f9[0].child">{{dt.info}}</li>
+                                            </ol>
+                                        </p>
+                                        <ol style="margin-left: 20px;" v-if="f9.length > 1">
+                                            <li v-for="dt in f9">
+                                                {{dt.info}}
+                                                <ol  v-if="dt.child.length > 0">
+                                                    <li v-for="cdt in dt.child">
+                                                        {{cdt.info}}
+                                                    </li>
+                                                </ol>
+                                            </li>
+                                        </ol>
+                                    </div>
+                                </div>
+
+                            </div>
+                        </li>
+
+                        <li class="media">
+                            <div class="media-body">
+                                <strong style="color: black">V. PERSYARATAN JABATAN TERTENTU</strong>
+                                <div class="media mt-3" >
+                                    <div class="media-body pr-3">
+                                        <p v-if="REQ.length == 0" >(Tidak ada persyaratan tertentu)</p>
+                                        <p  v-if="REQ.length == 1">
+                                            {{REQ[0].info}}
+                                            <ol  v-if="REQ[0].child.length > 0">
+                                                <li v-for="dt in REQ[0].child">{{dt.info}}</li>
+                                            </ol>
+                                        </p>
+                                        <ol  v-if="REQ.length > 1">
+                                            <li v-for="dt in REQ">
+                                                {{dt.info}}
+                                                <ol  v-if="dt.child.length > 0">
+                                                    <li v-for="cdt in dt.child">
+                                                        {{cdt.info}}
+                                                    </li>
+                                                </ol>
+                                            </li>
+                                        </ol>
+                                    </div>
+                                </div>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+</template>
+
+<script>
+    import ApiPosition from '../../services/api/ManagementPosition.js';
+    import ApiEvjab from '../../services/api/Evjab.js';
+    export default {
+        props: ['id'],
+        
+        data() {
+            return {
+                infoJabatan: {},
+                totalValue: 0,
+                taskList: [],
+                listResponsible: [],
+                workList: [],
+                onLoad: true,
+
+                f1: [],
+                f2: [],
+                f3: [],
+
+                f4: [],
+                f41: [],
+                f42: [],
+
+                f5: [],
+                f6: [],
+                f7: [],
+
+                f8: [],
+                f9: [],
+
+                REQ: [],
+
+            }
+        },
+        mounted() {
+            ApiEvjab.GetInfoFaktor(this.id)
+            .then(_resp => {
+                if(_resp && _resp.data) {
+                    this.infoJabatan = _resp.data
+                    this.taskList = JSON.parse(_resp.data.TB_ANALYTIC_POSITION.task_detail)
+                    this.listResponsible = JSON.parse(_resp.data.TB_ANALYTIC_POSITION.responsible)
+                    this.workList = JSON.parse(_resp.data.TB_ANALYTIC_POSITION.work_result)
+                    if(_resp.data.TB_INFO_FAKTORs && _resp.data.TB_INFO_FAKTORs.length > 0) {
+                        _resp.data.TB_INFO_FAKTORs.map(_f => {
+                            if(_f.type == 'F1' && _f.parent_id == 0) {
+                                this.f1.push({
+                                    id: _f.id,
+                                    info: _f.info,
+                                    child: []
+                                })
+                                _resp.data.TB_INFO_FAKTORs.map(_child => {
+                                    if(_child.parent_id == _f.id) {
+                                        this.f1[this.f1.findIndex(_temp => _temp.id == _f.id)].child.push({
+                                            id: _child.id,
+                                            info: _child.info,
+                                            child: []
+                                        })
+                                    }
+                                })
+                            }
+
+                            if(_f.type == 'F2' && _f.parent_id == 0) {
+                                this.f2.push({
+                                    id: _f.id,
+                                    info: _f.info,
+                                    child: []
+                                })
+                                _resp.data.TB_INFO_FAKTORs.map(_child => {
+                                    if(_child.parent_id == _f.id) {
+                                        this.f2[this.f2.findIndex(_temp => _temp.id == _f.id)].child.push({
+                                            id: _child.id,
+                                            info: _child.info,
+                                            child: []
+                                        })
+                                    }
+                                })
+                            }
+
+                            if(_f.type == 'F3' && _f.parent_id == 0) {
+                                this.f3.push({
+                                    id: _f.id,
+                                    info: _f.info,
+                                    child: []
+                                })
+                                _resp.data.TB_INFO_FAKTORs.map(_child => {
+                                    if(_child.parent_id == _f.id) {
+                                        this.f3[this.f3.findIndex(_temp => _temp.id == _f.id)].child.push({
+                                            id: _child.id,
+                                            info: _child.info,
+                                            child: []
+                                        })
+                                    }
+                                })
+                            }
+
+                            if(_f.type == 'F4' && _f.parent_id == 0) {
+                                this.f4.push({
+                                    id: _f.id,
+                                    info: _f.info,
+                                    child: []
+                                })
+                                _resp.data.TB_INFO_FAKTORs.map(_child => {
+                                    if(_child.parent_id == _f.id) {
+                                        this.f4[this.f4.findIndex(_temp => _temp.id == _f.id)].child.push({
+                                            id: _child.id,
+                                            info: _child.info,
+                                            child: []
+                                        })
+                                    }
+                                })
+                            }
+
+                            if(_f.type == 'F41' && _f.parent_id == 0) {
+                                this.f41.push({
+                                    id: _f.id,
+                                    info: _f.info,
+                                    child: []
+                                })
+                                _resp.data.TB_INFO_FAKTORs.map(_child => {
+                                    if(_child.parent_id == _f.id) {
+                                        this.f41[this.f41.findIndex(_temp => _temp.id == _f.id)].child.push({
+                                            id: _child.id,
+                                            info: _child.info,
+                                            child: []
+                                        })
+                                    }
+                                })
+                            }
+
+                            if(_f.type == 'F42' && _f.parent_id == 0) {
+                                this.f42.push({
+                                    id: _f.id,
+                                    info: _f.info,
+                                    child: []
+                                })
+                                _resp.data.TB_INFO_FAKTORs.map(_child => {
+                                    if(_child.parent_id == _f.id) {
+                                        this.f42[this.f42.findIndex(_temp => _temp.id == _f.id)].child.push({
+                                            id: _child.id,
+                                            info: _child.info,
+                                            child: []
+                                        })
+                                    }
+                                })
+                            }
+
+                            if(_f.type == 'F5' && _f.parent_id == 0) {
+                                this.f5.push({
+                                    id: _f.id,
+                                    info: _f.info,
+                                    child: []
+                                })
+                                _resp.data.TB_INFO_FAKTORs.map(_child => {
+                                    if(_child.parent_id == _f.id) {
+                                        this.f5[this.f5.findIndex(_temp => _temp.id == _f.id)].child.push({
+                                            id: _child.id,
+                                            info: _child.info,
+                                            child: []
+                                        })
+                                    }
+                                })
+                            }
+
+                            if(_f.type == 'F6' && _f.parent_id == 0) {
+                                this.f6.push({
+                                    id: _f.id,
+                                    info: _f.info,
+                                    child: []
+                                })
+                                _resp.data.TB_INFO_FAKTORs.map(_child => {
+                                    if(_child.parent_id == _f.id) {
+                                        this.f6[this.f6.findIndex(_temp => _temp.id == _f.id)].child.push({
+                                            id: _child.id,
+                                            info: _child.info,
+                                            child: []
+                                        })
+                                    }
+                                })
+                            }
+
+                            if(_f.type == 'F7' && _f.parent_id == 0) {
+                                this.f7.push({
+                                    id: _f.id,
+                                    info: _f.info,
+                                    child: []
+                                })
+                                _resp.data.TB_INFO_FAKTORs.map(_child => {
+                                    if(_child.parent_id == _f.id) {
+                                        this.f7[this.f7.findIndex(_temp => _temp.id == _f.id)].child.push({
+                                            id: _child.id,
+                                            info: _child.info,
+                                            child: []
+                                        })
+                                    }
+                                })
+                            }
+
+                            if(_f.type == 'F8' && _f.parent_id == 0) {
+                                this.f8.push({
+                                    id: _f.id,
+                                    info: _f.info,
+                                    child: []
+                                })
+                                _resp.data.TB_INFO_FAKTORs.map(_child => {
+                                    if(_child.parent_id == _f.id) {
+                                        this.f8[this.f8.findIndex(_temp => _temp.id == _f.id)].child.push({
+                                            id: _child.id,
+                                            info: _child.info,
+                                            child: []
+                                        })
+                                    }
+                                })
+                            }
+
+                            if(_f.type == 'F9' && _f.parent_id == 0) {
+                                this.f9.push({
+                                    id: _f.id,
+                                    info: _f.info,
+                                    child: []
+                                })
+                                _resp.data.TB_INFO_FAKTORs.map(_child => {
+                                    if(_child.parent_id == _f.id) {
+                                        this.f9[this.f9.findIndex(_temp => _temp.id == _f.id)].child.push({
+                                            id: _child.id,
+                                            info: _child.info,
+                                            child: []
+                                        })
+                                    }
+                                })
+                            }
+
+                            if(_f.type == 'REQ' && _f.parent_id == 0) {
+                                this.REQ.push({
+                                    id: _f.id,
+                                    info: _f.info,
+                                    child: []
+                                })
+                                _resp.data.TB_INFO_FAKTORs.map(_child => {
+                                    if(_child.parent_id == _f.id) {
+                                        this.REQ[this.REQ.findIndex(_temp => _temp.id == _f.id)].child.push({
+                                            id: _child.id,
+                                            info: _child.info,
+                                            child: []
+                                        })
+                                    }
+                                })
+                            }
+
+                            
+                            
+                            
+                        })
+                    }
+                }
+            })
+            .finally(() => {
+                setTimeout(() => {
+                    this.onLoad = false;
+                }, 500)
+            })
+        },
+        methods: {
+            counterF1(number) {
+                if(number == 1) {
+                    return 175
+                } else if (number == 2) {
+                    return 350
+                } else if (number == 3) {
+                    return 550
+                } else if (number == 4) {
+                    return 775
+                } else if (number == 5) {
+                    return 900
+                } else {
+                    return "-"
+                }
+            },
+            counterF2(number) {
+                if(number == 1) {
+                    return 100
+                } else if (number == 2) {
+                    return 250
+                } else if (number == 3) {
+                    return 350
+                } else {
+                    return "-"
+                }
+            },
+            counterF3(number) {
+                if(number == 1) {
+                    return 450
+                } else if (number == 2) {
+                    return 775
+                } else if (number == 3) {
+                    return 900
+                } else {
+                    return "-"
+                }
+            },
+            counterF41(number) {
+                if(number == 1) {
+                    return 25
+                } else if (number == 2) {
+                    return 50
+                } else if (number == 3) {
+                    return 75
+                } else if (number == 4) {
+                    return 100
+                } else {
+                    return "-"
+                }
+            },
+            counterF42(number) {
+                if(number == 1) {
+                    return 30
+                } else if (number == 2) {
+                    return 75
+                } else if (number == 3) {
+                    return 100
+                } else if (number == 4) {
+                    return 125
+                } else {
+                    return "-"
+                }
+            },
+            counterF5(number) {
+                if(number == 1) {
+                    return 75
+                } else if (number == 2) {
+                    return 205
+                } else if (number == 3) {
+                    return 340
+                } else if (number == 4) {
+                    return 505
+                } else if (number == 5) {
+                    return 650
+                } else if (number == 6) {
+                    return 800
+                } else if (number == 7) {
+                    return 930
+                } else if (number == 8) {
+                    return 1030
+                } else {
+                    return "-"
+                }
+            },
+            counterF6(number) {
+                if(number == 1) {
+                    return 310
+                } else if (number == 2) {
+                    return 575
+                } else if (number == 3) {
+                    return 975
+                } else if (number == 4) {
+                    return 1120
+                } else if (number == 5) {
+                    return 1225
+                } else if (number == 6) {
+                    return 1325
+                } else {
+                    return "-"
+                }
+            },
+
+
+            fcounterF1(number) {
+                if(number == 1) {
+                    return 50
+                } else if (number == 2) {
+                    return 200
+                } else if (number == 3) {
+                    return 350
+                } else if (number == 4) {
+                    return 550
+                } else if (number == 5) {
+                    return 750
+                } else if (number == 6) {
+                    return 950
+                } else if (number == 7) {
+                    return 1250
+                } else {
+                    return "-"
+                }
+            },
+            fcounterF2(number) {
+                if(number == 1) {
+                    return 25
+                } else if (number == 2) {
+                    return 125
+                } else if (number == 3) {
+                    return 275
+                } else if (number == 4) {
+                    return 450
+                } else if (number == 5) {
+                    return 650
+                } else {
+                    return "-"
+                }
+            },
+            fcounterF3(number) {
+                if(number == 1) {
+                    return 25
+                } else if (number == 2) {
+                    return 125
+                } else if (number == 3) {
+                    return 275
+                } else if (number == 4) {
+                    return 450
+                } else if (number == 5) {
+                    return 650
+                } else {
+                    return "-"
+                }
+            },
+            fcounterF4(number) {
+                if(number == 1) {
+                    return 25
+                } else if (number == 2) {
+                    return 75
+                } else if (number == 3) {
+                    return 150
+                } else if (number == 4) {
+                    return 225
+                } else if (number == 5) {
+                    return 325
+                } else if (number == 6) {
+                    return 450
+                } else {
+                    return "-"
+                }
+            },
+            
+            fcounterF5(number) {
+                if(number == 1) {
+                    return 25
+                } else if (number == 2) {
+                    return 75
+                } else if (number == 3) {
+                    return 150
+                } else if (number == 4) {
+                    return 225
+                } else if (number == 5) {
+                    return 325
+                } else if (number == 6) {
+                    return 450
+                } else {
+                    return "-"
+                }
+            },
+            fcounterF6(number) {
+                if(number == 1) {
+                    return 10
+                } else if (number == 2) {
+                    return 25
+                } else if (number == 3) {
+                    return 60
+                } else if (number == 4) {
+                    return 110
+                } else {
+                    return "-"
+                }
+            },
+            fcounterF7(number) {
+                if(number == 1) {
+                    return 20
+                } else if (number == 2) {
+                    return 50
+                } else if (number == 3) {
+                    return 120
+                } else if (number == 4) {
+                    return 220
+                } else {
+                    return "-"
+                }
+            },
+            fcounterF8(number) {
+                if(number == 1) {
+                    return 5
+                } else if (number == 2) {
+                    return 20
+                } else if (number == 3) {
+                    return 50
+                } else {
+                    return "-"
+                }
+            },
+            fcounterF9(number) {
+                if(number == 1) {
+                    return 5
+                } else if (number == 2) {
+                    return 20
+                } else if (number == 3) {
+                    return 50
+                } else {
+                    return "-"
+                }
+            },
+
+
+            fjobValue(){
+                let total = 0
+                total += this.numb_f1 != 0 ? this.counterF1(this.numb_f1) : 0
+                total += this.numb_f2 != 0 ? this.counterF2(this.numb_f2) : 0
+                total += this.numb_f3 != 0 ? this.counterF3(this.numb_f3) : 0
+                total += this.numb_f4 != 0 ? this.counterF4(this.numb_f4) : 0
+                total += this.numb_f5 != 0 ? this.counterF5(this.numb_f5) : 0
+                total += this.numb_f6 != 0 ? this.counterF6(this.numb_f6) : 0
+                total += this.numb_f7 != 0 ? this.counterF7(this.numb_f7) : 0
+                total += this.numb_f8 != 0 ? this.counterF8(this.numb_f8) : 0
+                total += this.numb_f9 != 0 ? this.counterF9(this.numb_f9) : 0
+
+                return total
+            },
+
+            fjobClass(number){
+                let kelas = 0
+                if (number >=190 && number<=240) {
+                    kelas = 1
+                    return kelas
+                }else if (number>=245 && number <=300) {
+                    kelas = 2
+                    return kelas
+                }else if (number>=305 && number <= 370) {
+                    kelas = 3
+                    return kelas
+                }else if (number>=375 && number <= 450) {
+                    kelas = 4
+                    return kelas
+                }else if (number>=455 && number <= 650) {
+                    kelas = 5 
+                    return kelas    
+                }else if (number>=655 && number <= 850) {
+                    kelas = 6
+                    return kelas
+                }else if (number>=855 && number <=1100) {
+                    kelas = 7
+                    return kelas
+                }else if (number>=1105 && number <= 1350) {
+                    kelas = 8
+                    return kelas
+                }else if (number>=1355 && number <= 1600) {
+                    kelas = 9
+                    return kelas
+                }else if (number>=1605 && number <= 1850) {
+                    kelas = 10
+                    return kelas
+                }else if (number>=1855 && number <= 2100) {
+                    kelas = 11
+                    return kelas
+                }else if (number>=2105 && number <=2350) {
+                    kelas =12
+                    return kelas
+                }else if (number>=2355 && number<=2750) {
+                    kelas = 13
+                    return kelas
+                }else if (number>=2755 && number <=3150) {
+                    kelas = 14
+                    return kelas
+                }else if (number>=3155 && number <= 3600) {
+                    kelas = 15
+                    return kelas
+                }else if (number>=3605 && number<=4050) {
+                    kelas = 16
+                    return kelas
+                }else if (number>= 4055) {
+                    kelas = 17
+                    return kelas
+                }else 
+                return "Tanpa Kelas"
+            },
+            
+        }
+    }
+</script>

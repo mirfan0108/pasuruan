@@ -7,6 +7,7 @@ import FormInfofakFungsional from "@/app/pages/evjab/infofak.fungsional.html"
 import ListPermenDua from "@/app/pages/evjab/list.permen.dua.html"
 import InfoFaktorPage from "@/app/pages/evjab/infofak.html"
 
+import DetailInfoFaktor from "@/app/pages/evjab/detail.faktor.html"
 import LampiranPage from "@/app/pages/evjab/lampiran.html"
 
 export default [
@@ -31,6 +32,12 @@ export default [
         name: 'fungsional.form.evjab',
         props: true,
         component: FormFungsionalPage
+    },
+    {
+        path: 'evaluasi-jabatan/detail/:id',
+        name: 'detail.infofaktor.evjab',
+        props: true,
+        component: DetailInfoFaktor
     },
     {
         path: 'evaluasi-jabatan/info-faktur',
