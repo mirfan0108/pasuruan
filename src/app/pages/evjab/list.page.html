@@ -25,10 +25,11 @@
                         <span>Mohon Tunggu</span>
                     </div>
                 </div>
-                <div class="card-body" v-if="!loading">
-                    <div class="row">
-                        <div class="col-md-12 col-lg-12">
-                            <table style="width: 100%; margin-top: 20px; font-size: 9pt;" class="table" v-if="tipe == 'Struktural'"> 
+                
+                <div class="table-responsive m-t-40" v-if="!loading">
+                    <div id="example_wrapper" class="dataTables_wrapper">
+                        <div class="dataTables_length" id="example_length">
+                            <table class="table display table-bordered table-striped dataTable" role="grid" aria-describedby="example_info" style="width: 1500px;" v-if="tipe == 'Struktural'"> 
                                 <thead style="border: 1pt solid black;" v-if="dataStruktur.length > 0 && tipe == 'Struktural'">
                                     <tr style="border: 1pt solid black;">
                                         <th rowspan="2"  style="width: 5%; text-align: center;border: 1pt solid black; vertical-align : middle;">No</th>
