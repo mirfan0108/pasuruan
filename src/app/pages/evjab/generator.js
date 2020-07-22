@@ -109,54 +109,115 @@ class Fes {
         return resultLampiran
     }
 
-<<<<<<< HEAD
     static async generateStructure2(position) {
-        let structure = []
-        let id_head = await position[position.findIndex(_item => _item.parent_id == 0)].id
-        let id_number = []
-        await position.map(_position => {
-            if(_position.parent_id == 0) {
-                structure.push({
-                    id: _position.id,
-                    bold: true,
-                    name: _position.position_name,
-                    fes: _position.fes_struktur,
-                    current_stickholder: _position.current_stickholder,
-                    needed_stickholder: _position.formA
-                })
-                id_number.push(_position.id)
-            } else if (_position.parent_id == id_head && _position.type == "Struktural") {
-                structure.push({
-                    id: _position.id,
-                    bold: true,
-                    name: _position.position_name,
-                    fes: _position.fes_struktur,
-                    current_stickholder: _position.current_stickholder,
-                    needed_stickholder: _position.formA
-                })
-                id_number.push(_position.id)
-            }
-        })
-        id_number.map(_id => {
-            position.map(_position => {
-                if(structure.findIndex(_val => _val.id == _position.id) < 0) {
-                    if(_position.parent_id == _id  && _position.type == "Struktural") {
-                        structure.push({
-                            id: _position.id,
-                            bold: false,
-                            name: _position.position_name,
-                            fes: _position.fes_struktur,
-                            current_stickholder: _position.current_stickholder,
-                            needed_stickholder: _position.formA
+        let Lampiran = []
+            let id_head = await position[position.findIndex(_item => _item.parent_id == 0)].id
+            let counter = 0
+            let id_number = []
+            let id_number_ = []
+            let total = 0
+            let resultLampiran = []
+            await position.map(_val => {
+                if(_val.type == "Struktural") {
+                    if(_val.parent_id == 0 ) {
+                        if(_val.oj != null ) {
+                            total+= Number(_val.oj) 
+                        }
+                        counter += 1
+                        Lampiran.push({
+                            id: _val.id,
+                            bold: true,
+                            name: _val.position_name,
+                            fes: _val.fes_struktur,
+                            current_stickholder: _val.current_stickholder,
+                            needed_stickholder: _val.formA,
+                            child: []
                         })
-                    }
+                    } else if (_val.parent_id == id_head) {
+                        console.log('sekr')
+                        id_number.push(_val.id)
+                        
+                        if(_val.oj != null ) {
+                            total+= Number(_val.oj) 
+                        }
+                        counter += 1
+                        Lampiran.push({
+                            id: _val.id,
+                            bold: true,
+                            name: _val.position_name,
+                            fes: _val.fes_struktur,
+                            current_stickholder: _val.current_stickholder,
+                            needed_stickholder: _val.formA,
+                            child: []
+                        })
+                    } 
                 }
             })
-        })
-        return structure
+            
+
+            await position.map(_val => {
+                if(_val.parent_id == id_number[id_number.findIndex(_number => _number == _val.parent_id)] && _val.type == "Struktural") {
+                    id_number_.push(_val.id)
+                    Lampiran[Lampiran.findIndex(__item => __item.id == _val.parent_id)].child.push({
+                        id: _val.id,
+                        bold: true,
+                        name: _val.position_name,
+                        fes: _val.fes_struktur,
+                        current_stickholder: _val.current_stickholder,
+                        needed_stickholder: _val.formA,
+                        child: []
+                    })
+                }
+            })
+
+            await position.map(_val => {
+                if(_val.parent_id == id_number_[id_number_.findIndex(_number => _number == _val.parent_id)] && _val.type == "Struktural") {
+                    if(_val.oj != null ) {
+                        total+= parseInt(_val.oj) 
+                    }
+                    
+                    Lampiran.map(_item => {
+                        if(_item.child.length > 0) {
+                            _item.child.map(_ch => {
+                                if(_ch.id == _val.parent_id) {
+                                    _ch.child.push({
+                                        id: _val.id,
+                                        bold: false,
+                                        name: _val.position_name,
+                                        fes: _val.fes_struktur,
+                                        current_stickholder: _val.current_stickholder,
+                                        needed_stickholder: _val.formA,
+                                        child: []
+                                    })
+                                }
+                            })
+                        }
+                    })
+                }
+            })
+
+
+            Lampiran.map(_root => {
+                if(_root.child.length == 0) {
+                    console.log('root push')
+                    resultLampiran.push(_root)
+                } else {
+                    resultLampiran.push(_root)
+                    console.log('child push')
+                    _root.child.map(_child => {
+                        resultLampiran.push(_child)
+                        if(_child.child.length > 0) {
+                            console.log('sub child push')
+                            _child.child.map(_sub_child => {
+                                resultLampiran.push(_sub_child)
+                            })
+                        }
+                    })
+                }
+            }) 
+        return resultLampiran
     }
-=======
->>>>>>> master
+
 
     static async generateFungsional(position) {
         let Lampiran = []
