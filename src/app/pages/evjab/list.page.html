@@ -79,10 +79,10 @@
                                 </tbody>
                             </table>
                         </div>
-                        <div class="col-md-12 col-lg-12">
-                            <table v-if="tipe == 'Fungsional'" style="width: 100%; margin-top: 20px; font-size: 7pt;" class="table">
-                                <thead >
-                                    <tr>
+                        <div class="dataTables_length" id="example_length">
+                            <table class="table display table-bordered table-striped dataTable" role="grid" aria-describedby="example_info" style="width: 1500px;" v-if="tipe == 'Fungsional'">
+                                <thead style="border: 1pt solid black;" v-if="dataStruktur.length > 0 && tipe == 'Fungsional'">
+                                    <tr style="border: 1pt solid black;">
                                         <th style="text-align: center;border: 1pt solid black; vertical-align : middle;">No</th>
                                         <th style="width: 30%; text-align: center;border: 1pt solid black; vertical-align : middle;">Nama Jabatan</th>
                                         <th style="width: 30%; text-align: center;border: 1pt solid black; vertical-align : middle;">Kasi/ Kasubbag/ Kasubbid (Eselon IV)</th>
@@ -106,44 +106,44 @@
                                         <!-- TRUE SPACE -->
                                         <td colspan="25" v-if="dt.space" style="background-color: aqua;" >&nbsp;</td>
                                         <!-- FALSE SPACE -->
-                                        <td v-if="!dt.space"></td>
-                                        <td v-if="!dt.space">{{dt.name}}</td>
-                                        <td v-if="!dt.space">{{dt.organization}}</td>
-                                        <td v-if="!dt.space && !dt.fes" colspan="20" style="text-align: center;" align="center">
+                                        <td style="text-align: center;border: 1pt solid black;" v-if="!dt.space"></td>
+                                        <td style="text-align: center;border: 1pt solid black;" v-if="!dt.space">{{dt.name}}</td>
+                                        <td style="text-align: center;border: 1pt solid black;" v-if="!dt.space">{{dt.organization}}</td>
+                                        <td  v-if="!dt.space && !dt.fes" colspan="20" style="text-align: center;border: 1pt solid black;" align="center">
                                             <button class="btn btn-sm btn-rounded btn-success" style="font-size: small;" @click.prevent="$root.$router.push({name: 'fungsional.form.evjab', params: {id: dt.id}})">Masukan Nilai</button>
                                         </td>
 
-                                        <td v-if="!dt.space && dt.fes">{{jobClass(jobValueF(dt.fes.f1 , dt.fes.f2 , dt.fes.f3 , dt.fes.f4, dt.fes.f5 , dt.fes.f6, dt.fes.f7, dt.fes.f8, dt.fes.f9  ))}}</td>
-                                        <td v-if="!dt.space && dt.fes">{{jobValueF(dt.fes.f1 , dt.fes.f2 , dt.fes.f3 , dt.fes.f4, dt.fes.f5 , dt.fes.f6, dt.fes.f7, dt.fes.f8, dt.fes.f9  )}}</td>
-                                        <td v-if="!dt.space && dt.fes">{{dt.fes.f1}}</td>
-                                        <td v-if="!dt.space && dt.fes">{{fcounterF1(dt.fes.f1)}}</td>
+                                        <td style="text-align: center;border: 1pt solid black;" v-if="!dt.space && dt.fes">{{jobClass(jobValueF(dt.fes.f1 , dt.fes.f2 , dt.fes.f3 , dt.fes.f4, dt.fes.f5 , dt.fes.f6, dt.fes.f7, dt.fes.f8, dt.fes.f9  ))}}</td>
+                                        <td style="text-align: center;border: 1pt solid black;" v-if="!dt.space && dt.fes">{{jobValueF(dt.fes.f1 , dt.fes.f2 , dt.fes.f3 , dt.fes.f4, dt.fes.f5 , dt.fes.f6, dt.fes.f7, dt.fes.f8, dt.fes.f9  )}}</td>
+                                        <td style="text-align: center;border: 1pt solid black;" v-if="!dt.space && dt.fes">{{dt.fes.f1}}</td>
+                                        <td style="text-align: center;border: 1pt solid black;" v-if="!dt.space && dt.fes">{{fcounterF1(dt.fes.f1)}}</td>
                                         
-                                        <td v-if="!dt.space && dt.fes">{{dt.fes.f2}}</td>
-                                        <td v-if="!dt.space && dt.fes">{{fcounterF2(dt.fes.f2)}}</td>
+                                        <td style="text-align: center;border: 1pt solid black;" v-if="!dt.space && dt.fes">{{dt.fes.f2}}</td>
+                                        <td style="text-align: center;border: 1pt solid black;" v-if="!dt.space && dt.fes">{{fcounterF2(dt.fes.f2)}}</td>
 
-                                        <td v-if="!dt.space && dt.fes">{{dt.fes.f3}}</td>
-                                        <td v-if="!dt.space && dt.fes">{{fcounterF3(dt.fes.f3)}}</td>
+                                        <td style="text-align: center;border: 1pt solid black;" v-if="!dt.space && dt.fes">{{dt.fes.f3}}</td>
+                                        <td style="text-align: center;border: 1pt solid black;" v-if="!dt.space && dt.fes">{{fcounterF3(dt.fes.f3)}}</td>
 
-                                        <td v-if="!dt.space && dt.fes">{{dt.fes.f4}}</td>
-                                        <td v-if="!dt.space && dt.fes">{{fcounterF4(dt.fes.f4)}}</td>
+                                        <td style="text-align: center;border: 1pt solid black;" v-if="!dt.space && dt.fes">{{dt.fes.f4}}</td>
+                                        <td style="text-align: center;border: 1pt solid black;" v-if="!dt.space && dt.fes">{{fcounterF4(dt.fes.f4)}}</td>
 
-                                        <td v-if="!dt.space && dt.fes">{{dt.fes.f5}}</td>
-                                        <td v-if="!dt.space && dt.fes">{{fcounterF5(dt.fes.f5)}}</td>
+                                        <td style="text-align: center;border: 1pt solid black;" v-if="!dt.space && dt.fes">{{dt.fes.f5}}</td>
+                                        <td style="text-align: center;border: 1pt solid black;" v-if="!dt.space && dt.fes">{{fcounterF5(dt.fes.f5)}}</td>
 
-                                        <td v-if="!dt.space && dt.fes">{{dt.fes.f6}}</td>
-                                        <td v-if="!dt.space && dt.fes">{{fcounterF6(dt.fes.f6)}}</td>
+                                        <td style="text-align: center;border: 1pt solid black;" v-if="!dt.space && dt.fes">{{dt.fes.f6}}</td>
+                                        <td style="text-align: center;border: 1pt solid black;" v-if="!dt.space && dt.fes">{{fcounterF6(dt.fes.f6)}}</td>
 
-                                        <td v-if="!dt.space && dt.fes">{{dt.fes.f7}}</td>
-                                        <td v-if="!dt.space && dt.fes">{{fcounterF7(dt.fes.f7)}}</td>
+                                        <td style="text-align: center;border: 1pt solid black;" v-if="!dt.space && dt.fes">{{dt.fes.f7}}</td>
+                                        <td style="text-align: center;border: 1pt solid black;" v-if="!dt.space && dt.fes">{{fcounterF7(dt.fes.f7)}}</td>
 
-                                        <td v-if="!dt.space && dt.fes">{{dt.fes.f8}}</td>
-                                        <td v-if="!dt.space && dt.fes">{{fcounterF8(dt.fes.f8)}}</td>
+                                        <td style="text-align: center;border: 1pt solid black;" v-if="!dt.space && dt.fes">{{dt.fes.f8}}</td>
+                                        <td style="text-align: center;border: 1pt solid black;" v-if="!dt.space && dt.fes">{{fcounterF8(dt.fes.f8)}}</td>
 
-                                        <td v-if="!dt.space && dt.fes">{{dt.fes.f9}}</td>
-                                        <td v-if="!dt.space && dt.fes">{{fcounterF9(dt.fes.f9)}}</td>
+                                        <td style="text-align: center;border: 1pt solid black;" v-if="!dt.space && dt.fes">{{dt.fes.f9}}</td>
+                                        <td style="text-align: center;border: 1pt solid black;" v-if="!dt.space && dt.fes">{{fcounterF9(dt.fes.f9)}}</td>
 
-                                        <td v-if="!dt.space" style="text-align: center;border: 1pt solid black;">{{dt.current_stickholder}}</td>
-                                        <td v-if="!dt.space" style="text-align: center;border: 1pt solid black;">{{formatNumber(Math.round(createTotal(dt.needed_stickholder)))}}</td>
+                                        <td style="text-align: center;border: 1pt solid black;" v-if="!dt.space" >{{dt.current_stickholder}}</td>
+                                        <td style="text-align: center;border: 1pt solid black;" v-if="!dt.space" >{{formatNumber(Math.round(createTotal(dt.needed_stickholder)))}}</td>
                                         
 
                                     </tr>
