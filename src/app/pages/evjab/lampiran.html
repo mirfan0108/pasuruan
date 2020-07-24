@@ -23,7 +23,7 @@
                 <!-- Nav tabs -->
                 <ul class="nav nav-tabs customtab" role="tablist">
                     <li class="nav-item"> 
-                        <a class="nav-link active show" data-toggle="tab" href="#pemen1" role="tab" aria-selected="false">
+                        <a @click.prevent="getLampiran1()" class="nav-link active show" data-toggle="tab" href="#pemen1" role="tab" aria-selected="false">
                             <span class="hidden-sm-up"><i class="ti-home"></i></span> <span class="hidden-xs-down">Permen I</span>
                         </a> 
                     </li>
@@ -54,7 +54,7 @@
                     </li>
                 </ul>
                 <!-- Tab panes -->
-                <div class="tab-content" v-if="KepIns.length > 0">
+                <div class="tab-content" >
                     <div class="tab-pane active show" id="pemen1" role="tabpanel">
                         <div class="p-20" align="center">
                             <h3>REKAPITULASI <br> KELAS JABATAN DAN PERSEDIAAN PEGAWAI <br> DI LINGKUNGAN {{opd.name.toUpperCase()}} KABUPATEN PASURUAN</h3>
@@ -67,16 +67,27 @@
                                         <th style="text-align: center; width: 45%;">Kelas Jabatan</th>
                                         <th style="text-align: center; ">Persediaan Pegawai</th>
                                     </tr>
+                                    <tr style="background-color: #1e88e5ad !important">
+                                        <th style="text-align: center; width: 5%;">1</th>
+                                        <th style="text-align: center; width: 45%;">2</th>
+                                        <th style="text-align: center; ">3</th>
+                                    </tr>
                                 </thead>
-                                <tbody>
-                                    <tr>
-                                        <td style="text-align: center;">1</td>
+                                <tbody v-if="dataStruktur.length > 0">
+                                    <tr v-for="(dt, index) in dataStruktur">
+                                        <td style="text-align: center;">{{index+1}}</td>
                                         <td style="text-align: center;">
-                                            Tanpa Kelas
+                                            {{dt.class == 0 ? 'Tanpa Kelas' : dt.class}}
                                         </td>
-                                        <td style="text-align: center;"></td>
+                                        <td style="text-align: center;">{{dt.total}}</td>
                                     </tr>
                                 </tbody>
+                                <tfoot>
+                                    <tr>
+                                        <td colspan="2" style="text-align: center;">Total</td>
+                                        <td style="text-align: center;">{{totalPenjabat()}}</td>
+                                    </tr>
+                                </tfoot>
                             </table>
                         </div>
                     </div>
@@ -456,9 +467,18 @@
                 
             })
 
-            if(localStorage.getItem('FES')) {
-                let temp = JSON.parse(localStorage.getItem('FES'))
-                this.dumData.push(temp)
+            if(localStorage.getItem('__opd')) {
+                this.$root.$store.dispatch('getOne_Opd', localStorage.getItem('__opd'))
+                .then(_res => {
+                    this.$root.$store.dispatch('setOpd_Data', {id: _res.opd.id, name: _res.opd.name})
+                    $("#opd-selection").append(`
+                        <option selected value="${_res.opd.id}">${_res.opd.name}</option>
+                    `)
+                    this.getLampiran()
+                    // $("#opd-selection").trigger('change');
+                })
+            } else {
+                this.getLampiran()
             }
         },
         methods: {
@@ -474,10 +494,25 @@
                     }
                 })
                 .finally(() => {
+                    this.getLampiran1()
                     setTimeout(() => {
                         this.onLoad = false
                     }, 500)
                 })
+            },
+
+            // LAMPIRAN 1
+            getLampiran1() {
+                generator.GenerateLamp1(this.position)
+                .then(_resp => {
+                    this.dataStruktur = _resp
+                    console.log('dt', _resp)
+                })
+            },
+            totalPenjabat() {
+                let total = 0
+                this.dataStruktur.map(_val => total += _val.total) 
+                return total
             },
             
             // LAMPIRAN 2
@@ -736,8 +771,11 @@
                 }else if (number>= 4055) {
                     kelas = 17
                     return kelas
-                }else 
-                return "Tanpa Kelas"
+                } else {
+                    if(kelas == 0) {
+                        return "Tanpa Kelas"
+                    }
+                }
 
             },
 

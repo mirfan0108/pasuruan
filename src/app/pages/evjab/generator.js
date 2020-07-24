@@ -745,6 +745,41 @@ class Fes {
         }
     }
 
+    static async GenerateLamp1(position) {
+        let result = [
+            { class: '0', total: 0},
+            { class: '17', total: 0},
+            { class: '16', total: 0},
+            { class: '15', total: 0},
+            { class: '14', total: 0},
+            { class: '13', total: 0},
+            { class: '12', total: 0},
+            { class: '11', total: 0},
+            { class: '10', total: 0},
+            { class: '9', total: 0},
+            { class: '8', total: 0},
+            { class: '7', total: 0},
+            { class: '6', total: 0},
+            { class: '5', total: 0},
+            { class: '4', total: 0},
+            { class: '3', total: 0},
+            { class: '2', total: 0},
+            { class: '1', total: 0},
+        ]
+        await position.map(_val => {
+            let jc = _val.type == "Struktural" ? 
+            _val.fes_struktur ? this.jobClass(this.jobValue(_val.fes_struktur.f1, _val.fes_struktur.f2, _val.fes_struktur.f3, _val.fes_struktur.f4_1, _val.fes_struktur.f4_2, _val.fes_struktur.f5, _val.fes_struktur.f6,)) : 0 : 
+            _val.fes_func ? this.jobClass(this.jobValueF(_val.fes_func.f1, _val.fes_func.f2, _val.fes_func.f3,_val.fes_func.f4,_val.fes_func.f5,_val.fes_func.f6,_val.fes_func.f7,_val.fes_func.f8,_val.fes_func.f9 )) : 0
+            console.log(`jc => ${jc} = `,_val.penjabat.length)
+            result.map(_cl => {
+                if(_cl.class == jc) {
+                    _cl.total += _val.penjabat.length
+                }
+            })
+        })
+        return result
+    }
+
     static counterF1(number) {
         if(number == 1) {
             return 175
@@ -1059,8 +1094,10 @@ class Fes {
         }else if (number>= 4055) {
             kelas = 17
             return kelas
-        }else 
-        return "Tanpa Kelas"
+        }else {
+
+            return "Tanpa Kelas"
+        }
 
     }
 
