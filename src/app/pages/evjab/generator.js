@@ -312,20 +312,21 @@ class Fes {
 
         Lampiran.map(_root => {
             if(_root.child.length != 0) {
+                resultLampiran.push({
+                    id: 0,
+                    bold: false,
+                    space: true,
+                    number: false,
+                    name: '',
+                    organization: '',
+                    fes: '', 
+                    current_stickholder: '',
+                    needed_stickholder: '',
+                    child: []
+                })
                 _root.child.map(_child => {
                     if(_child.child.length > 0) {
-                        resultLampiran.push({
-                            id: 0,
-                            bold: false,
-                            space: true,
-                            number: false,
-                            name: '',
-                            organization: '',
-                            fes: '', 
-                            current_stickholder: '',
-                            needed_stickholder: '',
-                            child: []
-                        })
+                        
                         _child.child.map(_sub_child => {
                             resultLampiran.push({
                                 id: _sub_child.id,
@@ -586,7 +587,6 @@ class Fes {
                     })
                 }
             })
-            console.log('[total] => ', total)
             return resultLampiran
         } else {
             return []
