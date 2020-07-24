@@ -28,22 +28,22 @@
                         </a> 
                     </li>
                     <li class="nav-item"> 
-                        <a class="nav-link" data-toggle="tab" href="#pemen2" role="tab" aria-selected="false">
+                        <a @click.prevent="getLampiran2()" class="nav-link" data-toggle="tab" href="#pemen2" role="tab" aria-selected="false">
                             <span class="hidden-sm-up"><i class="ti-user"></i></span> <span class="hidden-xs-down">Permen II</span>
                         </a> 
                     </li>
                     <li class="nav-item"> 
-                        <a class="nav-link " data-toggle="tab" href="#pemen3" role="tab" aria-selected="true">
+                        <a  @click.prevent="getLampiran3()" class="nav-link " data-toggle="tab" href="#pemen3" role="tab" aria-selected="true">
                             <span class="hidden-sm-up"><i class="ti-email"></i></span> <span class="hidden-xs-down">Permen III</span>
                         </a> 
                     </li>
                     <li class="nav-item"> 
-                        <a class="nav-link" data-toggle="tab" href="#pemen4" role="tab" aria-selected="true">
+                        <a @click.prevent="getLampiran4()" class="nav-link" data-toggle="tab" href="#pemen4" role="tab" aria-selected="true">
                             <span class="hidden-sm-up"><i class="ti-email"></i></span> <span class="hidden-xs-down">Permen IV</span>
                         </a> 
                     </li>
                     <li class="nav-item"> 
-                        <a class="nav-link" data-toggle="tab" href="#pemen5" role="tab" aria-selected="true">
+                        <a @click.prevent="getLampiran5()"class="nav-link" data-toggle="tab" href="#pemen5" role="tab" aria-selected="true">
                             <span class="hidden-sm-up"><i class="ti-email"></i></span> <span class="hidden-xs-down">Permen V</span>
                         </a> 
                     </li>
@@ -89,22 +89,27 @@
                             <table class="table table-bordered table-striped">
                                 <thead>
                                     <tr style="background-color: #1e88e5ad !important">
-                                        <th style="text-align: center;vertical-align: middle; width: 5%;">No.</th>
-                                        <th style="text-align: center; vertical-align: middle;">Nama Jabatan Struktural</th>
-                                        <th style="text-align: center; width: 10%;">Kelas Jabatan</th>
-                                        <th style="text-align: center; width: 10%;">Persediaan Pegawai</th>
-                                        <th style="text-align: center; vertical-align: middle; width: 20%;">Keterangan</th>
+                                        <th style="text-align: center;vertical-align: middle; border: 1px solid black; width: 5%;">No.</th>
+                                        <th style="text-align: center; vertical-align: middle; border: 1px solid black;">Nama Jabatan Struktural</th>
+                                        <th style="text-align: center; width: 10%; border: 1px solid black; ">Kelas Jabatan</th>
+                                        <th style="text-align: center; width: 10%; border: 1px solid black; ">Persediaan Pegawai</th>
+                                        <th style="text-align: center; vertical-align: middle; width: 20%;border: 1px solid black; ">Keterangan</th>
                                     </tr>
                                 </thead>
-                                <tbody>
-                                    <tr>
-                                        <td style="text-align: center;">1</td>
-                                        <td style="text-align: center;">
-                                            Tanpa Kelas
+                                <tbody v-if="dataStruktur.length > 0">
+                                    <tr v-for="(dt, index) in dataStruktur" >
+                                        <td style="text-align: center;border: 1pt solid black;">{{index+1}}</td>
+                                        <td style="border: 1pt solid black;">{{dt.name}}</td>
+                                        <td v-if="!dt.fes" style="text-align: center;border: 1pt solid black;" align="center">
+                                                Tidak Tersedia
                                         </td>
-                                        <td style="text-align: center;"></td>
+                                        <td v-if="dt.fes" style="text-align: center;border: 1pt solid black;">{{jobClass(jobValue(dt.fes.f1 , dt.fes.f2 , dt.fes.f3 , dt.fes.f4_1 , dt.fes.f4_2 , dt.fes.f5 , dt.fes.f6))}}</td>
+                                            
+                                        <td style="text-align: center;border: 1pt solid black;">{{dt.current_stickholder}}</td>
+                                        <td style="text-align: center;border: 1pt solid black;"> - </td>
                                     </tr>
                                 </tbody>
+                                
                             </table>
                         </div>
                     </div>
@@ -125,13 +130,23 @@
                                         <th style="text-align: center; vertical-align: middle; width: 20%;">Keterangan</th>
                                     </tr>
                                 </thead>
-                                <tbody>
-                                    <tr>
-                                        <td style="text-align: center;">1</td>
-                                        <td style="text-align: center;">
-                                            Tanpa Kelas
+                                <tbody  v-if="dataFungsional.length > 0">
+                                    <tr v-for="(dt, index) in dataFungsional">
+                                        <!-- TRUE SPACE -->
+                                        <td v-if="dt.space" style="background-color: aqua;" >&nbsp;</td>
+                                        <!-- FALSE SPACE -->
+                                        <td v-if="!dt.space"></td>
+                                        <td v-if="!dt.space" style="width: 30%; text-align: center;border: 1pt solid black;" >{{dt.name}}</td>
+                                        <td v-if="!dt.space" style="width: 30%; text-align: center;border: 1pt solid black;" >{{dt.organization}}</td>
+                                        <td v-if="!dt.space && !dt.fes" style="text-align: center;border: 1pt solid black;" align="center">
+                                            Tidak Tersedia
                                         </td>
-                                        <td style="text-align: center;"></td>
+
+                                        <td v-if="!dt.space && dt.fes" style="text-align: center;border: 1pt solid black;">{{jobClass(jobValueF(dt.fes.f1 , dt.fes.f2 , dt.fes.f3 , dt.fes.f4, dt.fes.f5 , dt.fes.f6, dt.fes.f7, dt.fes.f8, dt.fes.f9  ))}}</td>
+                                        <td v-if="!dt.space" style="text-align: center;border: 1pt solid black;">{{dt.current_stickholder}}</td>
+                                        <td v-if="!dt.space" style="text-align: center;border: 1pt solid black;"> - </td>
+                                        
+
                                     </tr>
                                 </tbody>
                             </table>
@@ -177,13 +192,29 @@
                                         <td style="vertical-align: middle;border: 1px solid black;vertical-align: middle; text-align: center;" colspan="2">11</td>
                                     </tr>
                                 </thead>
-                                <tbody>
-                                    <tr>
-                                        <td style="text-align: center;">1</td>
-                                        <td style="text-align: center;">
-                                            Tanpa Kelas
+                                <tbody v-if="dataStruktur4.length > 0 ">
+                                    <tr v-for="(dt, index) in dataStruktur4" >
+                                        <td style="text-align: center;border: 1pt solid black;">{{index+1}}</td>
+                                        <td style="border: 1pt solid black;">{{dt.name}}</td>
+                                        <td colspan="16" v-if="!dt.fes" style="text-align: center;border: 1pt solid black;" align="center">
+                                            Tidak Terseedia
                                         </td>
-                                        <td style="text-align: center;"></td>
+                                        <td v-if="dt.fes" style="text-align: center;border: 1pt solid black;">{{jobClass(jobValue(dt.fes.f1 , dt.fes.f2 , dt.fes.f3 , dt.fes.f4_1 , dt.fes.f4_2 , dt.fes.f5 , dt.fes.f6))}}</td>
+                                        <td v-if="dt.fes" style="text-align: center;border: 1pt solid black;">{{jobValue(dt.fes.f1 , dt.fes.f2 , dt.fes.f3 , dt.fes.f4_1 , dt.fes.f4_2 , dt.fes.f5 , dt.fes.f6  )}} </td>
+                                        <td style="text-align: center;border: 1pt solid black;" v-if="dt.fes">{{dt.fes.f1}}</td>
+                                        <td style="text-align: center;border: 1pt solid black;" v-if="dt.fes">{{counterF1(dt.fes.f1)}}</td>
+                                        <td style="text-align: center;border: 1pt solid black;" v-if="dt.fes">{{dt.fes.f2}}</td>
+                                        <td style="text-align: center;border: 1pt solid black;" v-if="dt.fes">{{counterF2(dt.fes.f2)}}</td>
+                                        <td style="text-align: center;border: 1pt solid black;" v-if="dt.fes">{{dt.fes.f3}}</td>
+                                        <td style="text-align: center;border: 1pt solid black;" v-if="dt.fes">{{counterF3(dt.fes.f3)}}</td>
+                                        <td style="text-align: center;border: 1pt solid black;" v-if="dt.fes">{{dt.fes.f4_1}}</td>
+                                        <td style="text-align: center;border: 1pt solid black;" v-if="dt.fes">{{counterF41(dt.fes.f4_1)}}</td>
+                                        <td style="text-align: center;border: 1pt solid black;" v-if="dt.fes">{{dt.fes.f4_2}}</td>
+                                        <td style="text-align: center;border: 1pt solid black;" v-if="dt.fes">{{counterF42(dt.fes.f4_2)}}</td>
+                                        <td style="text-align: center;border: 1pt solid black;" v-if="dt.fes">{{dt.fes.f5}}</td>
+                                        <td style="text-align: center;border: 1pt solid black;" v-if="dt.fes">{{counterF5(dt.fes.f5)}}</td>
+                                        <td style="text-align: center;border: 1pt solid black;" v-if="dt.fes">{{dt.fes.f6}}</td>
+                                        <td style="text-align: center;border: 1pt solid black;" v-if="dt.fes">{{counterF6(dt.fes.f6)}}</td>
                                     </tr>
                                 </tbody>
                             </table>
@@ -234,17 +265,49 @@
                                                 <td style="vertical-align: middle;border: 1px solid black;vertical-align: middle; text-align: center;" colspan="2">14</td>
                                             </tr>
                                         </thead>
-                                        <tbody>
-                                            <tr class="group">
-                                                <td colspan="5">Edinburgh</td>
-                                            </tr>
-                                            <tr role="row" class="odd">
-                                                <td>Cedric Kelly</td>
-                                                <td>Senior Javascript Developer</td>
+                                        <tbody  v-if="dataFungsional5.length > 0">
+                                            <tr v-for="(dt, index) in dataFungsional5">
+                                                <!-- TRUE SPACE -->
+                                                <td colspan="25" v-if="dt.space" style="background-color: aqua;" >&nbsp;</td>
+                                                <!-- FALSE SPACE -->
+                                                <td v-if="!dt.space"></td>
+                                                <td v-if="!dt.space">{{dt.name}}</td>
+                                                <td v-if="!dt.space">{{dt.organization}}</td>
+                                                <td v-if="!dt.space && !dt.fes" colspan="20" style="text-align: center;" align="center">
+                                                   Tidak Tersedia
+                                                </td>
+        
+                                                <td v-if="!dt.space && dt.fes">{{jobClass(jobValueF(dt.fes.f1 , dt.fes.f2 , dt.fes.f3 , dt.fes.f4, dt.fes.f5 , dt.fes.f6, dt.fes.f7, dt.fes.f8, dt.fes.f9  ))}}</td>
+                                                <td v-if="!dt.space && dt.fes">{{jobValueF(dt.fes.f1 , dt.fes.f2 , dt.fes.f3 , dt.fes.f4, dt.fes.f5 , dt.fes.f6, dt.fes.f7, dt.fes.f8, dt.fes.f9  )}}</td>
+                                                <td v-if="!dt.space && dt.fes">{{dt.fes.f1}}</td>
+                                                <td v-if="!dt.space && dt.fes">{{fcounterF1(dt.fes.f1)}}</td>
                                                 
-                                                <td>22</td>
-                                                <td>2012/03/29</td>
-                                                <td>$433,060</td>
+                                                <td v-if="!dt.space && dt.fes">{{dt.fes.f2}}</td>
+                                                <td v-if="!dt.space && dt.fes">{{fcounterF2(dt.fes.f2)}}</td>
+        
+                                                <td v-if="!dt.space && dt.fes">{{dt.fes.f3}}</td>
+                                                <td v-if="!dt.space && dt.fes">{{fcounterF3(dt.fes.f3)}}</td>
+        
+                                                <td v-if="!dt.space && dt.fes">{{dt.fes.f4}}</td>
+                                                <td v-if="!dt.space && dt.fes">{{fcounterF4(dt.fes.f4)}}</td>
+        
+                                                <td v-if="!dt.space && dt.fes">{{dt.fes.f5}}</td>
+                                                <td v-if="!dt.space && dt.fes">{{fcounterF5(dt.fes.f5)}}</td>
+        
+                                                <td v-if="!dt.space && dt.fes">{{dt.fes.f6}}</td>
+                                                <td v-if="!dt.space && dt.fes">{{fcounterF6(dt.fes.f6)}}</td>
+        
+                                                <td v-if="!dt.space && dt.fes">{{dt.fes.f7}}</td>
+                                                <td v-if="!dt.space && dt.fes">{{fcounterF7(dt.fes.f7)}}</td>
+        
+                                                <td v-if="!dt.space && dt.fes">{{dt.fes.f8}}</td>
+                                                <td v-if="!dt.space && dt.fes">{{fcounterF8(dt.fes.f8)}}</td>
+        
+                                                <td v-if="!dt.space && dt.fes">{{dt.fes.f9}}</td>
+                                                <td v-if="!dt.space && dt.fes">{{fcounterF9(dt.fes.f9)}}</td>
+
+                                                
+        
                                             </tr>
                                         </tbody>
                                     </table>
@@ -343,7 +406,18 @@
                 onLoad: true,
                 KepIns: [],
                 position: [],
-                onLoadLampiran6: true
+
+                onLoadLampiran2: true,
+                onLoadLampiran3: true,
+                onLoadLampiran4: true,
+                onLoadLampiran5: true,
+                onLoadLampiran6: true,
+                
+                dataStruktur: [],
+                dataStruktur4: [],
+                dataFungsional:[],
+                dataFungsional5:[],
+                dumData: [],
             }
         },
         computed: mapState([ 'Positions', 'totalPositions', 'accessToken']),
@@ -379,13 +453,21 @@
             }).on('change', e => {
                 this.onLoadLampiran6 = true
                 this.getLampiran()
+                
             })
+
+            if(localStorage.getItem('FES')) {
+                let temp = JSON.parse(localStorage.getItem('FES'))
+                this.dumData.push(temp)
+            }
         },
         methods: {
             getLampiran() {
                 this.onLoad = true
+                
                 ApiEvjab.GetLampiran($("#opd-selection").val())
                 .then(resp => {
+                    
                     if(resp.data && resp.data.opd) {
                         this.opd = resp.data.opd
                         this.position = resp.data.position
@@ -397,8 +479,67 @@
                     }, 500)
                 })
             },
+            
+            // LAMPIRAN 2
+            getLampiran2() {
+                generator.generateStructure2(this.position)
+                .then(_resp => {
+                    this.dataStruktur = _resp
+                })
+                .finally(() => {
+                    setTimeout(() => {
+                        this.onLoadLampiran2 = false
+                    })
+                })
 
-            getLampiran6() {
+                
+            },
+
+            //LAMPIRAN 3
+            getLampiran3(){
+                generator.generateFungsional(this.position)
+                .then(_resp =>{
+                    this.dataFungsional = _resp
+                })
+
+                .finally(() => {
+                    setTimeout(() => {
+                        this.onLoadLampiran3 = false
+                    })
+                })
+            },
+
+             // LAMPIRAN 4
+             getLampiran4() {
+                generator.generateStructure2(this.position)
+                .then(_resp => {
+                    this.dataStruktur4 = _resp
+                })
+                .finally(() => {
+                    setTimeout(() => {
+                        this.onLoadLampiran4 = false
+                    })
+                })
+
+                
+            },
+
+            //LAMPIRAN 5
+            getLampiran5(){
+                generator.generateFungsional(this.position)
+                .then(_resp =>{
+                    this.dataFungsional5 = _resp
+                })
+
+                .finally(() => {
+                    setTimeout(() => {
+                        this.onLoadLampiran5 = false
+                    })
+                })
+            },
+
+             //LAMPIRAN 6
+             getLampiran6() {
                 generator.GenerateLampiranKepInd(this.position)
                 .then(_kepins => {
                     this.KepIns = _kepins
@@ -408,7 +549,332 @@
                         this.onLoadLampiran6 = false
                     })
                 })
-            }
+            },
+
+            counterF1(number) {
+                if(number == 1) {
+                    return 175
+                } else if (number == 2) {
+                    return 350
+                } else if (number == 3) {
+                    return 550
+                } else if (number == 4) {
+                    return 775
+                } else if (number == 5) {
+                    return 900
+                } else {
+                    return "-"
+                }
+            },
+            counterF2(number) {
+                if(number == 1) {
+                    return 100
+                } else if (number == 2) {
+                    return 250
+                } else if (number == 3) {
+                    return 350
+                } else {
+                    return "-"
+                }
+            },
+            counterF3(number) {
+                if(number == 1) {
+                    return 450
+                } else if (number == 2) {
+                    return 775
+                } else if (number == 3) {
+                    return 900
+                } else {
+                    return "-"
+                }
+            },
+            counterF41(number) {
+                if(number == 1) {
+                    return 25
+                } else if (number == 2) {
+                    return 50
+                } else if (number == 3) {
+                    return 75
+                } else if (number == 4) {
+                    return 100
+                } else {
+                    return "-"
+                }
+            },
+            counterF42(number) {
+                if(number == 1) {
+                    return 30
+                } else if (number == 2) {
+                    return 75
+                } else if (number == 3) {
+                    return 100
+                } else if (number == 4) {
+                    return 125
+                } else {
+                    return "-"
+                }
+            },
+            counterF5(number) {
+                if(number == 1) {
+                    return 75
+                } else if (number == 2) {
+                    return 205
+                } else if (number == 3) {
+                    return 340
+                } else if (number == 4) {
+                    return 505
+                } else if (number == 5) {
+                    return 650
+                } else if (number == 6) {
+                    return 800
+                } else if (number == 7) {
+                    return 930
+                } else if (number == 8) {
+                    return 1030
+                } else {
+                    return "-"
+                }
+            },
+            counterF6(number) {
+                if(number == 1) {
+                    return 310
+                } else if (number == 2) {
+                    return 575
+                } else if (number == 3) {
+                    return 975
+                } else if (number == 4) {
+                    return 1120
+                } else if (number == 5) {
+                    return 1225
+                } else if (number == 6) {
+                    return 1325
+                } else {
+                    return "-"
+                }
+            },
+
+            jobValue(f1, f2, f3, f41, f42, f5, f6){
+                let total = 0
+                total += f1 != 0 ? this.counterF1(f1) : 0
+                total += f2 != 0 ? this.counterF2(f2) : 0
+                total += f3 != 0 ? this.counterF3(f3) : 0
+                total += f41 != 0 ? this.counterF41(f41) : 0
+                total += f42 != 0 ? this.counterF42(f42) : 0
+                total += f5 != 0 ? this.counterF5(f5) : 0
+                total += f6 != 0 ? this.counterF6(f6) : 0
+
+                return total
+            },
+
+            jobValueF(f1, f2, f3, f4, f5, f6, f7, f8, f9){
+                let total = 0
+                total += f1 != 0 ? this.fcounterF1(f1) : 0
+                total += f2 != 0 ? this.fcounterF2(f2) : 0
+                total += f3 != 0 ? this.fcounterF3(f3) : 0
+                total += f4 != 0 ? this.fcounterF4(f4) : 0
+                total += f5 != 0 ? this.fcounterF5(f5) : 0
+                total += f6 != 0 ? this.fcounterF6(f6) : 0
+                total += f7 != 0 ? this.fcounterF7(f7) : 0
+                total += f8 != 0 ? this.fcounterF8(f8) : 0
+                total += f9 != 0 ? this.fcounterF9(f9) : 0
+
+                return total
+            },
+
+           
+
+            jobClass(number){
+                let kelas = 0
+                if (number >=190 && number<=240) {
+                    kelas = 1
+                    return kelas
+                }else if (number>=245 && number <=300) {
+                    kelas = 2
+                    return kelas
+                }else if (number>=305 && number <= 370) {
+                    kelas = 3
+                    return kelas
+                }else if (number>=375 && number <= 450) {
+                    kelas = 4
+                    return kelas
+                }else if (number>=455 && number <= 650) {
+                    kelas = 5 
+                    return kelas    
+                }else if (number>=655 && number <= 850) {
+                    kelas = 6
+                    return kelas
+                }else if (number>=855 && number <=1100) {
+                    kelas = 7
+                    return kelas
+                }else if (number>=1105 && number <= 1350) {
+                    kelas = 8
+                    return kelas
+                }else if (number>=1355 && number <= 1600) {
+                    kelas = 9
+                    return kelas
+                }else if (number>=1605 && number <= 1850) {
+                    kelas = 10
+                    return kelas
+                }else if (number>=1855 && number <= 2100) {
+                    kelas = 11
+                    return kelas
+                }else if (number>=2105 && number <=2350) {
+                    kelas =12
+                    return kelas
+                }else if (number>=2355 && number<=2750) {
+                    kelas = 13
+                    return kelas
+                }else if (number>=2755 && number <=3150) {
+                    kelas = 14
+                    return kelas
+                }else if (number>=3155 && number <= 3600) {
+                    kelas = 15
+                    return kelas
+                }else if (number>=3605 && number<=4050) {
+                    kelas = 16
+                    return kelas
+                }else if (number>= 4055) {
+                    kelas = 17
+                    return kelas
+                }else 
+                return "Tanpa Kelas"
+
+            },
+
+            fcounterF1(number) {
+                if(number == 1) {
+                    return 50
+                } else if (number == 2) {
+                    return 200
+                } else if (number == 3) {
+                    return 350
+                } else if (number == 4) {
+                    return 550
+                } else if (number == 5) {
+                    return 750
+                } else if (number == 6) {
+                    return 950
+                } else if (number == 7) {
+                    return 1250
+                } else {
+                    return "-"
+                }
+            },
+            fcounterF2(number) {
+                if(number == 1) {
+                    return 25
+                } else if (number == 2) {
+                    return 125
+                } else if (number == 3) {
+                    return 275
+                } else if (number == 4) {
+                    return 450
+                } else if (number == 5) {
+                    return 650
+                } else {
+                    return "-"
+                }
+            },
+            fcounterF3(number) {
+                if(number == 1) {
+                    return 25
+                } else if (number == 2) {
+                    return 125
+                } else if (number == 3) {
+                    return 275
+                } else if (number == 4) {
+                    return 450
+                } else if (number == 5) {
+                    return 650
+                } else {
+                    return "-"
+                }
+            },
+            fcounterF4(number) {
+                if(number == 1) {
+                    return 25
+                } else if (number == 2) {
+                    return 75
+                } else if (number == 3) {
+                    return 150
+                } else if (number == 4) {
+                    return 225
+                } else if (number == 5) {
+                    return 325
+                } else if (number == 6) {
+                    return 450
+                } else {
+                    return "-"
+                }
+            },
+            
+            fcounterF5(number) {
+                if(number == 1) {
+                    return 25
+                } else if (number == 2) {
+                    return 75
+                } else if (number == 3) {
+                    return 150
+                } else if (number == 4) {
+                    return 225
+                } else if (number == 5) {
+                    return 325
+                } else if (number == 6) {
+                    return 450
+                } else {
+                    return "-"
+                }
+            },
+            fcounterF6(number) {
+                if(number == 1) {
+                    return 10
+                } else if (number == 2) {
+                    return 25
+                } else if (number == 3) {
+                    return 60
+                } else if (number == 4) {
+                    return 110
+                } else {
+                    return "-"
+                }
+            },
+            fcounterF7(number) {
+                if(number == 1) {
+                    return 20
+                } else if (number == 2) {
+                    return 50
+                } else if (number == 3) {
+                    return 120
+                } else if (number == 4) {
+                    return 220
+                } else {
+                    return "-"
+                }
+            },
+            fcounterF8(number) {
+                if(number == 1) {
+                    return 5
+                } else if (number == 2) {
+                    return 20
+                } else if (number == 3) {
+                    return 50
+                } else {
+                    return "-"
+                }
+            },
+            fcounterF9(number) {
+                if(number == 1) {
+                    return 5
+                } else if (number == 2) {
+                    return 20
+                } else if (number == 3) {
+                    return 50
+                } else {
+                    return "-"
+                }
+            },
+
+           
         }
     }
 </script>
