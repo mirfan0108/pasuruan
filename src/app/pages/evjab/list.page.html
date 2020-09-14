@@ -55,7 +55,7 @@
                                         <td style="text-align: center;border: 1pt solid black;">{{index+1}}</td>
                                         <td style="border: 1pt solid black;">{{dt.name}}</td>
                                         <td colspan="16" v-if="!dt.fes" style="text-align: center;border: 1pt solid black;" align="center">
-                                            <button class="btn btn-sm btn-rounded btn-success" style="font-size: small;" @click.prevent="$root.$router.push({name: 'struktural.form.evjab', params: {id: dt.id}})">Masukan Nilai</button>
+                                            Data Belum Tersedia
                                         </td>
                                         <td v-if="dt.fes" style="text-align: center;border: 1pt solid black;">{{jobClass(jobValue(dt.fes.f1 , dt.fes.f2 , dt.fes.f3 , dt.fes.f4_1 , dt.fes.f4_2 , dt.fes.f5 , dt.fes.f6))}}</td>
                                         <td v-if="dt.fes" style="text-align: center;border: 1pt solid black;">{{jobValue(dt.fes.f1 , dt.fes.f2 , dt.fes.f3 , dt.fes.f4_1 , dt.fes.f4_2 , dt.fes.f5 , dt.fes.f6  )}} </td>
@@ -110,7 +110,7 @@
                                         <td style="text-align: center;border: 1pt solid black;" v-if="!dt.space">{{dt.name}}</td>
                                         <td style="text-align: center;border: 1pt solid black;" v-if="!dt.space">{{dt.organization}}</td>
                                         <td  v-if="!dt.space && !dt.fes" colspan="20" style="text-align: center;border: 1pt solid black;" align="center">
-                                            <button class="btn btn-sm btn-rounded btn-success" style="font-size: small;" @click.prevent="$root.$router.push({name: 'fungsional.form.evjab', params: {id: dt.id}})">Masukan Nilai</button>
+                                            Data Belum Tersedia
                                         </td>
 
                                         <td style="text-align: center;border: 1pt solid black;" v-if="!dt.space && dt.fes">{{jobClass(jobValueF(dt.fes.f1 , dt.fes.f2 , dt.fes.f3 , dt.fes.f4, dt.fes.f5 , dt.fes.f6, dt.fes.f7, dt.fes.f8, dt.fes.f9  ))}}</td>

@@ -25,18 +25,18 @@
                         <span>Mohon Tunggu</span>
                     </div>
                 </div>
-                <div class="card-body" v-if="!loading">
-                    <div class="row">
-                        <div class="col-md-12 col-lg-12">
-                            <table style="width: 100%; margin-top: 20px; font-size: 9pt;" class="table" > 
+                <div class="table-responsive m-t-40" v-if="!loading">
+                    <div id="example_wrapper" class="dataTables_wrapper">
+                        <div class="dataTables_length" id="example_length"s>
+                            <table class="table display table-bordered table-striped dataTable" role="grid" aria-describedby="example_info" style="width: 1000px;" v-if="tipe == 'Struktural'" > 
                                 <thead style="border: 1pt solid black;" v-if="dataStruktur.length > 0 && tipe == 'Struktural'">
                                     <tr style="border: 1pt solid black;">
-                                        <th style="width: 5%; text-align: center;border: 1pt solid black; vertical-align : middle;">No</th>
-                                        <th style="width: 20%; text-align: center;border: 1pt solid black; vertical-align : middle;" >Nama Jabatan</th>
-                                        <th style="width: 5%; text-align: center;border: 1pt solid black; vertical-align : middle;">Aksi</th>
+                                        <th style="width: 10%; text-align: center;border: 1pt solid black; vertical-align : middle;">No</th>
+                                        <th style="width: 65%; text-align: center;border: 1pt solid black; vertical-align : middle;" >Nama Jabatan</th>
+                                        <th style="width: 25%; text-align: center;border: 1pt solid black; vertical-align : middle;">Aksi</th>
                                     </tr>
                                 </thead>
-                                <tbody v-if="dataStruktur.length > 0 ">
+                                <tbody v-if="dataStruktur.length > 0 && tipe == 'Struktural'">
                                     <tr v-for="(dt, index) in dataStruktur" >
                                         <td style="text-align: center;border: 1pt solid black;">{{index+1}}</td>
                                         <td style="border: 1pt solid black;">{{dt.name}}</td>
@@ -53,6 +53,44 @@
                                             Edit</button>
                                         </td>
                                         <td colspan="16" v-if="dt.info_faktor.length == 0" style="text-align: center;border: 1pt solid black;" align="center">
+                                            <button class="btn btn-sm btn-rounded btn-secondary" 
+                                                style="font-size: small;" 
+                                                @click.prevent="createNew(dt.id)">Buat Informasi Faktor</button>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+
+                        <div class="dataTables_length" id="example_length"s>
+                            <table class="table display table-bordered table-striped dataTable" role="grid" aria-describedby="example_info" style="width: 1000px;" v-if="tipe == 'Fungsional'" > 
+                                <thead style="border: 1pt solid black;" v-if="dataStruktur.length > 0 && tipe == 'Fungsional'">
+                                    <tr style="border: 1pt solid black;">
+                                        <th style="width: 10%; text-align: center;border: 1pt solid black; vertical-align : middle;">No</th>
+                                        <th style="width: 65%; text-align: center;border: 1pt solid black; vertical-align : middle;" >Nama Jabatan</th>
+                                        <th style="width: 25%; text-align: center;border: 1pt solid black; vertical-align : middle;">Aksi</th>
+                                    </tr>
+                                </thead>
+                                <tbody v-if="dataStruktur.length > 0 && tipe == 'Fungsional' ">
+                                    <tr v-for="(dt, index) in dataStruktur" >
+                                         <!-- TRUE SPACE -->
+                                         <td colspan="25" v-if="dt.space" style="background-color: aqua;" >&nbsp;</td>
+                                         <!-- FALSE SPACE -->
+                                        <td style="text-align: center;border: 1pt solid black; "  v-if="!dt.space">{{index+1}}</td>
+                                        <td style="border: 1pt solid black;"  v-if="!dt.space">{{dt.name}} </td>
+                                        
+                                        <td  colspan="16" v-if="dt.info_faktor.length > 0 && !dt.space " style="text-align: center;border: 1pt solid black;" align="center">
+                                            <button class="btn btn-sm btn-rounded btn-success" 
+                                            style="font-size: small;" 
+                                            @click.prevent="$root.$router.push({name: 'detail.infofaktor.evjab', params: {id: dt.id}})">
+                                            Detail</button>
+
+                                            <button class="btn btn-sm btn-rounded btn-secondary" 
+                                            style="font-size: small;" 
+                                            @click.prevent="createNew(dt.id)">
+                                            Edit</button>
+                                        </td>
+                                        <td colspan="16" v-if="dt.info_faktor.length == 0 && !dt.space " style="text-align: center;border: 1pt solid black;" align="center">
                                             <button class="btn btn-sm btn-rounded btn-secondary" 
                                                 style="font-size: small;" 
                                                 @click.prevent="createNew(dt.id)">Buat Informasi Faktor</button>
@@ -160,7 +198,7 @@
             },
             
             doStructure(data) {
-                generator.generateInfoStructure(data)
+                generator.generateInfoStructure2(data)
                 .then(_resp => {
                     console.log('generated', _resp)
                     this.dataStruktur = _resp
@@ -172,7 +210,7 @@
                 })
             },
             doFunsional(data) {
-                generator.generateInfoFungsional(data)
+                generator.generateInfoFungsional2(data)
                 .then(_resp => {
                     console.log('generated', _resp)
                     this.dataStruktur = _resp

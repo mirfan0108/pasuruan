@@ -383,9 +383,8 @@ class Fes {
         return resultLampiran
     }
 
-    static async generateInfoStructure(position) {
-        if(position && position.length > 0) {
-            let Lampiran = []
+    static async generateInfoStructure2(position) {
+        let Lampiran = []
             let id_head = await position[position.findIndex(_item => _item.parent_id == 0)].id
             let counter = 0
             let id_number = []
@@ -404,6 +403,9 @@ class Fes {
                             bold: true,
                             name: _val.position_name,
                             info_faktor: _val.info_faktor,
+                            fes: _val.fes_struktur,
+                            current_stickholder: _val.current_stickholder,
+                            needed_stickholder: _val.formA,
                             child: []
                         })
                     } else if (_val.parent_id == id_head) {
@@ -418,7 +420,10 @@ class Fes {
                             id: _val.id,
                             bold: true,
                             name: _val.position_name,
+                            fes: _val.fes_struktur,
                             info_faktor: _val.info_faktor,
+                            current_stickholder: _val.current_stickholder,
+                            needed_stickholder: _val.formA,
                             child: []
                         })
                     } 
@@ -433,7 +438,10 @@ class Fes {
                         id: _val.id,
                         bold: true,
                         name: _val.position_name,
+                        fes: _val.fes_struktur,
                         info_faktor: _val.info_faktor,
+                        current_stickholder: _val.current_stickholder,
+                        needed_stickholder: _val.formA,
                         child: []
                     })
                 }
@@ -453,7 +461,10 @@ class Fes {
                                         id: _val.id,
                                         bold: false,
                                         name: _val.position_name,
+                                        fes: _val.fes_struktur,
                                         info_faktor: _val.info_faktor,
+                                        current_stickholder: _val.current_stickholder,
+                                        needed_stickholder: _val.formA,
                                         child: []
                                     })
                                 }
@@ -481,117 +492,392 @@ class Fes {
                         }
                     })
                 }
-            })
-            return resultLampiran
-        } else {
-            return []
-        }
+            }) 
+        return resultLampiran
     }
 
-    static async generateInfoFungsional(position) {
-        if(position && position.length > 0) {
-            let Lampiran = []
-            let id_head = await position[position.findIndex(_item => _item.parent_id == 0)].id
-            let counter = 0
-            let id_number = []
-            let id_number_ = []
-            let total = 0
-            let resultLampiran = []
-            await position.map(_val => {
-                if(_val.type != "Struktural") {
-                    if(_val.parent_id == 0 ) {
-                        if(_val.oj != null ) {
-                            total+= Number(_val.oj) 
-                        }
-                        counter += 1
-                        Lampiran.push({
-                            id: _val.id,
-                            bold: true,
-                            name: _val.position_name,
-                            info_faktor: _val.info_faktor,
-                            child: []
-                        })
-                    } else if (_val.parent_id == id_head) {
-                        console.log('sekr')
-                        id_number.push(_val.id)
+    // static async generateInfoStructure(position) {
+    //     if(position && position.length > 0) {
+    //         let Lampiran = []
+    //         let id_head = await position[position.findIndex(_item => _item.parent_id == 0)].id
+    //         let counter = 0
+    //         let id_number = []
+    //         let id_number_ = []
+    //         let total = 0
+    //         let resultLampiran = []
+    //         await position.map(_val => {
+    //             if(_val.type == "Struktural") {
+    //                 if(_val.parent_id == 0 ) {
+    //                     if(_val.oj != null ) {
+    //                         total+= Number(_val.oj) 
+    //                     }
+    //                     counter += 1
+    //                     Lampiran.push({
+    //                         id: _val.id,
+    //                         bold: true,
+    //                         name: _val.position_name,
+    //                         info_faktor: _val.info_faktor,
+    //                         child: []
+    //                     })
+    //                 } else if (_val.parent_id == id_head) {
+    //                     console.log('sekr')
+    //                     id_number.push(_val.id)
                         
-                        if(_val.oj != null ) {
-                            total+= Number(_val.oj) 
-                        }
-                        counter += 1
-                        Lampiran.push({
-                            id: _val.id,
-                            bold: true,
-                            name: _val.position_name,
-                            info_faktor: _val.info_faktor,
-                            child: []
-                        })
-                    } 
-                }
-            })
+    //                     if(_val.oj != null ) {
+    //                         total+= Number(_val.oj) 
+    //                     }
+    //                     counter += 1
+    //                     Lampiran.push({
+    //                         id: _val.id,
+    //                         bold: true,
+    //                         name: _val.position_name,
+    //                         info_faktor: _val.info_faktor,
+    //                         child: []
+    //                     })
+    //                 } 
+    //             }
+    //         })
             
 
-            await position.map(_val => {
-                if(_val.parent_id == id_number[id_number.findIndex(_number => _number == _val.parent_id)] && _val.type != "Struktural") {
-                    id_number_.push(_val.id)
-                    Lampiran[Lampiran.findIndex(__item => __item.id == _val.parent_id)].child.push({
+    //         await position.map(_val => {
+    //             if(_val.parent_id == id_number[id_number.findIndex(_number => _number == _val.parent_id)] && _val.type == "Struktural") {
+    //                 id_number_.push(_val.id)
+    //                 Lampiran[Lampiran.findIndex(__item => __item.id == _val.parent_id)].child.push({
+    //                     id: _val.id,
+    //                     bold: true,
+    //                     name: _val.position_name,
+    //                     info_faktor: _val.info_faktor,
+    //                     child: []
+    //                 })
+    //             }
+    //         })
+
+    //         await position.map(_val => {
+    //             if(_val.parent_id == id_number_[id_number_.findIndex(_number => _number == _val.parent_id)] && _val.type == "Struktural") {
+    //                 if(_val.oj != null ) {
+    //                     total+= parseInt(_val.oj) 
+    //                 }
+                    
+    //                 Lampiran.map(_item => {
+    //                     if(_item.child.length > 0) {
+    //                         _item.child.map(_ch => {
+    //                             if(_ch.id == _val.parent_id) {
+    //                                 _ch.child.push({
+    //                                     id: _val.id,
+    //                                     bold: false,
+    //                                     name: _val.position_name,
+    //                                     info_faktor: _val.info_faktor,
+    //                                     child: []
+    //                                 })
+    //                             }
+    //                         })
+    //                     }
+    //                 })
+    //             }
+    //         })
+
+
+    //         Lampiran.map(_root => {
+    //             if(_root.child.length == 0) {
+    //                 console.log('root push')
+    //                 resultLampiran.push(_root)
+    //             } else {
+    //                 resultLampiran.push(_root)
+    //                 console.log('child push')
+    //                 _root.child.map(_child => {
+    //                     resultLampiran.push(_child)
+    //                     if(_child.child.length > 0) {
+    //                         console.log('sub child push')
+    //                         _child.child.map(_sub_child => {
+    //                             resultLampiran.push(_sub_child)
+    //                         })
+    //                     }
+    //                 })
+    //             }
+    //         })
+    //         return resultLampiran
+    //     } else {
+    //         return []
+    //     }
+    // }
+
+    static async generateInfoFungsional2(position) {
+        
+        let Lampiran = []
+        let id_head = await position[position.findIndex(_item => _item.parent_id == 0)].id
+        let id_number = []
+        let id_number_ = []
+        let counter = 0
+        let resultLampiran = []
+        await position.map(_val => {
+            if(_val.type != "Fungsional") {
+                if(_val.parent_id == 0 ) {
+                    counter += 1
+                    Lampiran.push({
                         id: _val.id,
                         bold: true,
+                        space: false,
+                        number: counter,
                         name: _val.position_name,
+                        organization: _val.organization,
+                        fes: _val.fes_func, 
                         info_faktor: _val.info_faktor,
+                        current_stickholder: _val.current_stickholder,
+                        needed_stickholder: _val.formA,
                         child: []
                     })
-                }
-            })
-
-            await position.map(_val => {
-                if(_val.parent_id == id_number_[id_number_.findIndex(_number => _number == _val.parent_id)] && _val.type != "Struktural") {
-                    if(_val.oj != null ) {
-                        total+= parseInt(_val.oj) 
-                    }
+                } else if (_val.parent_id == id_head) {
+                    console.log('sekr')
+                    id_number.push(_val.id)
                     
-                    Lampiran.map(_item => {
-                        if(_item.child.length > 0) {
-                            _item.child.map(_ch => {
-                                if(_ch.id == _val.parent_id) {
-                                    _ch.child.push({
-                                        id: _val.id,
-                                        bold: false,
-                                        name: _val.position_name,
-                                        info_faktor: _val.info_faktor,
-                                        child: []
-                                    })
-                                }
-                            })
-                        }
+                    counter += 1
+                    Lampiran.push({
+                        id: _val.id,
+                        bold: true,
+                        space: false,
+                        name: _val.position_name,
+                        load_counter: _val.oj,
+                        organization: _val.organization,
+                        fes: _val.fes_func, 
+                        info_faktor: _val.info_faktor,
+                        current_stickholder: _val.current_stickholder,
+                        needed_stickholder: _val.formA,
+                        child: []
                     })
-                }
-            })
+                } 
+            }
+        })
+        
+
+        await position.map(_val => {
+            if(_val.parent_id == id_number[id_number.findIndex(_number => _number == _val.parent_id)]) {
+                id_number_.push(_val.id)
+                
+                Lampiran[Lampiran.findIndex(__item => __item.id == _val.parent_id)].child.push({
+                    id: _val.id,
+                    bold: true,
+                    number: false,
+                    space: false,
+                    name: _val.position_name,
+                    organization: _val.organization,
+                    fes: _val.fes_func, 
+                    info_faktor: _val.info_faktor,
+                    current_stickholder: _val.current_stickholder,
+                    needed_stickholder: _val.formA,
+                    child: []
+                })
+            }
+        })
+
+        await position.map(_val => {
+            if(_val.parent_id == id_number_[id_number_.findIndex(_number => _number == _val.parent_id)]) {
+                
+                Lampiran.map(_item => {
+                    if(_item.child.length > 0) {
+                        _item.child.map(_ch => {
+                            if(_ch.id == _val.parent_id) {
+                                _ch.child.push({
+                                    id: _val.id,
+                                    bold: false,
+                                    space: false,
+                                    number: false,
+                                    name: _val.position_name,
+                                    organization: _val.organization,
+                                    fes: _val.fes_func, 
+                                    info_faktor: _val.info_faktor,
+                                    current_stickholder: _val.current_stickholder,
+                                    needed_stickholder: _val.formA,
+                                    child: []
+                                })
+                            }
+                        })
+                    }
+                })
+            }
+        })
 
 
-            Lampiran.map(_root => {
-                if(_root.child.length == 0) {
-                    console.log('root push')
-                    resultLampiran.push(_root)
-                } else {
-                    resultLampiran.push(_root)
-                    console.log('child push')
-                    _root.child.map(_child => {
-                        resultLampiran.push(_child)
-                        if(_child.child.length > 0) {
-                            console.log('sub child push')
-                            _child.child.map(_sub_child => {
-                                resultLampiran.push(_sub_child)
+        Lampiran.map(_root => {
+            if(_root.child.length != 0) {
+                resultLampiran.push({
+                    id: 0,
+                    bold: false,
+                    space: true,
+                    number: false,
+                    name: '',
+                    organization: '',
+                    fes: '',
+                    info_faktor: '', 
+                    current_stickholder: '',
+                    needed_stickholder: '',
+                    child: []
+                })
+                _root.child.map(_child => {
+                    if(_child.child.length > 0) {
+                        
+                        _child.child.map(_sub_child => {
+                            resultLampiran.push({
+                                id: _sub_child.id,
+                                bold: false,
+                                space: false,
+                                number: false,
+                                name: _sub_child.name,
+                                organization: _sub_child.organization,
+                                fes: _sub_child.fes, 
+                                info_faktor: _sub_child.info_faktor,
+                                current_stickholder: _sub_child.current_stickholder,
+                                needed_stickholder: _sub_child.needed_stickholder,
+                                child: []
                             })
-                        }
-                    })
-                }
-            })
-            return resultLampiran
-        } else {
-            return []
-        }
+                        })
+                    }
+                })
+
+            } 
+        })
+        await resultLampiran.push({
+            id: 0,
+            bold: false,
+            space: true,
+            number: false,
+            name: '',
+            organization: '',
+            fes: '', 
+            info_faktor:'',
+            current_stickholder: '',
+            needed_stickholder: '',
+            child: []
+        })
+        await position.map(_val => {
+            if(_val.type == "Fungsional") {
+                resultLampiran.push(
+                    {
+                        id: _val.id,
+                        bold: false,
+                        number: false,
+                        name: _val.position_name,
+                        id: _val.id,
+                        bold: false,
+                        space: false,
+                        number: false,
+                        name: _val.position_name,
+                        organization: _val.organization,
+                        fes: _val.fes_func, 
+                        info_faktor: _val.info_faktor,
+                        current_stickholder: _val.current_stickholder,
+                        needed_stickholder: _val.formA,
+                        child: []
+                    }
+                )
+            }
+        })
+        return resultLampiran
     }
+
+    // static async generateInfoFungsional(position) {
+    //     if(position && position.length > 0) {
+    //         let Lampiran = []
+    //         let id_head = await position[position.findIndex(_item => _item.parent_id == 0)].id
+    //         let counter = 0
+    //         let id_number = []
+    //         let id_number_ = []
+    //         let total = 0
+    //         let resultLampiran = []
+    //         await position.map(_val => {
+    //             if(_val.type != "Struktural") {
+    //                 if(_val.parent_id == 0 ) {
+    //                     if(_val.oj != null ) {
+    //                         total+= Number(_val.oj) 
+    //                     }
+    //                     counter += 1
+    //                     Lampiran.push({
+    //                         id: _val.id,
+    //                         bold: true,
+    //                         name: _val.position_name,
+    //                         info_faktor: _val.info_faktor,
+    //                         child: []
+    //                     })
+    //                 } else if (_val.parent_id == id_head) {
+    //                     console.log('sekr')
+    //                     id_number.push(_val.id)
+                        
+    //                     if(_val.oj != null ) {
+    //                         total+= Number(_val.oj) 
+    //                     }
+    //                     counter += 1
+    //                     Lampiran.push({
+    //                         id: _val.id,
+    //                         bold: true,
+    //                         name: _val.position_name,
+    //                         info_faktor: _val.info_faktor,
+    //                         child: []
+    //                     })
+    //                 } 
+    //             }
+    //         })
+            
+
+    //         await position.map(_val => {
+    //             if(_val.parent_id == id_number[id_number.findIndex(_number => _number == _val.parent_id)] && _val.type != "Struktural") {
+    //                 id_number_.push(_val.id)
+    //                 Lampiran[Lampiran.findIndex(__item => __item.id == _val.parent_id)].child.push({
+    //                     id: _val.id,
+    //                     bold: true,
+    //                     name: _val.position_name,
+    //                     info_faktor: _val.info_faktor,
+    //                     child: []
+    //                 })
+    //             }
+    //         })
+
+    //         await position.map(_val => {
+    //             if(_val.parent_id == id_number_[id_number_.findIndex(_number => _number == _val.parent_id)] && _val.type != "Struktural") {
+    //                 if(_val.oj != null ) {
+    //                     total+= parseInt(_val.oj) 
+    //                 }
+                    
+    //                 Lampiran.map(_item => {
+    //                     if(_item.child.length > 0) {
+    //                         _item.child.map(_ch => {
+    //                             if(_ch.id == _val.parent_id) {
+    //                                 _ch.child.push({
+    //                                     id: _val.id,
+    //                                     bold: false,
+    //                                     name: _val.position_name,
+    //                                     info_faktor: _val.info_faktor,
+    //                                     child: []
+    //                                 })
+    //                             }
+    //                         })
+    //                     }
+    //                 })
+    //             }
+    //         })
+
+
+    //         Lampiran.map(_root => {
+    //             if(_root.child.length == 0) {
+    //                 console.log('root push')
+    //                 resultLampiran.push(_root)
+    //             } else {
+    //                 resultLampiran.push(_root)
+    //                 console.log('child push')
+    //                 _root.child.map(_child => {
+    //                     resultLampiran.push(_child)
+    //                     if(_child.child.length > 0) {
+    //                         console.log('sub child push')
+    //                         _child.child.map(_sub_child => {
+    //                             resultLampiran.push(_sub_child)
+    //                         })
+    //                     }
+    //                 })
+    //             }
+    //         })
+    //         return resultLampiran
+    //     } else {
+    //         return []
+    //     }
+    // }
 
     static async GenerateLampiranKepInd(position) {
         if(position && position.length > 0) {
